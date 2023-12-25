@@ -63,6 +63,16 @@ namespace FixedspawnDissonance.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        public static byte[] texBodyArchSoul {
+            get {
+                object obj = ResourceManager.GetObject("texBodyArchSoul", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         public static byte[] texBodyGreaterWispSoul {
             get {
                 object obj = ResourceManager.GetObject("texBodyGreaterWispSoul", resourceCulture);
@@ -116,6 +126,16 @@ namespace FixedspawnDissonance.Properties {
         public static byte[] texRampWispSoulAlt {
             get {
                 object obj = ResourceManager.GetObject("texRampWispSoulAlt", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] texRampWispSoulAlt2 {
+            get {
+                object obj = ResourceManager.GetObject("texRampWispSoulAlt2", resourceCulture);
                 return ((byte[])(obj));
             }
         }
