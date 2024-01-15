@@ -392,7 +392,6 @@ namespace FixedspawnDissonance
                                 clonelist[j].inventory.itemAcquisitionOrder = temporder;
                             }
 
-
                             //Swarms fix, still broken u7.5
                             //Each player gets their own ShadowCloneEncounter object
                             //Some fucking how this also copies it to the next enemy that spawns

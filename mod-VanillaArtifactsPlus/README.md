@@ -15,9 +15,6 @@ Enigma can no longer give Spinel Tonic, Recycler, Tricorn and can now give Milky
 
 ![](https://cdn.discordapp.com/attachments/743886063738683413/1188878596308205620/image.png?ex=659c2079&is=6589ab79&hm=74974ae7d59e0ce30f6108af1a7c8fa8d15f8154344844a5b569c7a20b31afc1&) 
 
-
-
-
 ## Artifact of Vengence
 Umbras get Adaptive Armor but less health.\
 They won't get items such as Elixir and Tougher Times.
@@ -73,9 +70,6 @@ Forces Mithrix and Voidling to be Lunar/Voidtouched respectively instead of a sp
 
 Forces Minions and Drones to be random elite.
 
-Makes it so you start with an Elite Equipment.
-
-
 ![](https://cdn.discordapp.com/attachments/743886063738683413/1188877461241479289/image.png?ex=659c1f6b&is=6589aa6b&hm=3f01891a2d4d124e8837777c6d8f0dbfb26b550cfbe96a631a9ed1038bf0a3f8&) 
 
 
@@ -115,6 +109,8 @@ Artifact of Swarms now works on more ally items such as Goobo Jr, Spare Drone Pa
 Report bugs to @Wolfo.wolfo in the Risk of Rain 2 discord or RoR2 Modding discord.\
 If you're reporting a bug that isn't something obvious include the log file.
 
+Every played needs this mod installed.
+
 Also download my other mods:\
 [WolfoQualityOfLife](https://thunderstore.io/package/Wolfo/WolfoQualityOfLife/) for many visual improvements.\
 [LittleGameplayTweaks](https://thunderstore.io/package/Wolfo/LittleGameplayTweaks/) more enemy variety and some small changes.
@@ -124,6 +120,16 @@ Also download my other mods:\
 
 
 ## Changelog:
+```
+v2.5.2
+-Fixed an error with honor if command module is disabled
+-Fixed an error if elite aspects couldn't drop.
+-Nerfed late game Spite damage
+
+v2.5.1  
+-Fixed various configs from not working.  
+-Set default for "Honor : Start with Elite Equip" to false.  
+  
 v2.5.0 - Cleanup & Renaming  
 -Enigma :  
 --Fragments now drop driectly instead of needing to turn Equipment into Fragments  

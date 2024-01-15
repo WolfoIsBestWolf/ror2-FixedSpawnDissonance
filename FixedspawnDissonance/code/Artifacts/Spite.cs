@@ -23,7 +23,7 @@ namespace FixedspawnDissonance
             //
             if (BombArtifactManager.bombSpawnBaseRadius == 3)
             {
-                BombArtifactManager.bombSpawnBaseRadius = 30;
+                BombArtifactManager.bombSpawnBaseRadius = 36;
             }
             if (BombArtifactManager.bombSpawnRadiusCoefficient == 4)
             {

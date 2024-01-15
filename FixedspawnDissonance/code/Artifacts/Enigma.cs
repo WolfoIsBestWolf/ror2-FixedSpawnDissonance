@@ -18,7 +18,8 @@ namespace FixedspawnDissonance
 
             LanguageAPI.Add("ARTIFACT_COMMAND_CUBE_INTERACTION_PROMPT", "Choose", "en");
 
-            LanguageAPI.Add("ARTIFACT_ENIGMA_DESCRIPTION", "Spawn with a random equipment that changes every time it's activated.\nExtra Equipment will be turned into fragments that reduce cooldown instead.", "en");
+            //LanguageAPI.Add("ARTIFACT_ENIGMA_DESCRIPTION", "Spawn with a random equipment that changes every time it's activated.\nExtra Equipment will be turned into fragments that reduce cooldown instead.", "en");
+            LanguageAPI.Add("ARTIFACT_ENIGMA_DESCRIPTION", "Your equipment changes every time it's activated. Additional Equipment become fragments that reduce cooldown instead.", "en");
 
             LanguageAPI.Add("ITEM_ENIGMAEQUIPMENTBOOST_NAME", "Enigma Fragment", "en");
             LanguageAPI.Add("ITEM_ENIGMAEQUIPMENTBOOST_PICKUP", "Reduce equipment cooldown.", "en");
@@ -180,6 +181,14 @@ namespace FixedspawnDissonance
                 RoR2.Util.PlaySound("Play_UI_insufficient_funds", self.gameObject);
                 RoR2.Util.PlaySound("Play_UI_insufficient_funds", self.gameObject);
                 RoR2.Util.PlaySound("Play_UI_insufficient_funds", self.gameObject);
+                /*if (body.master.hasAuthority)
+                {
+                    CharacterMasterNotificationQueue notificationQueueForMaster = CharacterMasterNotificationQueue.GetNotificationQueueForMaster(body.master);
+                    CharacterMasterNotificationQueue.TransformationInfo transformation = new CharacterMasterNotificationQueue.TransformationInfo(CharacterMasterNotificationQueue.TransformationType.Default, EnigmaFragmentPurple);
+                    CharacterMasterNotificationQueue.NotificationInfo info = new CharacterMasterNotificationQueue.NotificationInfo(EquipmentCatalog.GetEquipmentDef(self.pickupIndex.pickupDef.equipmentIndex), transformation);
+                    notificationQueueForMaster.PushNotification(info, 6f);
+                    return;
+                }*/
             }
             bool hasEquip = body.inventory.currentEquipmentIndex != EquipmentIndex.None && PickupCatalog.GetPickupDef(self.pickupIndex).equipmentIndex != EquipmentIndex.None;
             orig(self, body);

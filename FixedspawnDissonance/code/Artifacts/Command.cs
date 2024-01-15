@@ -31,50 +31,61 @@ namespace FixedspawnDissonance
             };
         }
 
-        public static void LateRunningMethod()
+        public static void MakeEliteLists()
         {
             for (var i = 0; i < EliteCatalog.eliteDefs.Length; i++)
             {
-                //EquipmentDef tempEliteEquip = EquipmentCatalog.equipmentDefs[i];
-                EquipmentDef tempEliteEquip = EliteCatalog.eliteDefs[i].eliteEquipmentDef;
-                //Debug.LogWarning(EliteCatalog.eliteDefs[i]);
+                EliteDef eliteDef = EliteCatalog.eliteDefs[i];
+                EquipmentDef tempEliteEquip = eliteDef.eliteEquipmentDef;
+                //Debug.LogWarning(eliteDef);
 
-                if (tempEliteEquip != null && !EliteCatalog.eliteDefs[i].name.Equals("edLunarEulogy"))
+                if (tempEliteEquip != null)
                 {
-                    if (tempEliteEquip.dropOnDeathChance == 0 || tempEliteEquip.name.Contains("Gold") || tempEliteEquip.name.Contains("Echo") || tempEliteEquip.name.Contains("Yellow"))
+                    if (eliteDef.name.EndsWith("Eulogy") || tempEliteEquip.name.Contains("Gold") || tempEliteEquip.name.Contains("Echo") || tempEliteEquip.name.Contains("Yellow"))
                     {
                     }
                     else
                     {
-                        //Debug.LogWarning(tempEliteEquip);
-                        //EliteEquipmentEquipmentIndexCommand.Add(tempEliteEquip.equipmentIndex);
-                        PickupIndex equippickupIndex = PickupCatalog.FindPickupIndex(tempEliteEquip.equipmentIndex);
-                        PickupPickerController.Option newoption = new PickupPickerController.Option { pickupIndex = equippickupIndex, available = true };
-
-                        bool dontAdd = false;
-
-                        for (int e = 0; e < Command.EliteEquipmentChoicesForCommand.Length; e++)
+                        if (tempEliteEquip.dropOnDeathChance > 0)
                         {
-                            if (Command.EliteEquipmentChoicesForCommand[e].pickupIndex == equippickupIndex)
+                            PickupIndex equippickupIndex = PickupCatalog.FindPickupIndex(tempEliteEquip.equipmentIndex);
+                            PickupPickerController.Option newoption = new PickupPickerController.Option { pickupIndex = equippickupIndex, available = true };
+
+                            bool dontAdd = false;
+
+                            for (int e = 0; e < Command.EliteEquipmentChoicesForCommand.Length; e++)
                             {
-                                //Debug.Log("Not Adding " + tempEliteEquip);
-                                dontAdd = true;
+                                if (Command.EliteEquipmentChoicesForCommand[e].pickupIndex == equippickupIndex)
+                                {
+                                    //Debug.Log("Not Adding " + tempEliteEquip);
+                                    dontAdd = true;
+                                }
+                            }
+                            if (dontAdd == false)
+                            {
+                                //Debug.Log("Adding " + tempEliteEquip);
+                                Command.EliteEquipmentChoicesForCommand = Command.EliteEquipmentChoicesForCommand.Add(newoption);
                             }
                         }
-                        if (dontAdd == false)
-                        {
-                            //Debug.Log("Adding " + tempEliteEquip);
-                            Command.EliteEquipmentChoicesForCommand = Command.EliteEquipmentChoicesForCommand.Add(newoption);
-                        }
-
 
                         if (EliteCatalog.eliteDefs[i].name.EndsWith("Honor"))
                         {
-
                             Honor.EliteEquipmentDefs.Add(tempEliteEquip);
                         }
                     }
                 }
+            }
+
+            if (Honor.EliteEquipmentDefs.Count == 0)
+            {
+                Debug.LogWarning("No Honor Elites found : Who messed up the EliteCatalog");
+                Honor.EliteEquipmentDefs.Add(RoR2Content.Elites.FireHonor.eliteEquipmentDef);
+                Honor.EliteEquipmentDefs.Add(RoR2Content.Elites.LightningHonor.eliteEquipmentDef);
+                Honor.EliteEquipmentDefs.Add(RoR2Content.Elites.IceHonor.eliteEquipmentDef);
+            }
+            if (EliteEquipmentChoicesForCommand.Length == 0)
+            {
+                Debug.LogWarning("No Elites Found: Who messed up the EliteCatalog");
             }
 
         }
@@ -105,7 +116,10 @@ namespace FixedspawnDissonance
                 EquipmentDef tempequipdef = EquipmentCatalog.GetEquipmentDef(pickupIndex.equipmentIndex);
                 if (tempequipdef.passiveBuffDef && tempequipdef.passiveBuffDef.isElite && tempequipdef.dropOnDeathChance > 0)
                 {
-                    return EliteEquipmentChoicesForCommand;
+                    if (EliteEquipmentChoicesForCommand.Length > 0)
+                    {
+                        return EliteEquipmentChoicesForCommand;
+                    }     
                 }
             }
             return temp;

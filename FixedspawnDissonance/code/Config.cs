@@ -195,7 +195,7 @@ namespace FixedspawnDissonance
             HonorStartingEliteEquip = ConfigFile.Bind(
                 "Honor",
                 "Elite Starting Equip",
-                true,
+                false,
                 "When starting a run with Artifact of Honor, recieve a random Tier 1 Elite Equipment"
             );
             HonorMinionAlwaysElite = ConfigFile.Bind(

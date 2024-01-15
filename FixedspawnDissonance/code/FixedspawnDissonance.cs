@@ -156,10 +156,7 @@ namespace FixedspawnDissonance
                 Dissonance.ModdedEnemiesSupport();
             }
 
-            if (WConfig.CommandChanges.Value == true)
-            {
-                Command.LateRunningMethod();
-            }
+            Command.MakeEliteLists();
 
             if (WConfig.SpiteChanges.Value == true)
             {
@@ -228,9 +225,12 @@ namespace FixedspawnDissonance
                     if (WConfig.HonorPerfectedLunarBosses.Value == true)
                     {
                         Honor.LunarAffixEnable();
+                        On.RoR2.CharacterBody.OnOutOfDangerChanged += Honor.PreventPerfectedMithrixFromRegenningShield;
                     }
-                    On.RoR2.CharacterBody.OnOutOfDangerChanged += Honor.PreventPerfectedMithrixFromRegenningShield;
-                    On.RoR2.MinionOwnership.MinionGroup.AddMinion += Honor.MinionsInheritHonor;
+                    if (WConfig.HonorMinionAlwaysElite.Value)
+                    {
+                        On.RoR2.MinionOwnership.MinionGroup.AddMinion += Honor.MinionsInheritHonor;
+                    }               
                 }
             }
             else if (artifactDef == RoR2Content.Artifacts.enigmaArtifactDef && WConfig.EnigmaChanges.Value == true)
@@ -304,9 +304,12 @@ namespace FixedspawnDissonance
                 if (WConfig.HonorPerfectedLunarBosses.Value == true)
                 {
                     Honor.LunarAffixDisable();
+                    On.RoR2.CharacterBody.OnOutOfDangerChanged -= Honor.PreventPerfectedMithrixFromRegenningShield;
+                }   
+                if (WConfig.HonorMinionAlwaysElite.Value)
+                {
+                    On.RoR2.MinionOwnership.MinionGroup.AddMinion -= Honor.MinionsInheritHonor;
                 }
-                On.RoR2.CharacterBody.OnOutOfDangerChanged -= Honor.PreventPerfectedMithrixFromRegenningShield;
-                On.RoR2.MinionOwnership.MinionGroup.AddMinion -= Honor.MinionsInheritHonor;
             }
             else if (artifactDef == RoR2Content.Artifacts.enigmaArtifactDef && WConfig.EnigmaChanges.Value == true)
             {

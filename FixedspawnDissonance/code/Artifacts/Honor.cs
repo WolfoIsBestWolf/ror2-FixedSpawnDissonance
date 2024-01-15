@@ -28,7 +28,10 @@ namespace FixedspawnDissonance
                 LunarAffixHonorInit();
             }
             LunarAffixDisable();
-            On.RoR2.Run.Start += Honor.HonorGiveEliteEquipOnStart;
+            if (WConfig.HonorStartingEliteEquip.Value)
+            {
+                On.RoR2.Run.Start += Honor.HonorGiveEliteEquipOnStart;
+            }     
         }
 
         public static void PreventPerfectedMithrixFromRegenningShield(On.RoR2.CharacterBody.orig_OnOutOfDangerChanged orig, CharacterBody self)
@@ -57,6 +60,7 @@ namespace FixedspawnDissonance
             orig(ownerId, minion);
             if (NetworkServer.active)
             {
+                //Maybe just check if eq drone
                 Inventory inventory = minion.gameObject.GetComponent<Inventory>();
                 if (inventory && inventory.currentEquipmentIndex == EquipmentIndex.None)
                 {
