@@ -97,7 +97,7 @@ namespace FixedspawnDissonance
         private void Start() //Called at the first frame of the game.
         {
             //Needs to be called late for reasons
-            if (WConfig.KinChanges.Value == true)
+            if (WConfig.DissonanceChanges.Value == true)
             {
                 Dissonance.Start();
             }
