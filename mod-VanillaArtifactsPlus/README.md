@@ -1,5 +1,5 @@
 ## Artifact of Dissonance
-Adds Hermit Crabs to Dissonance as they missed it.
+Adds Hermit Crabs to Dissonance as they are missing from it.
 
 The Artifact spams less minibosses and have more evenly distributed categories.
 
@@ -13,7 +13,7 @@ Most equipment drops will be replaced by a Enigma Fragment that reduces Equipmen
 
 Enigma can no longer give Spinel Tonic, Recycler, Tricorn and can now give Milky Chrysalis, Effigy of Grief.
 
-![](https://cdn.discordapp.com/attachments/743886063738683413/1188878596308205620/image.png?ex=659c2079&is=6589ab79&hm=74974ae7d59e0ce30f6108af1a7c8fa8d15f8154344844a5b569c7a20b31afc1&) 
+![Image of Enigma Fragment](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsEnigma.png) 
 
 ## Artifact of Vengence
 Umbras get Adaptive Armor but less health.\
@@ -70,7 +70,7 @@ Forces Mithrix and Voidling to be Lunar/Voidtouched respectively instead of a sp
 
 Forces Minions and Drones to be random elite.
 
-![](https://cdn.discordapp.com/attachments/743886063738683413/1188877461241479289/image.png?ex=659c1f6b&is=6589aa6b&hm=3f01891a2d4d124e8837777c6d8f0dbfb26b550cfbe96a631a9ed1038bf0a3f8&) 
+![Image of Honor Enemies](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsHonor.png) 
 
 
 
@@ -85,8 +85,8 @@ Soul Wisps slow on hit.
 Soul Wisps had their stats adjusted to last longer but have less damage.\
 They die on a timer now instead of due to negative health regen.
 
-Overall this should make the Artifact more noticible but still often just free on kill effects.
-![](https://cdn.discordapp.com/attachments/743886063738683413/953202390474051654/unknown.png) 
+Overall this should make the Artifact more noticeable but still often just free on kill effects.
+![Image of Greater Soul](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsSoul.png) 
 
 ## Artifact of Sacrifice
 Void enemies now drops Void items.\
@@ -113,14 +113,20 @@ Every player needs this mod installed.
 
 Also download my other mods:\
 [WolfoQualityOfLife](https://thunderstore.io/package/Wolfo/WolfoQualityOfLife/) for many visual improvements.\
-[LittleGameplayTweaks](https://thunderstore.io/package/Wolfo/LittleGameplayTweaks/) more enemy variety and some small changes.
-[WolfoArtifacts](https://thunderstore.io/package/Wolfo/WolfoArtifacts) for some fun extra Artifacts.  
+[LittleGameplayTweaks](https://thunderstore.io/package/Wolfo/LittleGameplayTweaks/) more enemy variety and some small changes.\
+[WolfoArtifacts](https://thunderstore.io/package/Wolfo/WolfoArtifacts) for some fun extra Artifacts.\
 [SimulacrumAdditions](https://thunderstore.io/package/Wolfo/SimulacrumAdditions) for a better Simulacrum.  
 
 
 
 ## Changelog:
 ```
+v2.5.4 - Fix for Devotion Update.
+Now the mod loads again.
+
+v2.5.3 - Fixed storepage image being gone due to Discord.
+-Modded Umbras can now use Equipments
+
 v2.5.2
 -Fixed an error with honor if command module is disabled
 -Fixed an error if elite aspects couldn't drop.

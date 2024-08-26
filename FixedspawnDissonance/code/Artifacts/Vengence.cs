@@ -389,6 +389,9 @@ namespace FixedspawnDissonance
                                 clonelist[j].inventory.RemoveItem(RoR2Content.Items.ExtraLifeConsumed, 10000);
                                 temporder.Remove(DLC1Content.Items.ExtraLifeVoidConsumed.itemIndex);
                                 clonelist[j].inventory.RemoveItem(DLC1Content.Items.ExtraLifeVoidConsumed, 10000);
+
+                                //clonelist[j].inventory.itemAcquisitionOrder.
+
                                 clonelist[j].inventory.itemAcquisitionOrder = temporder;
                             }
 
@@ -414,6 +417,26 @@ namespace FixedspawnDissonance
 
         public static void EnableEquipmentForVengence()
         {
+            
+            for (int i = 0; i < SurvivorCatalog.survivorDefs.Length; i++)
+            {
+                if (SurvivorCatalog.survivorDefs[i].bodyPrefab)
+                {
+                    BodyIndex index = SurvivorCatalog.survivorDefs[i].bodyPrefab.GetComponent<CharacterBody>().bodyIndex;
+                    GameObject Master = MasterCatalog.GetMasterPrefab(MasterCatalog.FindAiMasterIndexForBody(index));
+                    RoR2.CharacterAI.AISkillDriver[] skilllist = Master.GetComponents<RoR2.CharacterAI.AISkillDriver>();
+                    //Debug.Log(Master);
+                    for (int JJ = 0; JJ < skilllist.Length; JJ++)
+                    {
+                        if (skilllist[JJ].skillSlot != SkillSlot.None)
+                        {
+                            skilllist[JJ].shouldFireEquipment = true;
+                        }
+                    }
+                }
+            }
+
+            /*
             RoR2.CharacterAI.AISkillDriver[] skilllist;
 
             GameObject CaptainMaster = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/charactermasters/CaptainMonsterMaster");
@@ -447,20 +470,6 @@ namespace FixedspawnDissonance
                     skilllist[i].shouldSprint = true;
                     skilllist[i].movementType = RoR2.CharacterAI.AISkillDriver.MovementType.ChaseMoveTarget;
                 }
-
-                /*
-                if (skilllist[i].customName.Equals("MarkOrbitalStrike"))
-                {
-                    skilllist[i].shouldFireEquipment = true;
-                    skilllist[i].aimType = RoR2.CharacterAI.AISkillDriver.AimType.AtCurrentEnemy;
-                    //skilllist[i].buttonPressType = RoR2.CharacterAI.AISkillDriver.ButtonPressType.TapContinuous;
-                }
-                else if (skilllist[i].customName.Contains("FireTazer") || skilllist[i].customName.Contains("FireShotgun") || skilllist[i].customName.Contains("BackUpIfClose"))
-                {
-                    //Debug.LogWarning(skilllist[i].customName);
-                    skilllist[i].shouldFireEquipment = true;
-                }
-                */
             }
 
 
@@ -656,7 +665,7 @@ namespace FixedspawnDissonance
                     skilllist[i].shouldFireEquipment = true;
                 }
             }
-
+            */
         }
 
 

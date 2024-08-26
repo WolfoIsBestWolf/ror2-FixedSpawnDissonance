@@ -11,7 +11,8 @@ namespace FixedspawnDissonance
 
         public static void Start()
         {
-            On.RoR2.Artifacts.CommandArtifactManager.OnDropletHitGroundServer += CommandArtifactManager_OnDropletHitGroundServer;
+            //On.RoR2.Artifacts.CommandArtifactManager.OnDropletHitGroundServer += CommandArtifactManager_OnDropletHitGroundServer;
+            //On.RoR2.PickupDropletController.CreateCommandCube += PickupDropletController_CreateCommandCube;
             On.RoR2.PickupPickerController.GetOptionsFromPickupIndex += CommandGiveAffixChoices;
 
            //Fix Void Particles
@@ -29,6 +30,11 @@ namespace FixedspawnDissonance
                     }
                 }
             };
+        }
+
+        private static void PickupDropletController_CreateCommandCube(On.RoR2.PickupDropletController.orig_CreateCommandCube orig, PickupDropletController self)
+        {
+            throw new System.NotImplementedException();
         }
 
         public static void MakeEliteLists()
@@ -91,7 +97,7 @@ namespace FixedspawnDissonance
         }
 
 
-        public static void CommandArtifactManager_OnDropletHitGroundServer(On.RoR2.Artifacts.CommandArtifactManager.orig_OnDropletHitGroundServer orig, ref GenericPickupController.CreatePickupInfo createPickupInfo, ref bool shouldSpawn)
+        /*public static void CommandArtifactManager_OnDropletHitGroundServer(On.RoR2.Artifacts.CommandArtifactManager.orig_OnDropletHitGroundServer orig, ref GenericPickupController.CreatePickupInfo createPickupInfo, ref bool shouldSpawn)
         {
             PickupIndex pickupIndex = createPickupInfo.pickupIndex;
             PickupDef pickupDef = PickupCatalog.GetPickupDef(pickupIndex);
@@ -105,7 +111,7 @@ namespace FixedspawnDissonance
                 }
             }
             orig(ref createPickupInfo, ref shouldSpawn);
-        }
+        }*/
 
 
         public static PickupPickerController.Option[] CommandGiveAffixChoices(On.RoR2.PickupPickerController.orig_GetOptionsFromPickupIndex orig, PickupIndex pickupIndex)
