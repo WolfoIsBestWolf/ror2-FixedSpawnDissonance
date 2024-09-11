@@ -12,7 +12,7 @@ using UnityEngine.Networking;
 namespace FixedspawnDissonance
 {
     [BepInDependency("com.bepis.r2api")]
-    [BepInPlugin("com.Wolfo.VanillaArtifactsPlus", "VanillaArtifactsPlus", "2.5.0")]
+    [BepInPlugin("com.Wolfo.VanillaArtifactsPlus", "VanillaArtifactsPlus", "3.0.0")]
     //[R2APISubmoduleDependency(nameof(ItemAPI), nameof(PrefabAPI), nameof(LanguageAPI))]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
 
@@ -102,7 +102,7 @@ namespace FixedspawnDissonance
                 Dissonance.Start();
             }
 
-            if (WConfig.KinChanges.Value == true && WConfig.KinYellowsForEnemies.Value == true)
+            if (WConfig.KinYellowsForEnemies.Value == true)
             {
                 KinBossDropsForEnemies.Start();
             }
@@ -243,10 +243,10 @@ namespace FixedspawnDissonance
                     On.RoR2.GenericPickupController.CreatePickup += Enigma.EnigmaFragmentMaker;
                 }
             }
-            else if (artifactDef == RoR2Content.Artifacts.weakAssKneesArtifactDef && WConfig.FrailtyChanges.Value == true)
+            /*else if (artifactDef == RoR2Content.Artifacts.weakAssKneesArtifactDef && WConfig.FrailtyChanges.Value == true)
             {
                  On.RoR2.GlobalEventManager.OnCharacterHitGroundServer += CharacterHitGround_FrailtyChanges;  
-            }
+            }*/
             else if (artifactDef == RoR2Content.Artifacts.singleMonsterTypeArtifactDef && WConfig.KinChanges.Value == true)
             {
                 Inventory MonsterTeamInventory = RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.monsterTeamInventory;
@@ -265,7 +265,7 @@ namespace FixedspawnDissonance
             else if (artifactDef == RoR2Content.Artifacts.swarmsArtifactDef && WConfig.SwarmsChanges.Value == true)
             {
                 On.RoR2.CharacterMaster.GetDeployableSameSlotLimit += Swarms.SwarmsDeployableLimitChanger;
-                On.EntityStates.Gup.BaseSplitDeath.OnEnter += Swarms.BaseSplitDeath_OnEnter;
+                //On.EntityStates.Gup.BaseSplitDeath.OnEnter += Swarms.BaseSplitDeath_OnEnter;
                 foreach (TeamDef teamDef in TeamCatalog.teamDefs)
                 {
                     teamDef.softCharacterLimit = (int)(teamDef.softCharacterLimit * 1.5f);
@@ -316,13 +316,13 @@ namespace FixedspawnDissonance
                 On.RoR2.GenericPickupController.AttemptGrant -= Enigma.EnigmaEquipmentGranter;
                 On.RoR2.GenericPickupController.CreatePickup -= Enigma.EnigmaFragmentMaker;
             }
-            else if (artifactDef == RoR2Content.Artifacts.weakAssKneesArtifactDef && WConfig.FrailtyChanges.Value == true)
+            /*else if (artifactDef == RoR2Content.Artifacts.weakAssKneesArtifactDef && WConfig.FrailtyChanges.Value == true)
             {
                 if (WConfig.FrailtyChanges.Value == true)
                 {
                     On.RoR2.GlobalEventManager.OnCharacterHitGroundServer -= CharacterHitGround_FrailtyChanges;
                 }
-            }
+            }*/
             else if (artifactDef == RoR2Content.Artifacts.singleMonsterTypeArtifactDef && WConfig.KinChanges.Value == true)
             {
                 if (Stage.instance)
@@ -344,7 +344,7 @@ namespace FixedspawnDissonance
             else if (artifactDef == RoR2Content.Artifacts.swarmsArtifactDef && WConfig.SwarmsChanges.Value == true)
             {
                 On.RoR2.CharacterMaster.GetDeployableSameSlotLimit -= Swarms.SwarmsDeployableLimitChanger;
-                On.EntityStates.Gup.BaseSplitDeath.OnEnter -= Swarms.BaseSplitDeath_OnEnter;
+                //On.EntityStates.Gup.BaseSplitDeath.OnEnter -= Swarms.BaseSplitDeath_OnEnter;
                 foreach (TeamDef teamDef in TeamCatalog.teamDefs)
                 {
                     teamDef.softCharacterLimit = (int)(teamDef.softCharacterLimit / 1.5f);
@@ -411,11 +411,11 @@ namespace FixedspawnDissonance
 
 
 
-        private void CharacterHitGround_FrailtyChanges(On.RoR2.GlobalEventManager.orig_OnCharacterHitGroundServer orig, GlobalEventManager self, CharacterBody characterBody, Vector3 impactVelocity)
+        /*private void CharacterHitGround_FrailtyChanges(On.RoR2.GlobalEventManager.orig_OnCharacterHitGroundServer orig, GlobalEventManager self, CharacterBody characterBody, Vector3 impactVelocity)
         {
             characterBody.bodyFlags &= ~CharacterBody.BodyFlags.IgnoreFallDamage;
             orig(self, characterBody, impactVelocity);
-        }
+        }*/
 
 
         /*

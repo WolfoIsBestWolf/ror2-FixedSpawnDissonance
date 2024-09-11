@@ -27,7 +27,7 @@ namespace FixedspawnDissonance
         public static ConfigEntry<bool> SwarmsChanges;
         public static ConfigEntry<bool> VenganceChanges;
         public static ConfigEntry<bool> SpiteChanges;
-        public static ConfigEntry<bool> FrailtyChanges;
+        //public static ConfigEntry<bool> FrailtyChanges;
         //public static ConfigEntry<bool> EnableGeneralChanges;
 
 
@@ -51,10 +51,10 @@ namespace FixedspawnDissonance
 
         public static ConfigEntry<float> EnigmaCooldownReduction;
         public static ConfigEntry<bool> EnigmaInterrupt;
-        public static ConfigEntry<bool> EnigmaDestructive;
+        //public static ConfigEntry<bool> EnigmaDestructive;
         //public static ConfigEntry<bool> EnigmaDirectional;
         public static ConfigEntry<bool> EnigmaMovement;
-        public static ConfigEntry<bool> EnigmaTonic;
+        //public static ConfigEntry<bool> EnigmaTonic;
 
         //public static ConfigEntry<bool> SacrificeVoids;
         public static ConfigEntry<bool> SacrificeMoreEnemySpawns;
@@ -173,12 +173,12 @@ namespace FixedspawnDissonance
                 "Spite, but like, more. Damage scales with stages beaten"
             );
 
-            FrailtyChanges = ConfigFile.Bind(
+            /*FrailtyChanges = ConfigFile.Bind(
                 ": Main :",
                 "Enable Artifact of Frailty changes",
                 false,
                 "Remove all fall damage immunity"
-            );
+            );*/
 
 
 
@@ -284,18 +284,18 @@ namespace FixedspawnDissonance
                false,
                "Should Recycler and Tricorn be an option for Enigma"
             );
-            EnigmaDestructive = ConfigFile.Bind(
+            /*EnigmaDestructive = ConfigFile.Bind(
                "Enigma",
                "Enable Descructive Equipment",
                true,
                "Should Helfire Tincture, Glowing Meteorite, Effigy of Grief be an option for Enigma"
-           );
-            EnigmaTonic = ConfigFile.Bind(
+           );*/
+            /*EnigmaTonic = ConfigFile.Bind(
                 "Enigma",
                 "Enable Spinel Tonic",
                 false,
                  "Should Spinel Tonic be an option for Enigma"
-                       );
+                       );*/
             EnigmaMovement = ConfigFile.Bind(
                            "Enigma",
                            "Enable Movement affecting Equipment",

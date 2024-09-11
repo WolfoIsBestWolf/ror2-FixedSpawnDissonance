@@ -42,7 +42,7 @@ namespace FixedspawnDissonance
                             minimumStageCompletions = 0,
                             spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
                         };
-                        RoR2Content.mixEnemyMonsterCards.AddCard(1, DC_ArchWisp); */
+                        dccsMixEnemy.AddCard(1, DC_ArchWisp); */
                         break;
                     case "cscClayMan":
                         /*DirectorCard DC_ClayMan = new DirectorCard
@@ -53,7 +53,7 @@ namespace FixedspawnDissonance
                             minimumStageCompletions = 0,
                             spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
                         };
-                        RoR2Content.mixEnemyMonsterCards.AddCard(2, DC_ClayMan);  //30
+                        dccsMixEnemy.AddCard(2, DC_ClayMan);  //30
                         BossPickupEdit.tempClayMan = CSCList[i].prefab.GetComponent<CharacterMaster>();*/
                         break;
                     case "cscAncientWisp":
@@ -65,7 +65,7 @@ namespace FixedspawnDissonance
                             minimumStageCompletions = 0,
                             spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
                         };
-                        RoR2Content.mixEnemyMonsterCards.AddCard(0, DC_AncientWisp);  //30*/
+                        dccsMixEnemy.AddCard(0, DC_AncientWisp);  //30*/
                         break;
                     case "cscSigmaConstruct":
                         /*CSCList[i].directorCreditCost = 125;
@@ -77,7 +77,7 @@ namespace FixedspawnDissonance
                             minimumStageCompletions = 0,
                             spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
                         };
-                        RoR2Content.mixEnemyMonsterCards.AddCard(1, DC_cscSigmaConstruct);  //30*/
+                        dccsMixEnemy.AddCard(1, DC_cscSigmaConstruct);  //30*/
                         //If only Sigma Construct was a good enemy
                         break;
                 }
@@ -85,9 +85,9 @@ namespace FixedspawnDissonance
         }
 
 
-        public static void DissoanceLunerEliteAll(On.RoR2.ClassicStageInfo.orig_RebuildCards orig, ClassicStageInfo self)
+        public static void DissoanceLunerEliteAll(On.RoR2.ClassicStageInfo.orig_RebuildCards orig, global::RoR2.ClassicStageInfo self, global::RoR2.DirectorCardCategorySelection forcedMonsterCategory, global::RoR2.DirectorCardCategorySelection forcedInteractableCategory)
         {
-            orig(self);
+            orig(self, forcedMonsterCategory, forcedInteractableCategory);
 
             if (self != null)
             {
@@ -132,11 +132,15 @@ namespace FixedspawnDissonance
 
         public static void Mixenemymaker()
         {
+
+            DirectorCardCategorySelection dccsMixEnemy = Addressables.LoadAssetAsync<DirectorCardCategorySelection>(key: "RoR2/Base/MixEnemy/dccsMixEnemy.asset").WaitForCompletion();
+
+
             DirectorCard DSScav = new DirectorCard
             {
                 spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscScav"),
                 preventOverhead = false,
-                selectionWeight = 1,
+                selectionWeight = 1, 
                 minimumStageCompletions = 0,
                 spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
             };
@@ -152,60 +156,60 @@ namespace FixedspawnDissonance
             };
 
 
-            RoR2Content.mixEnemyMonsterCards.categories[0].selectionWeight = 2;
-            RoR2Content.mixEnemyMonsterCards.categories[1].selectionWeight = 2;
-            RoR2Content.mixEnemyMonsterCards.categories[2].selectionWeight = 3;
-            //RoR2Content.mixEnemyMonsterCards.categories[3].selectionWeight = 0f;
-            RoR2Content.mixEnemyMonsterCards.categories[3].cards = RoR2Content.mixEnemyMonsterCards.categories[3].cards.Remove(RoR2Content.mixEnemyMonsterCards.categories[3].cards[0]);
-            RoR2Content.mixEnemyMonsterCards.AddCard(0, DSScav); //2000
+            dccsMixEnemy.categories[0].selectionWeight = 2;
+            dccsMixEnemy.categories[1].selectionWeight = 2;
+            dccsMixEnemy.categories[2].selectionWeight = 3;
+            //dccsMixEnemy.categories[3].selectionWeight = 0f;
+            dccsMixEnemy.categories[3].cards = dccsMixEnemy.categories[3].cards.Remove(dccsMixEnemy.categories[3].cards[0]);
+            dccsMixEnemy.AddCard(0, DSScav); //2000
 
 
 
             DirectorCard SolusProbeTemp = null;
             DirectorCard LunarWispTemp = null;
-            //RoR2Content.mixEnemyMonsterCards.AddCard(3, DSVoidInfestor); //60
+            //dccsMixEnemy.AddCard(3, DSVoidInfestor); //60
 
-            for (int i = RoR2Content.mixEnemyMonsterCards.categories.Length - 1; 0 <= i; i--)
+            for (int i = dccsMixEnemy.categories.Length - 1; 0 <= i; i--)
             {
                 //Debug.LogWarning(i);
-                for (int ii = 0; RoR2Content.mixEnemyMonsterCards.categories[i].cards.Length > ii; ii++)
+                for (int ii = 0; dccsMixEnemy.categories[i].cards.Length > ii; ii++)
                 {
-                    //Debug.LogWarning(RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii].spawnCard);
+                    //Debug.LogWarning(dccsMixEnemy.categories[i].cards[ii].spawnCard);
                     //Debug.LogWarning(ii);
 
-                    if (RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii].spawnCard.name.Equals("cscRoboBallMini"))
+                    if (dccsMixEnemy.categories[i].cards[ii].spawnCard.name.Equals("cscRoboBallMini"))
                     {
-                        SolusProbeTemp = RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii];
-                        RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii] = DSHermitCrab;
+                        SolusProbeTemp = dccsMixEnemy.categories[i].cards[ii];
+                        dccsMixEnemy.categories[i].cards[ii] = DSHermitCrab;
                     }
-                    else if (RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii].spawnCard.name.Equals("cscLunarWisp"))
+                    else if (dccsMixEnemy.categories[i].cards[ii].spawnCard.name.Equals("cscLunarWisp"))
                     {
-                        LunarWispTemp = RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii];
-                        RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii] = SolusProbeTemp;
+                        LunarWispTemp = dccsMixEnemy.categories[i].cards[ii];
+                        dccsMixEnemy.categories[i].cards[ii] = SolusProbeTemp;
                     }//
-                    else if (RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii].spawnCard.name.Equals("cscTitanBlackBeach"))
+                    else if (dccsMixEnemy.categories[i].cards[ii].spawnCard.name.Equals("cscTitanBlackBeach"))
                     {
-                        DissoTitan = RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii];
+                        DissoTitan = dccsMixEnemy.categories[i].cards[ii];
                     }
-                    else if (RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii].spawnCard.name.Equals("cscGolem"))
+                    else if (dccsMixEnemy.categories[i].cards[ii].spawnCard.name.Equals("cscGolem"))
                     {
-                        DissoGolem = RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii];
+                        DissoGolem = dccsMixEnemy.categories[i].cards[ii];
                     }
-                    else if (RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii].spawnCard.name.Equals("cscVermin"))
+                    else if (dccsMixEnemy.categories[i].cards[ii].spawnCard.name.Equals("cscVermin"))
                     {
-                        DissoVermin = RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii];
+                        DissoVermin = dccsMixEnemy.categories[i].cards[ii];
                     }
-                    else if (RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii].spawnCard.name.Equals("cscFlyingVermin"))
+                    else if (dccsMixEnemy.categories[i].cards[ii].spawnCard.name.Equals("cscFlyingVermin"))
                     {
-                        DissoVerminFlying = RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii];
+                        DissoVerminFlying = dccsMixEnemy.categories[i].cards[ii];
                     }
-                    else if (RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii].spawnCard.name.Equals("cscBeetle"))
+                    else if (dccsMixEnemy.categories[i].cards[ii].spawnCard.name.Equals("cscBeetle"))
                     {
-                        DissoBeetle = RoR2Content.mixEnemyMonsterCards.categories[i].cards[ii];
+                        DissoBeetle = dccsMixEnemy.categories[i].cards[ii];
                     }
                 }
             }
-            RoR2Content.mixEnemyMonsterCards.AddCard(0, LunarWispTemp); //550
+            dccsMixEnemy.AddCard(0, LunarWispTemp); //550
 
 
             //Logger.LogMessage($"Added Cards.");
@@ -224,59 +228,59 @@ namespace FixedspawnDissonance
             switch (DecideTitan)
             {
                 case 1:
-                    DissoTitan.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Titan/cscTitanBlackBeach.asset").WaitForCompletion(); ;
+                    DissoTitan.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Titan/cscTitanBlackBeach.asset").WaitForCompletion();
                     break;
                 case 2:
-                    DissoTitan.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Titan/cscTitanDampCave.asset").WaitForCompletion(); ;
+                    DissoTitan.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Titan/cscTitanDampCave.asset").WaitForCompletion();
                     break;
                 case 3:
-                    DissoTitan.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Titan/cscTitanGolemPlains.asset").WaitForCompletion(); ;
+                    DissoTitan.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Titan/cscTitanGolemPlains.asset").WaitForCompletion();
                     break;
                 case 4:
-                    DissoTitan.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Titan/cscTitanGooLake.asset").WaitForCompletion(); ;
+                    DissoTitan.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Titan/cscTitanGooLake.asset").WaitForCompletion();
                     break;
             }
             switch (DecideGolem)
             {
                 case 1:
-                    DissoGolem.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Golem/cscGolem.asset").WaitForCompletion(); ;
+                    DissoGolem.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Golem/cscGolem.asset").WaitForCompletion();
                     break;
                 case 2:
-                    DissoGolem.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Golem/cscGolemNature.asset").WaitForCompletion(); ;
+                    DissoGolem.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Golem/cscGolemNature.asset").WaitForCompletion();
                     break;
                 case 3:
-                    DissoGolem.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Golem/cscGolemSandy.asset").WaitForCompletion(); ;
+                    DissoGolem.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Golem/cscGolemSandy.asset").WaitForCompletion();
                     break;
                 case 4:
-                    DissoGolem.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Golem/cscGolemSnowy.asset").WaitForCompletion(); ;
+                    DissoGolem.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Golem/cscGolemSnowy.asset").WaitForCompletion();
                     break;
             }
             switch (DecideVermin)
             {
                 case 1:
-                    DissoVermin.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/DLC1/Vermin/cscVermin.asset").WaitForCompletion(); ;
+                    DissoVermin.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/DLC1/Vermin/cscVermin.asset").WaitForCompletion();
                     break;
                 case 2:
-                    DissoVermin.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/DLC1/Vermin/cscVerminSnowy.asset").WaitForCompletion(); ;
+                    DissoVermin.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/DLC1/Vermin/cscVerminSnowy.asset").WaitForCompletion();
                     break;
             }
             switch (DecideFlyingVermin)
             {
                 case 1:
-                    DissoVerminFlying.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/DLC1/FlyingVermin/cscFlyingVermin.asset").WaitForCompletion(); ;
+                    DissoVerminFlying.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/DLC1/FlyingVermin/cscFlyingVermin.asset").WaitForCompletion();
                     break;
                 case 2:
-                    DissoVerminFlying.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/DLC1/FlyingVermin/cscFlyingVerminSnowy.asset").WaitForCompletion(); ;
+                    DissoVerminFlying.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/DLC1/FlyingVermin/cscFlyingVerminSnowy.asset").WaitForCompletion();
                     break;
             }
             if (DecideBeetle == 50)
             {
                 Debug.LogWarning("Shiny Beetle");
-                DissoBeetle.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Beetle/cscBeetleSulfur.asset").WaitForCompletion(); ;
+                DissoBeetle.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Beetle/cscBeetleSulfur.asset").WaitForCompletion();
             }
             else
             {
-                DissoBeetle.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Beetle/cscBeetle.asset").WaitForCompletion(); ;
+                DissoBeetle.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Beetle/cscBeetle.asset").WaitForCompletion();
             }
             orig(monsterCategories, rng);
         }
