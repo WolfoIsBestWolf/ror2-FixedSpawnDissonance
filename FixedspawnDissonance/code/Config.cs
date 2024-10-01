@@ -18,6 +18,7 @@ namespace FixedspawnDissonance
 
         public static ConfigEntry<bool> CommandChanges;
         public static ConfigEntry<bool> DissonanceChanges;
+        public static ConfigEntry<bool> DevotionChanges;
         public static ConfigEntry<bool> EnigmaChanges;
         public static ConfigEntry<bool> EvolutionChanges;
         public static ConfigEntry<bool> HonorChanges;
@@ -114,6 +115,13 @@ namespace FixedspawnDissonance
                 "Enable Artifact of Enigma changes",
                 true,
                 "Replacing Equipment Drops with Enigma Fragment. Enabling/Disabling various Equipment for Enigma Compatible"
+            );
+
+            DevotionChanges = ConfigFile.Bind(
+                ": Main :",
+                "Enable Artifact of Devotion changes",
+                true,
+                "Currently, only adds missing elite types. Does not need to be disabled when official added"
             );
 
             EvolutionChanges = ConfigFile.Bind(

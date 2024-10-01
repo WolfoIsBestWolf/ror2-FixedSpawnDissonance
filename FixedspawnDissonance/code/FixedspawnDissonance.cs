@@ -12,7 +12,7 @@ using UnityEngine.Networking;
 namespace FixedspawnDissonance
 {
     [BepInDependency("com.bepis.r2api")]
-    [BepInPlugin("com.Wolfo.VanillaArtifactsPlus", "VanillaArtifactsPlus", "3.0.0")]
+    [BepInPlugin("com.Wolfo.VanillaArtifactsPlus", "VanillaArtifactsPlus", "3.0.2")]
     //[R2APISubmoduleDependency(nameof(ItemAPI), nameof(PrefabAPI), nameof(LanguageAPI))]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
 
@@ -26,8 +26,8 @@ namespace FixedspawnDissonance
         public static GameObject WarbannerObject = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/networkedobjects/WarbannerWard");
         public static GameObject WarbannerObjectEnemy = R2API.PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/networkedobjects/WarbannerWard"), "WarbannerWardEnemy", true);
 
-        public static CharacterSpawnCard MagmaWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
-        public static CharacterSpawnCard ElectricWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");
+        //public static CharacterSpawnCard MagmaWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
+        //public static CharacterSpawnCard ElectricWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");
 
         public void Awake()
         {
@@ -42,7 +42,10 @@ namespace FixedspawnDissonance
             RunArtifactManager.onArtifactEnabledGlobal += RunArtifactManager_onArtifactEnabledGlobal;
             RunArtifactManager.onArtifactDisabledGlobal += RunArtifactManager_onArtifactDisabledGlobal;
 
-
+            if (WConfig.DevotionChanges.Value == true)
+            {
+                Devotion.Start();
+            } 
             if (WConfig.CommandChanges.Value == true)
             {
                 Command.Start();
@@ -145,15 +148,12 @@ namespace FixedspawnDissonance
             {
                 KinBossDropsForEnemies.ModBossDropChanger();
             }
-            if (WConfig.VenganceChanges.Value == true && WConfig.VengenceEquipment.Value == true)
-            {
-                Vengence.EnableEquipmentForVengence();
-            }
+
             
             if (WConfig.DissonanceChanges.Value == true)
             {
                 //Most mods already add it themselves so always double check
-                Dissonance.ModdedEnemiesSupport();
+                //Dissonance.ModdedEnemiesSupport();
             }
 
             Command.MakeEliteLists();
@@ -168,6 +168,11 @@ namespace FixedspawnDissonance
             Soul.IndexAffixHealingCore = AffixEarthHealerBody.GetComponent<CharacterBody>().bodyIndex;
             Soul.SoulGreaterWispIndex = Soul.SoulGreaterWispBody.GetComponent<CharacterBody>().bodyIndex;
             Soul.SoulArchWispIndex = Soul.SoulArchWispBody.GetComponent<CharacterBody>().bodyIndex;
+
+            if (WConfig.VenganceChanges.Value == true && WConfig.VengenceEquipment.Value == true)
+            {
+                Vengence.EnableEquipmentForVengence();
+            }
 
             /*
             Texture dummy = Soul.SoulGreaterWispBody.GetComponent<CharacterBody>().portraitIcon;
@@ -217,6 +222,9 @@ namespace FixedspawnDissonance
                     if (WConfig.HonorEliteWormRules.Value == "HonorOnly")
                     {
                         //Debug.Log("Artifact of Honor - Worms will be Elites");
+                        CharacterSpawnCard MagmaWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
+                        CharacterSpawnCard ElectricWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");
+
                         MagmaWormEliteHonor.noElites = false;
                         MagmaWormEliteHonor.eliteRules = SpawnCard.EliteRules.Default;
                         ElectricWormEliteHonor.noElites = false;
@@ -296,6 +304,9 @@ namespace FixedspawnDissonance
             {
                 if (WConfig.HonorEliteWormRules.Value == "HonorOnly")
                 {
+                    CharacterSpawnCard MagmaWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
+                    CharacterSpawnCard ElectricWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");
+
                     MagmaWormEliteHonor.noElites = true;
                     MagmaWormEliteHonor.eliteRules = SpawnCard.EliteRules.ArtifactOnly;
                     ElectricWormEliteHonor.noElites = true;

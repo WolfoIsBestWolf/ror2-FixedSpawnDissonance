@@ -103,19 +103,15 @@ Artifact of Command allows choice of Elite Aspect. Command cubes will auto compl
 Artifact of Swarms now works on more ally items such as Goobo Jr, Spare Drone Parts, Gup, and ups every team limit by 50%.
 
 
+## Artifact of Devotion
+
+Adds the DLC2 elites to the rotation because they forgot to add them.
 
 
 ##
 Report bugs to @Wolfo.wolfo in the Risk of Rain 2 discord or RoR2 Modding discord.\
 If you're reporting a bug that isn't something obvious include the log file.
 
-Every player needs this mod installed.
-
-Also download my other mods:\
-[WolfoQualityOfLife](https://thunderstore.io/package/Wolfo/WolfoQualityOfLife/) for many visual improvements.\
-[LittleGameplayTweaks](https://thunderstore.io/package/Wolfo/LittleGameplayTweaks/) more enemy variety and some small changes.\
-[WolfoArtifacts](https://thunderstore.io/package/Wolfo/WolfoArtifacts) for some fun extra Artifacts.\
-[SimulacrumAdditions](https://thunderstore.io/package/Wolfo/SimulacrumAdditions) for a better Simulacrum.  
-
+### Every player needs this mod installed.
 
 

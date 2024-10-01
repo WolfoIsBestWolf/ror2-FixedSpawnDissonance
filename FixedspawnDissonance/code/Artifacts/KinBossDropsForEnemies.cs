@@ -32,33 +32,35 @@ namespace FixedspawnDissonance
 
             DeathRewards rewardgolem = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/GolemBody").GetComponent<DeathRewards>();
             rewardgolem.bossPickup = new SerializablePickupIndex() { pickupName = "ItemIndex.Knurl" };
+            rewardgolem = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC2/Halcyonite/HalcyoniteBody.prefab").WaitForCompletion().GetComponent<DeathRewards>();
+            rewardgolem.bossPickup = new SerializablePickupIndex() { pickupName = "ItemIndex.Knurl" };
 
-            DeathRewards rewardbeetle1 = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/BeetleBody").GetComponent<DeathRewards>();
-            rewardbeetle1.bossPickup = BossItemBeetle;
-            DeathRewards rewardbeetle2 = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/BeetleGuardBody").GetComponent<DeathRewards>();
-            rewardbeetle2.bossPickup = BossItemBeetle;
+            DeathRewards rewardbeetle = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/BeetleBody").GetComponent<DeathRewards>();
+            rewardbeetle.bossPickup = BossItemBeetle;
+            rewardbeetle = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/BeetleGuardBody").GetComponent<DeathRewards>();
+            rewardbeetle.bossPickup = BossItemBeetle;
 
             DeathRewards rewardjelly = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/JellyfishBody").GetComponent<DeathRewards>();
             rewardjelly.bossPickup = new SerializablePickupIndex() { pickupName = "ItemIndex.NovaOnLowHealth" };
 
-            DeathRewards rewardwisp1 = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/WispBody").GetComponent<DeathRewards>();
-            rewardwisp1.bossPickup = BossItemWisp;
-            DeathRewards rewardwisp2 = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/GreaterWispBody").GetComponent<DeathRewards>();
-            rewardwisp2.bossPickup = BossItemWisp;
+            DeathRewards rewardwisp = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/WispBody").GetComponent<DeathRewards>();
+            rewardwisp.bossPickup = BossItemWisp;
+            rewardwisp = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/GreaterWispBody").GetComponent<DeathRewards>();
+            rewardwisp.bossPickup = BossItemWisp;
 
-            DeathRewards rewardlemurian1 = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/LemurianBody").GetComponent<DeathRewards>();
-            rewardlemurian1.bossPickup = BossItemMagma;
-            DeathRewards rewardlemurian2 = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/LemurianBruiserBody").GetComponent<DeathRewards>();
-            rewardlemurian2.bossPickup = BossItemMagma;
+            DeathRewards rewardlemurian = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/LemurianBody").GetComponent<DeathRewards>();
+            rewardlemurian.bossPickup = BossItemMagma;
+            rewardlemurian = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/LemurianBruiserBody").GetComponent<DeathRewards>();
+            rewardlemurian.bossPickup = BossItemMagma;
 
-            rewardlemurian2 = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC2/Scorchling/ScorchlingBody.prefab").WaitForCompletion().GetComponent<DeathRewards>();
-            rewardlemurian2.bossPickup = BossItemMagma;
+            rewardlemurian = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC2/Scorchling/ScorchlingBody.prefab").WaitForCompletion().GetComponent<DeathRewards>();
+            rewardlemurian.bossPickup = BossItemMagma;
 
 
-            DeathRewards rewardclay1 = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/ClayBruiserBody").GetComponent<DeathRewards>();
-            rewardclay1.bossPickup = new SerializablePickupIndex() { pickupName = "ItemIndex.SiphonOnLowHealth" };
-            DeathRewards rewardclay2 = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/ClayGrenadierBody").GetComponent<DeathRewards>();
-            rewardclay2.bossPickup = new SerializablePickupIndex() { pickupName = "ItemIndex.SiphonOnLowHealth" };
+            DeathRewards rewardclay = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/ClayBruiserBody").GetComponent<DeathRewards>();
+            rewardclay.bossPickup = new SerializablePickupIndex() { pickupName = "ItemIndex.SiphonOnLowHealth" };
+            rewardclay = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/ClayGrenadierBody").GetComponent<DeathRewards>();
+            rewardclay.bossPickup = new SerializablePickupIndex() { pickupName = "ItemIndex.SiphonOnLowHealth" };
 
 
             DeathRewards rewardimp = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/ImpBody").GetComponent<DeathRewards>();
@@ -66,21 +68,20 @@ namespace FixedspawnDissonance
 
             DeathRewards rewardparent = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/ParentBody").GetComponent<DeathRewards>();
             rewardparent.bossPickup = new SerializablePickupIndex() { pickupName = "ItemIndex.ParentEgg" };
- 
             rewardparent = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC2/Child/ChildBody.prefab").WaitForCompletion().GetComponent<DeathRewards>();
             rewardparent.bossPickup = new SerializablePickupIndex() { pickupName = "ItemIndex.ParentEgg" };
 
-            DeathRewards rewardroboball1 = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/RoboBallMiniBody").GetComponent<DeathRewards>();
-            rewardroboball1.bossPickup = BossItemRoboBall;
-            DeathRewards rewardroboball2 = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/VultureBody").GetComponent<DeathRewards>();
-            rewardroboball2.bossPickup = BossItemRoboBall;
+            DeathRewards rewardroboball = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/RoboBallMiniBody").GetComponent<DeathRewards>();
+            rewardroboball.bossPickup = BossItemRoboBall;
+            rewardroboball = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/VultureBody").GetComponent<DeathRewards>();
+            rewardroboball.bossPickup = BossItemRoboBall;
 
-            DeathRewards rewardlunar1 = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/LunarExploderBody").GetComponent<DeathRewards>();
-            rewardlunar1.bossPickup = BossItemShinyPearl;
-            DeathRewards rewardlunar2 = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/LunarGolemBody").GetComponent<DeathRewards>();
-            rewardlunar2.bossPickup = BossItemShinyPearl;
-            DeathRewards rewardlunar3 = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/LunarWispBody").GetComponent<DeathRewards>();
-            rewardlunar3.bossPickup = BossItemShinyPearl;
+            DeathRewards rewardlunar = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/LunarExploderBody").GetComponent<DeathRewards>();
+            rewardlunar.bossPickup = BossItemShinyPearl;
+            rewardlunar = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/LunarGolemBody").GetComponent<DeathRewards>();
+            rewardlunar.bossPickup = BossItemShinyPearl;
+            rewardlunar = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/LunarWispBody").GetComponent<DeathRewards>();
+            rewardlunar.bossPickup = BossItemShinyPearl;
 
 
             DeathRewards rewardlamp = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/MinorConstructBody").GetComponent<DeathRewards>();
@@ -88,16 +89,16 @@ namespace FixedspawnDissonance
 
 
 
-            DeathRewards rewardvoid1 = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/VoidMegaCrabBody").GetComponent<DeathRewards>();
-            rewardvoid1.bossPickup = BossItemVoid;
-            DeathRewards rewardvoid2 = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/NullifierBody").GetComponent<DeathRewards>();
-            rewardvoid2.bossPickup = BossItemVoid;
-            DeathRewards rewardvoid3 = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC1/VoidJailer/VoidJailerBody.prefab").WaitForCompletion().GetComponent<DeathRewards>();
-            rewardvoid3.bossPickup = BossItemVoid;
-            DeathRewards rewardvoid4 = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC1/VoidBarnacle/VoidBarnacleBody.prefab").WaitForCompletion().GetComponent<DeathRewards>();
-            rewardvoid4.bossPickup = BossItemVoid;
-            DeathRewards rewardvoid5 = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab").WaitForCompletion().GetComponent<DeathRewards>();
-            rewardvoid5.bossPickup = BossItemVoid;
+            DeathRewards rewardvoid = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/VoidMegaCrabBody").GetComponent<DeathRewards>();
+            rewardvoid.bossPickup = BossItemVoid;
+            rewardvoid = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/NullifierBody").GetComponent<DeathRewards>();
+            rewardvoid.bossPickup = BossItemVoid;
+            rewardvoid = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC1/VoidJailer/VoidJailerBody.prefab").WaitForCompletion().GetComponent<DeathRewards>();
+            rewardvoid.bossPickup = BossItemVoid;
+            rewardvoid = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC1/VoidBarnacle/VoidBarnacleBody.prefab").WaitForCompletion().GetComponent<DeathRewards>();
+            rewardvoid.bossPickup = BossItemVoid;
+            rewardvoid = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab").WaitForCompletion().GetComponent<DeathRewards>();
+            rewardvoid.bossPickup = BossItemVoid;
 
 
 

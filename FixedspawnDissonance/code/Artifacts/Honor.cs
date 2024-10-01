@@ -28,10 +28,25 @@ namespace FixedspawnDissonance
                 LunarAffixHonorInit();
             }
             LunarAffixDisable();
+
+            if (WConfig.HonorEliteWormRules.Value == "HonorOnly")
+            {
+                On.RoR2.CharacterBody.UpdateItemAvailability += RemoveFireTrailFromWorm;
+            }
+
             if (WConfig.HonorStartingEliteEquip.Value)
             {
                 On.RoR2.Run.Start += Honor.HonorGiveEliteEquipOnStart;
             }     
+        }
+
+        private static void RemoveFireTrailFromWorm(On.RoR2.CharacterBody.orig_UpdateItemAvailability orig, CharacterBody self)
+        {
+            orig(self);
+            if(self.GetComponent<WormBodyPositions2>())
+            {
+                self.itemAvailability.hasFireTrail = false;
+            }
         }
 
         public static void PreventPerfectedMithrixFromRegenningShield(On.RoR2.CharacterBody.orig_OnOutOfDangerChanged orig, CharacterBody self)
@@ -64,12 +79,15 @@ namespace FixedspawnDissonance
                 Inventory inventory = minion.gameObject.GetComponent<Inventory>();
                 if (inventory && inventory.currentEquipmentIndex == EquipmentIndex.None)
                 {
-                    int index = Main.Random.Next(EliteEquipmentDefs.Count);
+                    if (EliteEquipmentDefs.Count > 0)
+                    {
+                        int index = Main.Random.Next(EliteEquipmentDefs.Count);
 
-                    inventory.SetEquipment(new EquipmentState(EliteEquipmentDefs[index].equipmentIndex, Run.FixedTimeStamp.negativeInfinity, 0), 0);
-                    //inventory.SetEquipmentIndex(EliteEquipmentHonorDefs[index].equipmentIndex);
-                    inventory.GiveItem(RoR2Content.Items.BoostDamage, 5);
-                    inventory.GiveItem(RoR2Content.Items.BoostHp, 15);
+                        inventory.SetEquipment(new EquipmentState(EliteEquipmentDefs[index].equipmentIndex, Run.FixedTimeStamp.negativeInfinity, 0), 0);
+                        //inventory.SetEquipmentIndex(EliteEquipmentHonorDefs[index].equipmentIndex);
+                        inventory.GiveItem(RoR2Content.Items.BoostDamage, 5);
+                        inventory.GiveItem(RoR2Content.Items.BoostHp, 15);
+                    }  
                 }
 
             }

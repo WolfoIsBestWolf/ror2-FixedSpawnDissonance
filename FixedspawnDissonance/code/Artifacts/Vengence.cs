@@ -424,15 +424,19 @@ namespace FixedspawnDissonance
                 {
                     BodyIndex index = SurvivorCatalog.survivorDefs[i].bodyPrefab.GetComponent<CharacterBody>().bodyIndex;
                     GameObject Master = MasterCatalog.GetMasterPrefab(MasterCatalog.FindAiMasterIndexForBody(index));
-                    RoR2.CharacterAI.AISkillDriver[] skilllist = Master.GetComponents<RoR2.CharacterAI.AISkillDriver>();
-                    //Debug.Log(Master);
-                    for (int JJ = 0; JJ < skilllist.Length; JJ++)
+                    if (Master)
                     {
-                        if (skilllist[JJ].skillSlot != SkillSlot.None)
+                        RoR2.CharacterAI.AISkillDriver[] skilllist = Master.GetComponents<RoR2.CharacterAI.AISkillDriver>();
+                        //Debug.Log(Master);
+                        for (int JJ = 0; JJ < skilllist.Length; JJ++)
                         {
-                            skilllist[JJ].shouldFireEquipment = true;
+                            if (skilllist[JJ].skillSlot != SkillSlot.None)
+                            {
+                                skilllist[JJ].shouldFireEquipment = true;
+                            }
                         }
                     }
+
                 }
             }
 

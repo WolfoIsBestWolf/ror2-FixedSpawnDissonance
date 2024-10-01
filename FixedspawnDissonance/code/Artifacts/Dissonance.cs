@@ -156,6 +156,7 @@ namespace FixedspawnDissonance
             };
 
 
+
             dccsMixEnemy.categories[0].selectionWeight = 2;
             dccsMixEnemy.categories[1].selectionWeight = 2;
             dccsMixEnemy.categories[2].selectionWeight = 3;
@@ -164,56 +165,82 @@ namespace FixedspawnDissonance
             dccsMixEnemy.AddCard(0, DSScav); //2000
 
 
-
+            bool Child = false;
             DirectorCard SolusProbeTemp = null;
             DirectorCard LunarWispTemp = null;
             //dccsMixEnemy.AddCard(3, DSVoidInfestor); //60
 
-            for (int i = dccsMixEnemy.categories.Length - 1; 0 <= i; i--)
+            for (int ii = 0; dccsMixEnemy.categories[2].cards.Length > ii; ii++)
             {
-                //Debug.LogWarning(i);
-                for (int ii = 0; dccsMixEnemy.categories[i].cards.Length > ii; ii++)
+                if (dccsMixEnemy.categories[2].cards[ii].spawnCard.name.EndsWith("Child"))
                 {
-                    //Debug.LogWarning(dccsMixEnemy.categories[i].cards[ii].spawnCard);
-                    //Debug.LogWarning(ii);
-
-                    if (dccsMixEnemy.categories[i].cards[ii].spawnCard.name.Equals("cscRoboBallMini"))
-                    {
-                        SolusProbeTemp = dccsMixEnemy.categories[i].cards[ii];
-                        dccsMixEnemy.categories[i].cards[ii] = DSHermitCrab;
-                    }
-                    else if (dccsMixEnemy.categories[i].cards[ii].spawnCard.name.Equals("cscLunarWisp"))
-                    {
-                        LunarWispTemp = dccsMixEnemy.categories[i].cards[ii];
-                        dccsMixEnemy.categories[i].cards[ii] = SolusProbeTemp;
-                    }//
-                    else if (dccsMixEnemy.categories[i].cards[ii].spawnCard.name.Equals("cscTitanBlackBeach"))
-                    {
-                        DissoTitan = dccsMixEnemy.categories[i].cards[ii];
-                    }
-                    else if (dccsMixEnemy.categories[i].cards[ii].spawnCard.name.Equals("cscGolem"))
-                    {
-                        DissoGolem = dccsMixEnemy.categories[i].cards[ii];
-                    }
-                    else if (dccsMixEnemy.categories[i].cards[ii].spawnCard.name.Equals("cscVermin"))
-                    {
-                        DissoVermin = dccsMixEnemy.categories[i].cards[ii];
-                    }
-                    else if (dccsMixEnemy.categories[i].cards[ii].spawnCard.name.Equals("cscFlyingVermin"))
-                    {
-                        DissoVerminFlying = dccsMixEnemy.categories[i].cards[ii];
-                    }
-                    else if (dccsMixEnemy.categories[i].cards[ii].spawnCard.name.Equals("cscBeetle"))
-                    {
-                        DissoBeetle = dccsMixEnemy.categories[i].cards[ii];
-                    }
+                    Child = true;
+                }
+                else if (dccsMixEnemy.categories[2].cards[ii].spawnCard.name.EndsWith("lMini"))
+                {
+                    SolusProbeTemp = dccsMixEnemy.categories[2].cards[ii];
+                    dccsMixEnemy.categories[2].cards[ii] = DSHermitCrab;
+                }
+                else if (dccsMixEnemy.categories[2].cards[ii].spawnCard.name.Equals("cscVermin"))
+                {
+                    DissoVermin = dccsMixEnemy.categories[2].cards[ii];
+                }
+                else if (dccsMixEnemy.categories[2].cards[ii].spawnCard.name.Equals("cscFlyingVermin"))
+                {
+                    DissoVerminFlying = dccsMixEnemy.categories[2].cards[ii];
                 }
             }
+            for (int ii = 0; dccsMixEnemy.categories[1].cards.Length > ii; ii++)
+            {
+                if (dccsMixEnemy.categories[1].cards[ii].spawnCard.name.Equals("cscLunarWisp"))
+                {
+                    LunarWispTemp = dccsMixEnemy.categories[1].cards[ii];
+                    dccsMixEnemy.categories[1].cards[ii] = SolusProbeTemp;
+                }
+                else if (dccsMixEnemy.categories[1].cards[ii].spawnCard.name.Equals("cscGolem"))
+                {
+                    DissoGolem = dccsMixEnemy.categories[1].cards[ii];
+                }
+            }
+            for (int ii = 0; dccsMixEnemy.categories[0].cards.Length > ii; ii++)
+            {
+                if (dccsMixEnemy.categories[1].cards[ii].spawnCard.name.Equals("cscTitanBlackBeach"))
+                {
+                    DissoTitan = dccsMixEnemy.categories[1].cards[ii];
+                }
+            }
+ 
             dccsMixEnemy.AddCard(0, LunarWispTemp); //550
-
-
-            //Logger.LogMessage($"Added Cards.");
-            //cardsadded = true;
+            if (Child == false)
+            {
+                DirectorCard DLC2_Child = new DirectorCard
+                {
+                    spawnCard = Addressables.LoadAssetAsync<SpawnCard>(key: "RoR2/DLC2/Child/cscChild.asset").WaitForCompletion(),
+                    selectionWeight = 1,
+                    preventOverhead = false,
+                    minimumStageCompletions = 0,
+                    spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
+                };
+                DirectorCard DLC2_Scorch = new DirectorCard
+                {
+                    spawnCard = Addressables.LoadAssetAsync<SpawnCard>(key: "RoR2/DLC2/Scorchling/cscScorchling.asset").WaitForCompletion(),
+                    selectionWeight = 1,
+                    preventOverhead = false,
+                    minimumStageCompletions = 0,
+                    spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
+                };
+                DirectorCard DLC2_Halc = new DirectorCard
+                {
+                    spawnCard = Addressables.LoadAssetAsync<SpawnCard>(key: "RoR2/DLC2/Halcyonite/cscHalcyonite.asset").WaitForCompletion(),
+                    selectionWeight = 1,
+                    preventOverhead = false,
+                    minimumStageCompletions = 0,
+                    spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
+                };
+                dccsMixEnemy.AddCard(2, DLC2_Child);
+                dccsMixEnemy.AddCard(1, DLC2_Scorch);
+                dccsMixEnemy.AddCard(0, DLC2_Halc);
+            }
         }
 
 
