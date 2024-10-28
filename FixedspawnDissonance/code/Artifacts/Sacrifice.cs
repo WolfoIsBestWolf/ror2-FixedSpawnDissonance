@@ -35,14 +35,14 @@ namespace FixedspawnDissonance
             dtSacrificeArtifactVoid.voidTier3Weight = 1; //1
             dtSacrificeArtifactVoid.name = "dtSacrificeArtifactVoid";
 
-            if (WConfig.SacrificeMoreEnemySpawns.Value) 
+            if (WConfig.SacrificeMoreEnemySpawns.Value)
             {
                 On.RoR2.Artifacts.SacrificeArtifactManager.OnPrePopulateSceneServer += (orig, sceneDirector) =>
                 {
                     sceneDirector.monsterCredit = (int)(sceneDirector.monsterCredit * 1.6f);
                     orig(sceneDirector);
                 };
-            }  
+            }
         }
 
         public static void SacrificeArtifactManager_OnServerCharacterDeath(On.RoR2.Artifacts.SacrificeArtifactManager.orig_OnServerCharacterDeath orig, DamageReport damageReport)

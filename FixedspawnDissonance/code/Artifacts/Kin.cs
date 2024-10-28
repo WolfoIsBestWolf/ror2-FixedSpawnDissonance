@@ -21,15 +21,15 @@ namespace FixedspawnDissonance
                 SpawnCard spwncard = monsterCategories.categories[0].cards[0].spawnCard;
                 if (spwncard == KinNoRepeat)
                 {
-                        //Debug.Log("Repeat Spawn");
-                        do
+                    //Debug.Log("Repeat Spawn");
+                    do
                     {
                         r++;
                         monsterCategories.CopyFrom(KinBackup);
                         orig2(monsterCategories, rng);
                         spwncard = monsterCategories.categories[0].cards[0].spawnCard;
-                            //Debug.LogWarning(monsterCategories.categories[0].cards[0].spawnCard);
-                        } while (r < 15 && spwncard == KinNoRepeat);
+                        //Debug.LogWarning(monsterCategories.categories[0].cards[0].spawnCard);
+                    } while (r < 15 && spwncard == KinNoRepeat);
                 }
                 if (spwncard != KinNoRepeat)
                 {

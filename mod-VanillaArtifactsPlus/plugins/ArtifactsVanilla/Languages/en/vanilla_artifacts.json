@@ -1,0 +1,19 @@
+{
+	"strings":
+	{      
+		"ARTIFACT_COMMAND_CUBE_INTERACTION_PROMPT": "Choose",
+	
+	       "ARTIFACT_ENIGMA_DESCRIPTION": "Your equipment changes every time it's activated. Additional Equipment become fragments that reduce cooldown instead.",
+
+            "ITEM_ENIGMAEQUIPMENTBOOST_NAME": "Enigma Fragment",
+            "ITEM_ENIGMAEQUIPMENTBOOST_PICKUP": "Reduce equipment cooldown.",
+            "ITEM_ENIGMAEQUIPMENTBOOST_DESC": "<style=cIsUtility>Reduce equipment cooldown</style> by <style=cIsUtility>{0}%</style> <style=cStack>(+{1}% per stack)</style>.",
+ 
+	
+		"SOULWISP_BODY_NAME": "Lesser Soul",
+        "SOULGREATERWISP_BODY_NAME": "Greater Soul",
+        "SOULARCHWISP_BODY_NAME": "Arch Soul",
+
+		
+	}
+}

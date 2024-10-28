@@ -209,7 +209,7 @@ namespace FixedspawnDissonance
             DLC2Content.Items.ExtraShrineItem.tags = DLC2Content.Items.ExtraShrineItem.tags.Add(ItemTag.AIBlacklist);
 
             DLC2Content.Items.TeleportOnLowHealth.tags = DLC2Content.Items.TeleportOnLowHealth.tags.Add(ItemTag.Count);
-           
+
             DLC2Content.Items.GoldOnStageStart.tags = DLC2Content.Items.GoldOnStageStart.tags.Add(ItemTag.AIBlacklist);
             DLC2Content.Items.ResetChests.tags = DLC2Content.Items.ResetChests.tags.Add(ItemTag.AIBlacklist);
             DLC2Content.Items.BoostAllStats.tags = DLC2Content.Items.BoostAllStats.tags.Add(ItemTag.AIBlacklist);

@@ -1,7 +1,7 @@
 using R2API;
 using RoR2;
-using UnityEngine;
 using RoR2.Artifacts;
+using UnityEngine;
 
 namespace FixedspawnDissonance
 {
@@ -16,22 +16,41 @@ namespace FixedspawnDissonance
             //On.RoR2.UI.GenericNotification.SetItem += PickupItemNotification;
             ColorUtility.TryParseHtmlString("#AE6BCB", out CustomColor);
 
-            LanguageAPI.Add("ARTIFACT_COMMAND_CUBE_INTERACTION_PROMPT", "Choose", "en");
-
-            //LanguageAPI.Add("ARTIFACT_ENIGMA_DESCRIPTION", "Spawn with a random equipment that changes every time it's activated.\nExtra Equipment will be turned into fragments that reduce cooldown instead.", "en");
-            LanguageAPI.Add("ARTIFACT_ENIGMA_DESCRIPTION", "Your equipment changes every time it's activated. Additional Equipment become fragments that reduce cooldown instead.", "en");
-
-            LanguageAPI.Add("ITEM_ENIGMAEQUIPMENTBOOST_NAME", "Enigma Fragment", "en");
-            LanguageAPI.Add("ITEM_ENIGMAEQUIPMENTBOOST_PICKUP", "Reduce equipment cooldown.", "en");
-            LanguageAPI.Add("ITEM_ENIGMAEQUIPMENTBOOST_DESC", "<style=cIsUtility>Reduce equipment cooldown</style> by <style=cIsUtility>" + WConfig.EnigmaCooldownReduction.Value + "%</style> <style=cStack>(+" + WConfig.EnigmaCooldownReduction.Value + "% per stack)</style>.", "en");
-
-            LanguageAPI.Add("EQUIPMENT_ENIGMAEQUIPMENT_NAME", "Enigma Box", "en");
-            LanguageAPI.Add("EQUIPMENT_ENIGMAEQUIPMENT_PICKUP", "What could it be?", "en");
-            LanguageAPI.Add("EQUIPMENT_ENIGMAEQUIPMENT_DESC", "Activate a random equipment on use.", "en");
 
 
+            if (WConfig.EnigmaInterrupt.Value == false)
+            {
+                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/BossHunter").enigmaCompatible = false;
+                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/BossHunterConsumed").enigmaCompatible = false;
+                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Recycle").enigmaCompatible = false;
+            }
+
+            if (WConfig.EnigmaMovement.Value == true)
+            {
+                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Jetpack").enigmaCompatible = true;
+                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/FireBallDash").enigmaCompatible = true;
+            }
+            else
+            {
+                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Jetpack").enigmaCompatible = false;
+                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/FireBallDash").enigmaCompatible = false;
+            }
+
+            RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Tonic").enigmaCompatible = false;
+            RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Meteor").enigmaCompatible = false;
+            RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/BurnNearby").enigmaCompatible = false;
+            RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/CrippleWard").enigmaCompatible = true;
+
+            if (!WConfig.DisableNewContent.Value)
+            {
+                MakeEnigmaFragment();
+            }
+        }
+
+        public static void MakeEnigmaFragment()
+        {
             //var EnigmaArtifactDisplay = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("ArtifactIndex.Enigma")).displayPrefab;
-
+  
             ArtifactDef EnigmaArtifactDefTemp = RoR2.LegacyResourcesAPI.Load<ArtifactDef>("artifactdefs/Enigma");
             ItemDef EnigmaFragment = ScriptableObject.CreateInstance<ItemDef>();
 
@@ -74,53 +93,31 @@ namespace FixedspawnDissonance
                 }
                 return orig(self);
             };
-
-
-            if (WConfig.EnigmaInterrupt.Value == false)
-            {
-                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/BossHunter").enigmaCompatible = false;
-                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/BossHunterConsumed").enigmaCompatible = false;
-                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Recycle").enigmaCompatible = false;
-            }
-
-            if (WConfig.EnigmaMovement.Value == true)
-            {
-                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Jetpack").enigmaCompatible = true;
-                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/FireBallDash").enigmaCompatible = true;
-            }
-            else
-            {
-                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Jetpack").enigmaCompatible = false;
-                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/FireBallDash").enigmaCompatible = false;
-            }
- 
-            RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Tonic").enigmaCompatible = false;
-            RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Meteor").enigmaCompatible = false;
-            RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/BurnNearby").enigmaCompatible = false;
-            RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/CrippleWard").enigmaCompatible = false;
         }
 
         public static void EnigmaCallLate()
         {
-            //Idk why I call this late but I dont wanna bother finding out
-            Texture2D texItemEnigmaP = new Texture2D(128, 128, TextureFormat.DXT5, false);
-            texItemEnigmaP.LoadImage(Properties.Resources.texItemEnigmaP, true);
-            texItemEnigmaP.filterMode = FilterMode.Bilinear;
-            texItemEnigmaP.wrapMode = TextureWrapMode.Clamp;
-            Sprite texItemEnigmaPS = Sprite.Create(texItemEnigmaP, new Rect(0, 0, 128, 128), new Vector2(0.5f, 0.5f));
+            if (!WConfig.DisableNewContent.Value)
+            {
+                //Idk why I call this late but I dont wanna bother finding out
+                Texture2D texItemEnigmaP = new Texture2D(128, 128, TextureFormat.DXT5, false);
+                texItemEnigmaP.LoadImage(Properties.Resources.texItemEnigmaP, true);
+                texItemEnigmaP.filterMode = FilterMode.Bilinear;
+                texItemEnigmaP.wrapMode = TextureWrapMode.Clamp;
+                Sprite texItemEnigmaPS = Sprite.Create(texItemEnigmaP, new Rect(0, 0, 128, 128), new Vector2(0.5f, 0.5f));
 
-            EnigmaFragmentPurple.pickupIconSprite = texItemEnigmaPS;
+                EnigmaFragmentPurple.pickupIconSprite = texItemEnigmaPS;
 
 
-            PickupDef boostequipdef = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("ItemIndex.EnigmaFragment_ArtifactHelper"));
+                PickupDef boostequipdef = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("ItemIndex.EnigmaFragment_ArtifactHelper"));
 
-            boostequipdef.baseColor = CustomColor;
-            boostequipdef.darkColor = CustomColor;
+                boostequipdef.baseColor = CustomColor;
+                boostequipdef.darkColor = CustomColor;
 
-            boostequipdef.displayPrefab = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("ArtifactIndex.Enigma")).displayPrefab;
-            boostequipdef.dropletDisplayPrefab = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("EquipmentIndex.Fruit")).dropletDisplayPrefab;
-            boostequipdef.iconSprite = texItemEnigmaPS;
-
+                boostequipdef.displayPrefab = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("ArtifactIndex.Enigma")).displayPrefab;
+                boostequipdef.dropletDisplayPrefab = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("EquipmentIndex.Fruit")).dropletDisplayPrefab;
+                boostequipdef.iconSprite = texItemEnigmaPS;
+            }
 
 
             //Mod Support

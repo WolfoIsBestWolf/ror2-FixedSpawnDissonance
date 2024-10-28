@@ -1,7 +1,6 @@
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 
 namespace FixedspawnDissonance
@@ -10,40 +9,87 @@ namespace FixedspawnDissonance
     {
         public static List<EquipmentDef> EliteEquipmentDefs = new List<EquipmentDef>();
 
-        //Honor Stupid Elite
-        public static GivePickupsOnStart HonorAffixGiverVoidling0 = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC1/VoidRaidCrab/MiniVoidRaidCrabMasterBase.prefab").WaitForCompletion().AddComponent<GivePickupsOnStart>();
-        public static GivePickupsOnStart HonorAffixGiverVoidling1 = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC1/VoidRaidCrab/MiniVoidRaidCrabMasterPhase1.prefab").WaitForCompletion().AddComponent<GivePickupsOnStart>();
-        public static GivePickupsOnStart HonorAffixGiverVoidling2 = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC1/VoidRaidCrab/MiniVoidRaidCrabMasterPhase2.prefab").WaitForCompletion().AddComponent<GivePickupsOnStart>();
-        public static GivePickupsOnStart HonorAffixGiverVoidling3 = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC1/VoidRaidCrab/MiniVoidRaidCrabMasterPhase3.prefab").WaitForCompletion().AddComponent<GivePickupsOnStart>();
-
-        public static GivePickupsOnStart BrotherLunarAffixGiver = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/charactermasters/BrotherMaster").AddComponent<GivePickupsOnStart>();
-        public static GivePickupsOnStart BrotherHurtLunarAffixGiver = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/charactermasters/BrotherHurtMaster").AddComponent<GivePickupsOnStart>();
-        public static GivePickupsOnStart BrotherHauntLunarAffixGiver = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/charactermasters/BrotherHauntMaster").AddComponent<GivePickupsOnStart>();
-
-
         public static void Start()
         {
             if (WConfig.HonorPerfectedLunarBosses.Value == true)
             {
-                LunarAffixHonorInit();
+                On.RoR2.ScriptedCombatEncounter.BeginEncounter += ScriptedCombatEncounter_BeginEncounter;
+                On.RoR2.InfiniteTowerExplicitSpawnWaveController.Initialize += InfiniteTowerExplicitSpawnWaveController_Initialize;
             }
-            LunarAffixDisable();
 
-            if (WConfig.HonorEliteWormRules.Value == "HonorOnly")
-            {
-                On.RoR2.CharacterBody.UpdateItemAvailability += RemoveFireTrailFromWorm;
-            }
+            On.RoR2.CharacterBody.UpdateItemAvailability += RemoveFireTrailFromWorm;
 
             if (WConfig.HonorStartingEliteEquip.Value)
             {
                 On.RoR2.Run.Start += Honor.HonorGiveEliteEquipOnStart;
-            }     
+            }
+        }
+
+        private static void InfiniteTowerExplicitSpawnWaveController_Initialize(On.RoR2.InfiniteTowerExplicitSpawnWaveController.orig_Initialize orig, InfiniteTowerExplicitSpawnWaveController self, int waveIndex, Inventory enemyInventory, GameObject spawnTargetObject)
+        {
+            if (RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.EliteOnly))
+            {
+                string name = self.spawnList[0].spawnCard.name;
+                if (name.StartsWith("cscBrother"))
+                {
+                    self.spawnList[0].eliteDef = RoR2Content.Elites.Lunar;
+                }
+                else if (name.StartsWith("cscScavLunar"))
+                {
+                    self.spawnList[0].eliteDef = RoR2Content.Elites.Lunar;
+                }
+                else if (name.StartsWith("cscMiniVoidR"))
+                {
+                    self.spawnList[0].eliteDef = DLC1Content.Elites.Void;
+                }
+                else if (name.StartsWith("cscITVoidMe"))
+                {
+                    self.spawnList[0].eliteDef = DLC1Content.Elites.Void;
+                }
+                else if (name.StartsWith("cscFalseSon"))
+                {
+                    self.spawnList[0].eliteDef = DLC2Content.Elites.Aurelionite;
+                }
+            }
+
+
+            orig(self, waveIndex, enemyInventory, spawnTargetObject);
+        }
+
+        private static void ScriptedCombatEncounter_BeginEncounter(On.RoR2.ScriptedCombatEncounter.orig_BeginEncounter orig, ScriptedCombatEncounter self)
+        {
+            orig(self);
+            if (RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.EliteOnly))
+            {
+                string name = self.spawns[0].spawnCard.name;
+                if (name.StartsWith("cscBrother"))
+                {
+                    for (int i = 0; i < self.combatSquad.memberCount; i++)
+                    {
+                        self.combatSquad.membersList[i].inventory.SetEquipmentIndex(RoR2Content.Equipment.AffixLunar.equipmentIndex);
+                    }
+                }
+                else if (name.StartsWith("cscMiniVoidR"))
+                {
+                    for (int i = 0; i < self.combatSquad.memberCount; i++)
+                    {
+                        self.combatSquad.membersList[i].inventory.SetEquipmentIndex(DLC1Content.Equipment.EliteVoidEquipment.equipmentIndex);
+                    }
+                }
+                else if (name.StartsWith("cscFalseSon"))
+                {
+                    for (int i = 0; i < self.combatSquad.memberCount; i++)
+                    {
+                        self.combatSquad.membersList[i].inventory.SetEquipmentIndex(DLC2Content.Equipment.EliteAurelioniteEquipment.equipmentIndex);
+                    }
+                }
+            }
         }
 
         private static void RemoveFireTrailFromWorm(On.RoR2.CharacterBody.orig_UpdateItemAvailability orig, CharacterBody self)
         {
             orig(self);
-            if(self.GetComponent<WormBodyPositions2>())
+            if (self.GetComponent<WormBodyPositions2>())
             {
                 self.itemAvailability.hasFireTrail = false;
             }
@@ -58,17 +104,6 @@ namespace FixedspawnDissonance
             }
         }
 
-        public static void LunarAffixHonorInit()
-        {
-            BrotherLunarAffixGiver.equipmentString = "EliteLunarEquipment";
-            BrotherHurtLunarAffixGiver.equipmentString = "EliteLunarEquipment";
-            BrotherHauntLunarAffixGiver.equipmentString = "EliteLunarEquipment";
-
-            HonorAffixGiverVoidling0.equipmentString = "EliteVoidEquipment";
-            HonorAffixGiverVoidling1.equipmentString = "EliteVoidEquipment";
-            HonorAffixGiverVoidling2.equipmentString = "EliteVoidEquipment";
-            HonorAffixGiverVoidling3.equipmentString = "EliteVoidEquipment";
-        }
 
         public static void MinionsInheritHonor(On.RoR2.MinionOwnership.MinionGroup.orig_AddMinion orig, NetworkInstanceId ownerId, global::RoR2.MinionOwnership minion)
         {
@@ -87,7 +122,7 @@ namespace FixedspawnDissonance
                         //inventory.SetEquipmentIndex(EliteEquipmentHonorDefs[index].equipmentIndex);
                         inventory.GiveItem(RoR2Content.Items.BoostDamage, 5);
                         inventory.GiveItem(RoR2Content.Items.BoostHp, 15);
-                    }  
+                    }
                 }
 
             }
@@ -134,29 +169,7 @@ namespace FixedspawnDissonance
             }
         }
 
-        public static void LunarAffixDisable()
-        {
-            BrotherLunarAffixGiver.enabled = false;
-            BrotherHurtLunarAffixGiver.enabled = false;
-            BrotherHauntLunarAffixGiver.enabled = false;
 
-            HonorAffixGiverVoidling0.enabled = false;
-            HonorAffixGiverVoidling1.enabled = false;
-            HonorAffixGiverVoidling2.enabled = false;
-            HonorAffixGiverVoidling3.enabled = false;
-        }
-        public static void LunarAffixEnable()
-        {
-            BrotherLunarAffixGiver.enabled = true;
-            BrotherHurtLunarAffixGiver.enabled = true;
-            BrotherHauntLunarAffixGiver.enabled = true;
-
-            HonorAffixGiverVoidling0.enabled = true;
-            HonorAffixGiverVoidling1.enabled = true;
-            HonorAffixGiverVoidling2.enabled = true;
-            HonorAffixGiverVoidling3.enabled = true;
-        }
-   
         public static void WormStart()
         {
             if (WConfig.HonorEliteWormRules.Value == "Never")
@@ -190,6 +203,6 @@ namespace FixedspawnDissonance
                 Debug.LogWarning("Invalid String for Worm Elite Rules");
             }
         }
-    
+
     }
 }

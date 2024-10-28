@@ -1,5 +1,11 @@
+This mod is required by everyone.
+
+If you wish to use this mod as a Host with players who do not have it. You can disable content added by this mod.\
+This would include Enigma Fragments and Greater Soul Wisps. \
+Rest of the changes is probably fine.
+
 ## Artifact of Dissonance
-Adds Hermit Crabs to Dissonance as they are missing from it.
+Adds Hermit Crabs and Sots enemies to Dissonance as they are missing from it.
 
 The Artifact spams less minibosses and have more evenly distributed categories.
 
@@ -48,16 +54,16 @@ Hordes of Many will now drop fitting Yellow Items depending on the enemy.\
 This should help with Artifact of Kin or just general situations where the game fails to spawn a Boss.\
 You cannot use Tricorn on enemies for these drops.
 ```
-Titanic Knurl:       Stone Golem
+Titanic Knurl:       Stone Golem, Halcyonite
 Queen's Gland:       Beetle, Beetle Guard
 Genesis Loop:        Jellyfish
 Little Disciple:     Lesser Wisp, Greater Wisp
-Molten Perforator:   Lemurian, Elder Lemurian
+Molten Perforator:   Lemurian, Elder Lemurian, Scorchling
 Charged Perforator:  Overloading Lemurian, Overloading Elder Lemurian
 Shatterspleen:       Imp
 Mired Urn:           Clay Templar, Clay Apothecary
 Empathy Cores:       Solus Probe, Alloy Vulture
-Planula:             Parent
+Planula:             Parent, Child
 Defense Nucleus:     Alpha Construct
 Irradiant Pearl:     Lunar Exploder, Lunar Golem, Lunar Wisp
 Newly Hatched Zoea:  Void Barnacle, Void Reaver, Void Jailer
@@ -66,7 +72,7 @@ Newly Hatched Zoea:  Void Barnacle, Void Reaver, Void Jailer
 ## Artifact of Honor
 Allows Worms to be Elites when Artifact of Honor is enabled. 
 
-Forces Mithrix and Voidling to be Lunar/Voidtouched respectively instead of a specific Tier1 elite.
+Mithix will be Perfected, Voidling will be Voidtouched, False Son will be Gilded.
 
 Forces Minions and Drones to be random elite.
 
@@ -94,24 +100,31 @@ Bosses now drop Green/Red/Yellows only but regular enemies drop slightly less Gr
 Stages will have more enemies at the start.
 
 ## Artifact of Spite
-Bombs will hurt enemies.\
+Bombs will hurt and knock enemies around.\
 Smaller enemies drop more bombs and in a larger radius.\
-Damage goes up per stage, Explosion radius is bigger, bombs explode a bit earlier.
 
-Artifact of Command allows choice of Elite Aspect. Command cubes will auto complete if it would be only 1 option.
-
-Artifact of Swarms now works on more ally items such as Goobo Jr, Spare Drone Parts, Gup, and ups every team limit by 50%.
-
+Damage is now always the same regardless of what enemy dropped it. (Done via someone elses mod)\
+Damage scales a extra amount per stage in addition to ambient level.
 
 ## Artifact of Devotion
 
 Adds the DLC2 elites to the rotation because they forgot to add them.
 
+Makes the oldest lemurians inventory viewable in the scoreboard for every player that has one.
+
+#
+
+Artifact of Command allows choice of Elite Aspect. Command cubes will auto complete if it would be only 1 option.
+
+Artifact of Swarms now works on more ally items such as Goobo Jr, Spare Drone Parts and ups every team limit by 50%.
+
+
+### Every player needs this mod installed.
 
 ##
 Report bugs to @Wolfo.wolfo in the Risk of Rain 2 discord or RoR2 Modding discord.\
 If you're reporting a bug that isn't something obvious include the log file.
 
-### Every player needs this mod installed.
+Credits to Nuxlar for making Deovtion Inventory originally and allowing me to add it even if I didn't end up using most of his code.
 
 

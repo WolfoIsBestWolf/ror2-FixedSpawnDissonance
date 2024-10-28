@@ -1,5 +1,15 @@
 ## Changelog:
 ```
+v3.1.0
+Added Ambient Spite as a dependency. Just makes more sense for Spite to work this way.
+Ported Nuxlars Devotion Lemurian Inventory mod. (with Permission)
+False Son will be Gilded when Honor is enabled.
+
+Fixed Devotion eggs not working properly if Devotion is diabled (Vanilla bug)
+Fixed Lemurians not properly evolving after Devotion gets disabled.
+Fixed Family Lines being broadcast even with Dissonance on. (Vanilla, SotS bug)
+
+v3.0.3 - Fixed an issue preventing Dissonance from working.
 v3.0.2
 Added the 2 new elite types to the Devotion elite pool.
 

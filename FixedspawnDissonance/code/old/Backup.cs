@@ -118,9 +118,7 @@ if (SoulImmortal.Value == true)
    GreaterSoulWispBody.levelDamage *= 0.6f;
    GreaterSoulWispBody.baseAttackSpeed *= 1.33f;
 
-   SoulLesserWispBody.transform.GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetChild(1).gameObject.SetActive(false);
-   SoulGreaterWispBody.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(2).gameObject.SetActive(false);
-
+ 
    GivePickupsOnStart.ItemInfo AlienHead = new GivePickupsOnStart.ItemInfo { itemString = ("AlienHead"), count = 1, };
    GivePickupsOnStart.ItemInfo DeathMark = new GivePickupsOnStart.ItemInfo { itemString = ("DeathMark"), count = 1, };
    GivePickupsOnStart.ItemInfo StunGrenade = new GivePickupsOnStart.ItemInfo { itemString = ("StunChanceOnHit"), count = 1, };

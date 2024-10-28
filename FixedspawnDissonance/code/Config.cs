@@ -1,13 +1,5 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
-using R2API;
-using R2API.Utils;
-using RoR2;
-using RoR2.Artifacts;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.Networking;
 
 namespace FixedspawnDissonance
 {
@@ -15,6 +7,8 @@ namespace FixedspawnDissonance
     public class WConfig
     {
         public static ConfigFile ConfigFile;
+
+        public static ConfigEntry<bool> DisableNewContent;
 
         public static ConfigEntry<bool> CommandChanges;
         public static ConfigEntry<bool> DissonanceChanges;
@@ -68,6 +62,8 @@ namespace FixedspawnDissonance
         public static ConfigEntry<int> EvoMoreRed;
         public static ConfigEntry<int> EvoVoidTeam;
 
+        public static ConfigEntry<bool> DevotionInventory;
+        public static ConfigEntry<bool> DevotionOnlyOneInventory;
 
         //public static ConfigEntry<bool> RarerEnemies;
         //public static ConfigEntry<bool> BullshitScavs;
@@ -95,6 +91,13 @@ namespace FixedspawnDissonance
         public static void InitConfig()
         {
             ConfigFile = new ConfigFile(Paths.ConfigPath + "\\Wolfo.Vanilla_Artifacts_Plus.cfg", true);
+
+            DisableNewContent = ConfigFile.Bind(
+                ": Main :",
+                "Disable New Content",
+                false,
+                "Disable new items/monsters added by this mod for Host mod only situations.\nMeaning Enigma Fragments and Greater Soul Wisps will not exist.\nNot sure how well other stuff works."
+            );
 
             CommandChanges = ConfigFile.Bind(
                 ": Main :",
@@ -334,6 +337,19 @@ namespace FixedspawnDissonance
                 "Prevents Scavs and Enemies from spawning with; Nkuhanas Opinion, Aegis, Happiest Mask, Ghors Tome, Death Mark, Infusion\n Prevents Artifact of Evolution giving; Tesla Coil, Razorwire"
             );
 
+            DevotionOnlyOneInventory = ConfigFile.Bind(
+                "Devotion",
+                "Show everybodies Lemurians Inventory",
+                true,
+                "Should every players, lemurians, inventory be shown, or only your lemurians inventory."
+            );
+            DevotionInventory = ConfigFile.Bind(
+                "Devotion",
+                "Show Lemurians Inventory",
+                true,
+                "Show the oldest Lemurians inventory on the scoreboard. Every players is shown alternating player, lem. See other config."
+            );
+
 
             /*
             SoulImmortal = ConfigFile.Bind(
@@ -372,7 +388,7 @@ DissonancePerfectedForAll = ConfigFile.Bind(
     "Sets the EliteRules for all enemies selected by Dissonance on Commencement to the Lunar rule.\nMeaning only Perfected elites normally and Perfected + Tier 1 Elites with Honor"
 );*/
 
- 
+
         }
 
     }

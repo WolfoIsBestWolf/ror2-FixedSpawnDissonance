@@ -1,4 +1,3 @@
-using BepInEx;
 using RoR2;
 using UnityEngine;
 
@@ -15,7 +14,7 @@ namespace FixedspawnDissonance
             //On.RoR2.PickupDropletController.CreateCommandCube += PickupDropletController_CreateCommandCube;
             On.RoR2.PickupPickerController.GetOptionsFromPickupIndex += CommandGiveAffixChoices;
 
-           //Fix Void Particles
+            //Fix Void Particles
             On.RoR2.PickupPickerController.SetOptionsFromPickupForCommandArtifact += (orig, self, pickupIndex) =>
             {
                 orig(self, pickupIndex);
@@ -125,7 +124,7 @@ namespace FixedspawnDissonance
                     if (EliteEquipmentChoicesForCommand.Length > 0)
                     {
                         return EliteEquipmentChoicesForCommand;
-                    }     
+                    }
                 }
             }
             return temp;

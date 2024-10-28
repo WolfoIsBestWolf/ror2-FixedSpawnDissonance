@@ -1,10 +1,6 @@
 ﻿/*
 
-    //LanguageAPI.Add("ARTIFACT_ENIGMA_DESCRIPTION", "Spawn with a Enigma Box which activates random equipment. Equipment can be turned into equipment cooldown reduction", "en");
-    //LanguageAPI.Add("ARTIFACT_ENIGMA_DESCRIPTION", "Spawn with a Enigma Box which activates random equipment. Duplicate Enigma Boxes will reduce cooldown.", "en");
-                
-
-
+ 
                 
                 RoR2Content.Equipment.Enigma.pickupModelPrefab = EnigmaArtifactDisplay;
                 RoR2Content.Equipment.Enigma.pickupIconSprite = texItemEnigmaOrangeS;
@@ -21,8 +17,7 @@
 
             if (EnigmaUpgrade.Value == true)
             {
-                LanguageAPI.Add("ARTIFACT_ENIGMA_DESCRIPTION", "Spawn with a random equipment that changes every time it's activated. Additional equipment turned into cooldown reduction", "en");
-
+                
                 On.RoR2.Artifacts.EnigmaArtifactManager.OnServerEquipmentActivated += (orig, equipmentSlot, equipmentIndex) =>
                 {
                     equipmentSlot.characterBody.inventory.SetEquipmentIndex(RoR2Content.Equipment.Enigma.equipmentIndex);

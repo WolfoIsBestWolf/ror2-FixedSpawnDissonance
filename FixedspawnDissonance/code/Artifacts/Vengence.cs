@@ -1,10 +1,8 @@
 using RoR2;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
-using System;
 
 namespace FixedspawnDissonance
 {
@@ -26,7 +24,7 @@ namespace FixedspawnDissonance
                 return temp;
             };
 
-           
+
 
 
             //Vengence + Metamorphosis for random Foe
@@ -110,7 +108,7 @@ namespace FixedspawnDissonance
 
         public static float UmbraHealHalf(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen)
         {
-            if(self.itemCounts.invadingDoppelganger > 0)
+            if (self.itemCounts.invadingDoppelganger > 0)
             {
                 amount /= 2;
             }
@@ -121,7 +119,7 @@ namespace FixedspawnDissonance
         {
             //Remove all OnKill, Minion items
             for (int i = 0; i < inventory.itemAcquisitionOrder.Count; i++)
-            {          
+            {
                 ItemDef tempDef = ItemCatalog.GetItemDef(inventory.itemAcquisitionOrder[i]);
                 //Debug.Log("Filter : "+tempDef.name);
                 if (tempDef.ContainsTag(ItemTag.CannotCopy) || tempDef.ContainsTag(ItemTag.OnKillEffect) || tempDef.ContainsTag(ItemTag.AIBlacklist))
@@ -256,7 +254,7 @@ namespace FixedspawnDissonance
 
                                 if (MushroomVoid > 1) { clonelist[j].inventory.RemoveItem(DLC1Content.Items.MushroomVoid, MushroomVoid - 1); }
                                 if (Mushroom > 1) { clonelist[j].inventory.RemoveItem(RoR2Content.Items.Mushroom, Mushroom - 1); }
-                                
+
                                 if (LunarSun > 2) { clonelist[j].inventory.RemoveItem(DLC1Content.Items.LunarSun, LunarSun / 2); }
 
 
@@ -377,7 +375,7 @@ namespace FixedspawnDissonance
                                     //clonelist[j].inventory.GiveItem(RoR2Content.Items.LevelBonus, (int)bonuslevel);
                                 }
 
-                                
+
                             }
 
                             if (WConfig.VengenceGoodDrop.Value == true)
@@ -417,7 +415,7 @@ namespace FixedspawnDissonance
 
         public static void EnableEquipmentForVengence()
         {
-            
+
             for (int i = 0; i < SurvivorCatalog.survivorDefs.Length; i++)
             {
                 if (SurvivorCatalog.survivorDefs[i].bodyPrefab)
