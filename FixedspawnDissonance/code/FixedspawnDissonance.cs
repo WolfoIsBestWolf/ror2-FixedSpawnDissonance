@@ -9,8 +9,8 @@ using UnityEngine.Networking;
 namespace FixedspawnDissonance
 {
     [BepInDependency("com.bepis.r2api")]
-    [BepInPlugin("com.Wolfo.VanillaArtifactsPlus", "VanillaArtifactsPlus", "3.1.0")]
-    [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
+    [BepInPlugin("com.Wolfo.VanillaArtifactsPlus", "VanillaArtifactsPlus", "3.1.1")]
+    [NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
 
 
     public class Main : BaseUnityPlugin

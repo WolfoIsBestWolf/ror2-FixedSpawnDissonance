@@ -100,9 +100,7 @@ namespace FixedspawnDissonance
             if (!WConfig.DisableNewContent.Value)
             {
                 //Idk why I call this late but I dont wanna bother finding out
-                Texture2D texItemEnigmaP = new Texture2D(128, 128, TextureFormat.DXT5, false);
-                texItemEnigmaP.LoadImage(Properties.Resources.texItemEnigmaP, true);
-                texItemEnigmaP.filterMode = FilterMode.Bilinear;
+                Texture2D texItemEnigmaP = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/texItemEnigmaP.png");
                 texItemEnigmaP.wrapMode = TextureWrapMode.Clamp;
                 Sprite texItemEnigmaPS = Sprite.Create(texItemEnigmaP, new Rect(0, 0, 128, 128), new Vector2(0.5f, 0.5f));
 

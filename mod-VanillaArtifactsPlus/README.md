@@ -119,8 +119,6 @@ Artifact of Command allows choice of Elite Aspect. Command cubes will auto compl
 Artifact of Swarms now works on more ally items such as Goobo Jr, Spare Drone Parts and ups every team limit by 50%.
 
 
-### Every player needs this mod installed.
-
 ##
 Report bugs to @Wolfo.wolfo in the Risk of Rain 2 discord or RoR2 Modding discord.\
 If you're reporting a bug that isn't something obvious include the log file.

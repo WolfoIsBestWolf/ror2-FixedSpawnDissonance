@@ -1,5 +1,10 @@
 ## Changelog:
 ```
+v3.1.1
+Fixed an issue with removing Fire from Elite Worms, leading to REX root not disappearing
+Bundled few assets mod does have.
+Mod now actually tagged as "NotRequiredByAll" to support Content disabling config
+
 v3.1.0
 Added Ambient Spite as a dependency. Just makes more sense for Spite to work this way.
 Ported Nuxlars Devotion Lemurian Inventory mod. (with Permission)

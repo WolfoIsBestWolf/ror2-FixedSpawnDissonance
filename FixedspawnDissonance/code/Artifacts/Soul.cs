@@ -35,8 +35,7 @@ namespace FixedspawnDissonance
 
             CharacterBody SoulWispBody = SoulLesserWispBody.GetComponent<CharacterBody>();
 
-            Texture2D TexSoulWisp = new Texture2D(128, 128, TextureFormat.DXT5, false);
-            TexSoulWisp.LoadImage(Properties.Resources.texBodyWispSoul, true);
+            Texture2D TexSoulWisp = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/texBodyWispSoul.png");
             TexSoulWisp.wrapMode = TextureWrapMode.Clamp;
 
             SoulWispBody.baseMaxHealth = 50;  //35 base
@@ -76,13 +75,11 @@ namespace FixedspawnDissonance
 
 
 
-                Texture2D texRampWispSoulAlt = new Texture2D(256, 16, TextureFormat.DXT5, false);
-                texRampWispSoulAlt.LoadImage(Properties.Resources.texRampWispSoulAlt, true);
+                Texture2D texRampWispSoulAlt = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/texRampWispSoulAlt.png");
                 texRampWispSoulAlt.filterMode = FilterMode.Point;
                 texRampWispSoulAlt.wrapMode = TextureWrapMode.Clamp;
 
-                Texture2D texRampWispSoulAlt2 = new Texture2D(256, 16, TextureFormat.DXT5, false);
-                texRampWispSoulAlt2.LoadImage(Properties.Resources.texRampWispSoulAlt2, true);
+                Texture2D texRampWispSoulAlt2 = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/texRampWispSoulAlt2.png");
                 texRampWispSoulAlt2.filterMode = FilterMode.Point;
                 texRampWispSoulAlt2.wrapMode = TextureWrapMode.Clamp;
 
@@ -115,12 +112,10 @@ namespace FixedspawnDissonance
                 SoulGreaterWispBody.GetComponent<DeathRewards>().logUnlockableDef = null;
                 //SoulArchWispBody.GetComponent<DeathRewards>().logUnlockableDef = null;
 
-                Texture2D TexGreaterSoulWisp = new Texture2D(128, 128, TextureFormat.DXT5, false);
-                TexGreaterSoulWisp.LoadImage(Properties.Resources.texBodyGreaterWispSoul, true);
+                Texture2D TexGreaterSoulWisp = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/texBodyGreaterWispSoul.png");
                 TexGreaterSoulWisp.wrapMode = TextureWrapMode.Clamp;
 
-                Texture2D texBodyArchSoul = new Texture2D(128, 128, TextureFormat.DXT5, false);
-                texBodyArchSoul.LoadImage(Properties.Resources.texBodyArchSoul, true);
+                Texture2D texBodyArchSoul = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/texBodyArchSoul.png");
                 texBodyArchSoul.wrapMode = TextureWrapMode.Clamp;
                 //
                 SoulWispBody.portraitIcon = TexSoulWisp;

@@ -17,6 +17,7 @@ namespace FixedspawnDissonance
                 On.RoR2.InfiniteTowerExplicitSpawnWaveController.Initialize += InfiniteTowerExplicitSpawnWaveController_Initialize;
             }
 
+            //Probably don't remove this based on Honor
             On.RoR2.CharacterBody.UpdateItemAvailability += RemoveFireTrailFromWorm;
 
             if (WConfig.HonorStartingEliteEquip.Value)
@@ -89,7 +90,7 @@ namespace FixedspawnDissonance
         private static void RemoveFireTrailFromWorm(On.RoR2.CharacterBody.orig_UpdateItemAvailability orig, CharacterBody self)
         {
             orig(self);
-            if (self.GetComponent<WormBodyPositions2>())
+            if (self && self.GetComponent<WormBodyPositions2>())
             {
                 self.itemAvailability.hasFireTrail = false;
             }

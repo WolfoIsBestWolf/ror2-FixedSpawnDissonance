@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+CRC: 1898822097
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e6b246a36fcde179653762532df74532
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b0363f7088f9761414f730641bf9a24b
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/ArtifactsVanilla/texItemEnigmaOrange.png
+- Assets/ArtifactsVanilla/texRampWispSoulAlt.png
+- Assets/ArtifactsVanilla/texItemEnigmaP.png
+- Assets/ArtifactsVanilla/texBodyGreaterWispSoul.png
+- Assets/ArtifactsVanilla/texRampWispSoulAlt2.png
+- Assets/ArtifactsVanilla/texBodyArchSoul.png
+- Assets/ArtifactsVanilla/texBodyWispSoul.png
+- Assets/ArtifactsVanilla/texItemEnigma.png
+Dependencies: []
