@@ -277,7 +277,7 @@ return orig(self, amount, procChainMask, nonRegen);
 //Don't really remember what this was used for
 internal static void AffixesIn()
 {
-    RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/AffixLunar").isLunar = false;
+    LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/AffixLunar").isLunar = false;
     List<EquipmentIndex> FullEquipmentList = EquipmentCatalog.equipmentList;
     int[] invoutput = new int[EquipmentCatalog.equipmentCount];
 
@@ -306,16 +306,20 @@ internal static void AffixesIn()
 /*
 DirectorCard DSBeetleQueen = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscBeetleQueen"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscBeetleQueen"),
 
     preventOverhead = false,
     selectionWeight = 3,
     minimumStageCompletions = 0,
-    spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
+    spawnDistance = 
+
+
+
+.MonsterSpawnDistance.Standard
 };
 DirectorCard DSVagrant = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscVagrant"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscVagrant"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -324,7 +328,7 @@ DirectorCard DSVagrant = new DirectorCard
 };
 DirectorCard DSImpBoss = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscImpBoss"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscImpBoss"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -333,7 +337,7 @@ DirectorCard DSImpBoss = new DirectorCard
 };
 DirectorCard DSRoboBallBoss = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscRoboBallBoss"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscRoboBallBoss"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -342,7 +346,7 @@ DirectorCard DSRoboBallBoss = new DirectorCard
 };
 DirectorCard DSGrovetender = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscGravekeeper"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscGravekeeper"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -351,7 +355,7 @@ DirectorCard DSGrovetender = new DirectorCard
 };
 DirectorCard DSMagmaWorm = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -360,7 +364,7 @@ DirectorCard DSMagmaWorm = new DirectorCard
 };
 DirectorCard DSElectricWorm = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -371,7 +375,7 @@ DirectorCard DSElectricWorm = new DirectorCard
 
 DirectorCard DSGolem = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscGolem"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscGolem"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -380,7 +384,7 @@ DirectorCard DSGolem = new DirectorCard
 };
 DirectorCard DSGreaterWisp = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscGreaterWisp"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscGreaterWisp"),
 
     preventOverhead = true,
     selectionWeight = 3,
@@ -389,7 +393,7 @@ DirectorCard DSGreaterWisp = new DirectorCard
 };
 DirectorCard DSBell = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscBell"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscBell"),
 
     preventOverhead = true,
     selectionWeight = 3,
@@ -398,7 +402,7 @@ DirectorCard DSBell = new DirectorCard
 };
 DirectorCard DSElderLemurian = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscLemurianBruiser"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscLemurianBruiser"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -407,7 +411,7 @@ DirectorCard DSElderLemurian = new DirectorCard
 };
 DirectorCard DSBison = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscBison"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscBison"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -416,7 +420,7 @@ DirectorCard DSBison = new DirectorCard
 };
 DirectorCard DSClayTemp = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscClayBruiser"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscClayBruiser"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -425,7 +429,7 @@ DirectorCard DSClayTemp = new DirectorCard
 };
 DirectorCard DSVoidReaver = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscNullifier"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscNullifier"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -434,7 +438,7 @@ DirectorCard DSVoidReaver = new DirectorCard
 };
 DirectorCard DSParent = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscParent"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscParent"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -445,7 +449,7 @@ DirectorCard DSParent = new DirectorCard
 
 DirectorCard DSLemurian = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscLemurian"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscLemurian"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -454,7 +458,7 @@ DirectorCard DSLemurian = new DirectorCard
 };
 DirectorCard DSWisp = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscLesserWisp"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscLesserWisp"),
 
     preventOverhead = true,
     selectionWeight = 3,
@@ -463,7 +467,7 @@ DirectorCard DSWisp = new DirectorCard
 };
 DirectorCard DSBeetle = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscBeetle"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscBeetle"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -472,7 +476,7 @@ DirectorCard DSBeetle = new DirectorCard
 };
 DirectorCard DSJellyfish = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscJellyfish"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscJellyfish"),
 
     preventOverhead = true,
     selectionWeight = 3,
@@ -481,7 +485,7 @@ DirectorCard DSJellyfish = new DirectorCard
 };
 DirectorCard DSImp = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscImp"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscImp"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -490,7 +494,7 @@ DirectorCard DSImp = new DirectorCard
 };
 DirectorCard DSVulture = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscVulture"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscVulture"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -499,7 +503,7 @@ DirectorCard DSVulture = new DirectorCard
 };
 DirectorCard DSRoboBallMini = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscRoboBallMini"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscRoboBallMini"),
 
     preventOverhead = true,
     selectionWeight = 1,
@@ -508,7 +512,7 @@ DirectorCard DSRoboBallMini = new DirectorCard
 };
 DirectorCard DSMushroom = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMiniMushroom"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMiniMushroom"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -517,7 +521,7 @@ DirectorCard DSMushroom = new DirectorCard
 };
 DirectorCard DSBeetleGuard = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscBeetleGuard"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscBeetleGuard"),
 
     preventOverhead = false,
     selectionWeight = 3,
@@ -527,7 +531,7 @@ DirectorCard DSBeetleGuard = new DirectorCard
 
 DirectorCard DSClayBoss = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscClayBoss"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscClayBoss"),
     selectionWeight = 3,
 
     preventOverhead = false,
@@ -536,7 +540,7 @@ DirectorCard DSClayBoss = new DirectorCard
 };
 DirectorCard DSGrandparent = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/titan/cscGrandparent"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/titan/cscGrandparent"),
     selectionWeight = 3,
 
     preventOverhead = false,
@@ -545,7 +549,7 @@ DirectorCard DSGrandparent = new DirectorCard
 };
 DirectorCard DSLunarExploder = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscLunarExploder"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscLunarExploder"),
     selectionWeight = 3,
 
     preventOverhead = false,
@@ -554,7 +558,7 @@ DirectorCard DSLunarExploder = new DirectorCard
 };
 DirectorCard DSLunarGolem = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscLunarGolem"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscLunarGolem"),
     selectionWeight = 3,
 
     preventOverhead = false,
@@ -563,7 +567,7 @@ DirectorCard DSLunarGolem = new DirectorCard
 };
 DirectorCard DSLunarWisp = new DirectorCard
 {
-    spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscLunarWisp"),
+    spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscLunarWisp"),
     selectionWeight = 3,
 
     preventOverhead = true,
@@ -595,16 +599,16 @@ DirectorCard DSVoidInfestor = new DirectorCard
           RoR2.CharacterAI.AISkillDriver HackingBeaconPrimary = CaptainMaster.AddComponent<RoR2.CharacterAI.AISkillDriver>();
           RoR2.CharacterAI.AISkillDriver HackingBeaconSecondary = CaptainMaster.AddComponent<RoR2.CharacterAI.AISkillDriver>();
 
-          DiabloStrikePrimary.requiredSkill = RoR2.LegacyResourcesAPI.Load<RoR2.Skills.SkillDef>("skilldefs/captainbody/CallAirstrikeAlt");
-          DiabloStrikeUtility.requiredSkill = RoR2.LegacyResourcesAPI.Load<RoR2.Skills.SkillDef>("skilldefs/captainbody/PrepAirstrikeAlt");
-          ActivateBeaconsSpecial.requiredSkill = RoR2.LegacyResourcesAPI.Load<RoR2.Skills.SkillDef>("skilldefs/captainbody/PrepSupplyDrop");
-          HealingBeaconPrimary.requiredSkill = RoR2.LegacyResourcesAPI.Load<RoR2.Skills.SkillDef>("skilldefs/captainbody/CallSupplyDropHealing");
+          DiabloStrikePrimary.requiredSkill = LegacyResourcesAPI.Load<RoR2.Skills.SkillDef>("skilldefs/captainbody/CallAirstrikeAlt");
+          DiabloStrikeUtility.requiredSkill = LegacyResourcesAPI.Load<RoR2.Skills.SkillDef>("skilldefs/captainbody/PrepAirstrikeAlt");
+          ActivateBeaconsSpecial.requiredSkill = LegacyResourcesAPI.Load<RoR2.Skills.SkillDef>("skilldefs/captainbody/PrepSupplyDrop");
+          HealingBeaconPrimary.requiredSkill = LegacyResourcesAPI.Load<RoR2.Skills.SkillDef>("skilldefs/captainbody/CallSupplyDropHealing");
           HealingBeaconSecondary.requiredSkill = HealingBeaconPrimary.requiredSkill;
-          ShockBeaconPrimary.requiredSkill = RoR2.LegacyResourcesAPI.Load<RoR2.Skills.SkillDef>("skilldefs/captainbody/CallSupplyDropShocking");
+          ShockBeaconPrimary.requiredSkill = LegacyResourcesAPI.Load<RoR2.Skills.SkillDef>("skilldefs/captainbody/CallSupplyDropShocking");
           ShockBeaconSecondary.requiredSkill = ShockBeaconPrimary.requiredSkill;
-          ResupplyBeaconPrimary.requiredSkill = RoR2.LegacyResourcesAPI.Load<RoR2.Skills.SkillDef>("skilldefs/captainbody/CallSupplyDropEquipmentRestock");
+          ResupplyBeaconPrimary.requiredSkill = LegacyResourcesAPI.Load<RoR2.Skills.SkillDef>("skilldefs/captainbody/CallSupplyDropEquipmentRestock");
           ResupplyBeaconSecondary.requiredSkill = ResupplyBeaconPrimary.requiredSkill;
-          HackingBeaconPrimary.requiredSkill = RoR2.LegacyResourcesAPI.Load<RoR2.Skills.SkillDef>("skilldefs/captainbody/CallSupplyDropHacking");
+          HackingBeaconPrimary.requiredSkill = LegacyResourcesAPI.Load<RoR2.Skills.SkillDef>("skilldefs/captainbody/CallSupplyDropHacking");
           HackingBeaconSecondary.requiredSkill = HackingBeaconPrimary.requiredSkill;
 
           DiabloStrikePrimary.skillSlot = SkillSlot.Primary;

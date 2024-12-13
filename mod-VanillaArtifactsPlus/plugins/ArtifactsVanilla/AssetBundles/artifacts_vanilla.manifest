@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1898822097
+CRC: 3081489630
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e6b246a36fcde179653762532df74532
+    Hash: 5ee0be84e0b70b4ccadf7311282191ea
   TypeTreeHash:
     serializedVersion: 2
     Hash: b0363f7088f9761414f730641bf9a24b
@@ -14,11 +14,13 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/ArtifactsVanilla/texItemEnigmaOrange.png
+- Assets/ArtifactsVanilla/icon_old.png
 - Assets/ArtifactsVanilla/texRampWispSoulAlt.png
 - Assets/ArtifactsVanilla/texItemEnigmaP.png
 - Assets/ArtifactsVanilla/texBodyGreaterWispSoul.png
 - Assets/ArtifactsVanilla/texRampWispSoulAlt2.png
 - Assets/ArtifactsVanilla/texBodyArchSoul.png
+- Assets/ArtifactsVanilla/icon.png
 - Assets/ArtifactsVanilla/texBodyWispSoul.png
 - Assets/ArtifactsVanilla/texItemEnigma.png
 Dependencies: []

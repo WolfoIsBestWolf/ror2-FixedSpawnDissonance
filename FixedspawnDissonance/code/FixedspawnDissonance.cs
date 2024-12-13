@@ -9,16 +9,13 @@ using UnityEngine.Networking;
 namespace FixedspawnDissonance
 {
     [BepInDependency("com.bepis.r2api")]
-    [BepInPlugin("com.Wolfo.VanillaArtifactsPlus", "VanillaArtifactsPlus", "3.1.1")]
+    [BepInPlugin("com.Wolfo.VanillaArtifactsPlus", "VanillaArtifactsPlus", "3.2.0")]
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
 
 
     public class Main : BaseUnityPlugin
     {
         public static readonly System.Random Random = new System.Random();
-
-        public static GameObject WarbannerObject = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/networkedobjects/WarbannerWard");
-        public static GameObject WarbannerObjectEnemy = R2API.PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/networkedobjects/WarbannerWard"), "WarbannerWardEnemy", true);
 
         public void Awake()
         {
@@ -70,23 +67,10 @@ namespace FixedspawnDissonance
             {
                 Vengence.Start();
             }
-            //Frailty.Start(); //Its like 1 function
-            //Spite.Start(); //Also like 1 block of code that isn't very big
-            //Swarms.Start();
-
-
-
-            //Enemy Warbanner Support for Warbanner on Vengance
-            Material WarbannerFlagNormal = WarbannerObject.transform.GetChild(1).GetChild(1).GetComponent<SkinnedMeshRenderer>().material;
-            Material WarbannerFlagEnemy = Instantiate(WarbannerFlagNormal);
-            WarbannerFlagEnemy.color = new Color(0.35f, 0.35f, 0f, 1f);
-            Material WarbannerSphereNormal = WarbannerObject.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().material;
-            Material WarbannerSphereEnemy = Instantiate(WarbannerSphereNormal);
-            WarbannerSphereEnemy.SetColor("_TintColor", new Color(1f, 0.1f, 0.1f, 1f));
-
-            WarbannerObjectEnemy.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().material = WarbannerSphereEnemy;
-            WarbannerObjectEnemy.transform.GetChild(1).GetChild(1).GetComponent<SkinnedMeshRenderer>().material = WarbannerFlagEnemy;
-            //ContentAddition.AddNetworkedObject(WarbannerObjectEnemy);
+            Swarms.Start();
+            Glass.Start();
+            Rebirth.Start();
+ 
         }
 
         private void Start() //Called at the first frame of the game.
@@ -96,83 +80,53 @@ namespace FixedspawnDissonance
             {
                 Dissonance.Start();
             }
-
             if (WConfig.KinYellowsForEnemies.Value == true)
             {
                 KinBossDropsForEnemies.Start();
             }
-
             if (WConfig.HonorChanges.Value == true)
             {
-                Honor.WormStart();
+                Honor.Worm_EliteStuff(false);
             }
         }
-
-
-
-
-        public void EnemyWarbannerForVenganceEvolution(On.RoR2.Items.WardOnLevelManager.orig_OnCharacterLevelUp orig, CharacterBody characterBody)
-        {
-            if (characterBody.teamComponent.teamIndex == TeamIndex.Monster && characterBody.inventory && characterBody.inventory.GetItemCount(RoR2Content.Items.WardOnLevel) > 0)
-            {
-                RoR2.Items.WardOnLevelManager.wardPrefab = WarbannerObjectEnemy;
-                orig(characterBody);
-                RoR2.Items.WardOnLevelManager.wardPrefab = WarbannerObject;
-                return;
-            }
-            orig(characterBody);
-        }
-
-
 
 
         internal static void ModSupport()
         {
-            //Debug.LogWarning(Language.GetString("ITEM_ENIGMAEQUIPMENTBOOST_DESC"));
-            R2API.LanguageAPI.Add("ITEM_ENIGMAEQUIPMENTBOOST_DESC", string.Format(Language.GetString("ITEM_ENIGMAEQUIPMENTBOOST_DESC"), WConfig.EnigmaCooldownReduction.Value, WConfig.EnigmaCooldownReduction.Value));
-            //Debug.LogWarning(Language.GetString("ITEM_ENIGMAEQUIPMENTBOOST_DESC"));
+    
+            
 
+
+            GameObject AffixEarthHealerBody = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC1/EliteEarth/AffixEarthHealerBody.prefab").WaitForCompletion();
+            Soul.IndexAffixHealingCore = AffixEarthHealerBody.GetComponent<CharacterBody>().bodyIndex;
             if (!WConfig.DisableNewContent.Value)
             {
-                if (WConfig.EvolutionChanges.Value == true && WConfig.EvoBetterBlacklist.Value == true)
-                {
-                    Evolution.Tagchanger();
-                }
-                if (WConfig.EnigmaChanges.Value == true)
-                {
-                    Enigma.EnigmaCallLate();
-                }
-                if (WConfig.KinChanges.Value == true && WConfig.KinYellowsForEnemies.Value == true)
-                {
-                    KinBossDropsForEnemies.ModBossDropChanger();
-                }
-                if (WConfig.DissonanceChanges.Value == true)
-                {
-                }
-                Command.MakeEliteLists();
-                if (WConfig.SpiteChanges.Value == true)
-                {
-                    Spite.SpiteChangesCalledLate();
-                }
-                GameObject AffixEarthHealerBody = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC1/EliteEarth/AffixEarthHealerBody.prefab").WaitForCompletion();
-                Soul.IndexAffixHealingCore = AffixEarthHealerBody.GetComponent<CharacterBody>().bodyIndex;
-                if (!WConfig.DisableNewContent.Value)
-                {
-                    Soul.SoulGreaterWispIndex = Soul.SoulGreaterWispBody.GetComponent<CharacterBody>().bodyIndex;
-                    Soul.SoulArchWispIndex = Soul.SoulArchWispBody.GetComponent<CharacterBody>().bodyIndex;
-                }
+                Soul.SoulGreaterWispIndex = Soul.SoulGreaterWispBody.GetComponent<CharacterBody>().bodyIndex;
+                Soul.SoulArchWispIndex = Soul.SoulArchWispBody.GetComponent<CharacterBody>().bodyIndex;
+            }
 
-                if (WConfig.VenganceChanges.Value == true && WConfig.VengenceEquipment.Value == true)
-                {
-                    Vengence.EnableEquipmentForVengence();
-                }
+            if (WConfig.EvolutionChanges.Value == true && WConfig.EvoBetterBlacklist.Value == true)
+            {
+                Evolution.Tagchanger();
+            }
+            if (WConfig.EnigmaChanges.Value == true)
+            {
+                R2API.LanguageAPI.Add("ITEM_ENIGMAEQUIPMENTBOOST_DESC", string.Format(Language.GetString("ITEM_ENIGMAEQUIPMENTBOOST_DESC"), WConfig.EnigmaCooldownReduction.Value, WConfig.EnigmaCooldownReduction.Value));
+                Enigma.EnigmaCallLate();
+            }
+            if (WConfig.KinChanges.Value == true && WConfig.KinYellowsForEnemies.Value == true)
+            {
+                KinBossDropsForEnemies.ModBossDropChanger();
+            }
+            if (WConfig.SpiteChanges.Value == true)
+            {
+                Spite.SpiteChangesCalledLate();
+            }
+            if (WConfig.VenganceChanges.Value == true && WConfig.VengenceEquipment.Value == true)
+            {
+                Vengence.EnableEquipmentForVengence();
             }
         }
-
-
-
-
-
 
 
 
@@ -183,7 +137,7 @@ namespace FixedspawnDissonance
             {
                 if (NetworkServer.active)
                 {
-                    if (WConfig.DisableNewContent.Value)
+                    if (!WConfig.DisableNewContent.Value)
                     {
                         On.RoR2.MasterSummon.Perform += Soul.SoulSpawnGreaterUniversal;
                     }
@@ -193,22 +147,13 @@ namespace FixedspawnDissonance
             {
                 if (NetworkServer.active)
                 {
-                    if (WConfig.HonorEliteWormRules.Value == "HonorOnly")
-                    {
-                        //Debug.Log("Artifact of Honor - Worms will be Elites");
-                        CharacterSpawnCard MagmaWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
-                        CharacterSpawnCard ElectricWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");
-
-                        MagmaWormEliteHonor.noElites = false;
-                        MagmaWormEliteHonor.eliteRules = SpawnCard.EliteRules.Default;
-                        ElectricWormEliteHonor.noElites = false;
-                        ElectricWormEliteHonor.eliteRules = SpawnCard.EliteRules.Default;
-                    }
-                    if (WConfig.HonorPerfectedLunarBosses.Value == true)
+                    Honor.Worm_EliteStuff(true);
+                    Honor.Honor_EliteTiers(true);
+                    if (WConfig.Honor_PerfectMithrix.Value == true)
                     {
                         On.RoR2.CharacterBody.OnOutOfDangerChanged += Honor.PreventPerfectedMithrixFromRegenningShield;
                     }
-                    if (WConfig.HonorMinionAlwaysElite.Value)
+                    if (WConfig.Honor_EliteMinions.Value)
                     {
                         On.RoR2.MinionOwnership.MinionGroup.AddMinion += Honor.MinionsInheritHonor;
                     }
@@ -227,27 +172,13 @@ namespace FixedspawnDissonance
             }
             else if (artifactDef == RoR2Content.Artifacts.singleMonsterTypeArtifactDef && WConfig.KinChanges.Value == true)
             {
-                Inventory MonsterTeamInventory = RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.monsterTeamInventory;
-                if (MonsterTeamInventory)
-                {
-                    EnemyInfoPanelInventoryProvider panel = MonsterTeamInventory.gameObject.GetComponent<EnemyInfoPanelInventoryProvider>();
-                    if (panel)
-                    {
-                        panel.MarkAsDirty();
-                    }
-                }
-
-                RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscHermitCrab").requiredFlags = 0;
-                RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscVulture").requiredFlags = 0;
+                RoR2.UI.EnemyInfoPanel.MarkDirty();
+                LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscHermitCrab").requiredFlags = 0;
+                LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscVulture").requiredFlags = 0;
             }
-            else if (artifactDef == RoR2Content.Artifacts.swarmsArtifactDef && WConfig.SwarmsChanges.Value == true)
+            else if (artifactDef == RoR2Content.Artifacts.swarmsArtifactDef)
             {
                 On.RoR2.CharacterMaster.GetDeployableSameSlotLimit += Swarms.SwarmsDeployableLimitChanger;
-                //On.EntityStates.Gup.BaseSplitDeath.OnEnter += Swarms.BaseSplitDeath_OnEnter;
-                foreach (TeamDef teamDef in TeamCatalog.teamDefs)
-                {
-                    teamDef.softCharacterLimit = (int)(teamDef.softCharacterLimit * 1.5f);
-                }
             }
             else if (artifactDef == RoR2Content.Artifacts.sacrificeArtifactDef && WConfig.SacrificeChanges.Value == true)
             {
@@ -255,8 +186,7 @@ namespace FixedspawnDissonance
             }
             else if (artifactDef == RoR2Content.Artifacts.shadowCloneArtifactDef && WConfig.VenganceChanges.Value == true)
             {
-                On.RoR2.HealthComponent.Heal += Vengence.UmbraHealHalf;
-                On.RoR2.Items.WardOnLevelManager.OnCharacterLevelUp += EnemyWarbannerForVenganceEvolution;
+                Vengence.OnArtifactEnable();
             }
         }
 
@@ -264,28 +194,20 @@ namespace FixedspawnDissonance
         {
             if (artifactDef == RoR2Content.Artifacts.wispOnDeath && WConfig.SoulChanges.Value == true)
             {
-                if (WConfig.DisableNewContent.Value)
+                if (!WConfig.DisableNewContent.Value)
                 {
                     On.RoR2.MasterSummon.Perform -= Soul.SoulSpawnGreaterUniversal;
                 }
             }
             else if (artifactDef == RoR2Content.Artifacts.eliteOnlyArtifactDef && WConfig.HonorChanges.Value == true)
             {
-                if (WConfig.HonorEliteWormRules.Value == "HonorOnly")
-                {
-                    CharacterSpawnCard MagmaWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
-                    CharacterSpawnCard ElectricWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");
-
-                    MagmaWormEliteHonor.noElites = true;
-                    MagmaWormEliteHonor.eliteRules = SpawnCard.EliteRules.ArtifactOnly;
-                    ElectricWormEliteHonor.noElites = true;
-                    ElectricWormEliteHonor.eliteRules = SpawnCard.EliteRules.ArtifactOnly;
-                }
-                if (WConfig.HonorPerfectedLunarBosses.Value == true)
+                Honor.Worm_EliteStuff(false);
+                Honor.Honor_EliteTiers(false);
+                if (WConfig.Honor_PerfectMithrix.Value == true)
                 {
                     On.RoR2.CharacterBody.OnOutOfDangerChanged -= Honor.PreventPerfectedMithrixFromRegenningShield;
                 }
-                if (WConfig.HonorMinionAlwaysElite.Value)
+                if (WConfig.Honor_EliteMinions.Value)
                 {
                     On.RoR2.MinionOwnership.MinionGroup.AddMinion -= Honor.MinionsInheritHonor;
                 }
@@ -298,39 +220,19 @@ namespace FixedspawnDissonance
                     On.RoR2.GenericPickupController.CreatePickup -= Enigma.EnigmaFragmentMaker;
                 }
             }
-            /*else if (artifactDef == RoR2Content.Artifacts.weakAssKneesArtifactDef && WConfig.FrailtyChanges.Value == true)
-            {
-                if (WConfig.FrailtyChanges.Value == true)
-                {
-                    On.RoR2.GlobalEventManager.OnCharacterHitGroundServer -= CharacterHitGround_FrailtyChanges;
-                }
-            }*/
             else if (artifactDef == RoR2Content.Artifacts.singleMonsterTypeArtifactDef && WConfig.KinChanges.Value == true)
             {
                 if (Stage.instance)
                 {
                     Stage.instance.Network_singleMonsterTypeBodyIndex = -1;
-                    Inventory MonsterTeamInventory = RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.monsterTeamInventory;
-                    if (MonsterTeamInventory)
-                    {
-                        EnemyInfoPanelInventoryProvider panel = MonsterTeamInventory.gameObject.GetComponent<EnemyInfoPanelInventoryProvider>();
-                        if (panel)
-                        {
-                            panel.MarkAsDirty();
-                        }
-                    }
+                    EnemyInfoPanelInventoryProvider.isDirty = true;
                 }
-                RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscHermitCrab").requiredFlags = RoR2.Navigation.NodeFlags.NoCeiling;
-                RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscVulture").requiredFlags = RoR2.Navigation.NodeFlags.NoCeiling;
+                LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscHermitCrab").requiredFlags = RoR2.Navigation.NodeFlags.NoCeiling;
+                LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscVulture").requiredFlags = RoR2.Navigation.NodeFlags.NoCeiling;
             }
-            else if (artifactDef == RoR2Content.Artifacts.swarmsArtifactDef && WConfig.SwarmsChanges.Value == true)
+            else if (artifactDef == RoR2Content.Artifacts.swarmsArtifactDef)
             {
                 On.RoR2.CharacterMaster.GetDeployableSameSlotLimit -= Swarms.SwarmsDeployableLimitChanger;
-                //On.EntityStates.Gup.BaseSplitDeath.OnEnter -= Swarms.BaseSplitDeath_OnEnter;
-                foreach (TeamDef teamDef in TeamCatalog.teamDefs)
-                {
-                    teamDef.softCharacterLimit = (int)(teamDef.softCharacterLimit / 1.5f);
-                }
             }
             else if (artifactDef == RoR2Content.Artifacts.sacrificeArtifactDef && WConfig.SacrificeChanges.Value == true)
             {
@@ -338,14 +240,12 @@ namespace FixedspawnDissonance
             }
             else if (artifactDef == RoR2Content.Artifacts.shadowCloneArtifactDef && WConfig.VenganceChanges.Value == true)
             {
-                On.RoR2.HealthComponent.Heal -= Vengence.UmbraHealHalf;
-                On.RoR2.Items.WardOnLevelManager.OnCharacterLevelUp -= EnemyWarbannerForVenganceEvolution;
+                Vengence.OnArtifactDisable();
             }
         }
 
         public static void DSArtifactCheckerOnStageAwake(On.RoR2.SceneDirector.orig_Start orig, SceneDirector self)
         {
-
             orig(self);
             if (RunArtifactManager.instance)
             {
@@ -367,7 +267,7 @@ namespace FixedspawnDissonance
 
                         MasterSummon masterSummon = new MasterSummon
                         {
-                            masterPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/charactermasters/ShopkeeperMaster"),
+                            masterPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/charactermasters/ShopkeeperMaster"),
                             position = Newt.transform.position,
                             rotation = Newt.transform.rotation,
                             summonerBodyObject = Newt.GetComponent<CharacterMaster>().bodyPrefab,
@@ -387,25 +287,6 @@ namespace FixedspawnDissonance
 
         }
 
-
-
-
-
-
-
-        /*private void CharacterHitGround_FrailtyChanges(On.RoR2.GlobalEventManager.orig_OnCharacterHitGroundServer orig, GlobalEventManager self, CharacterBody characterBody, Vector3 impactVelocity)
-        {
-            characterBody.bodyFlags &= ~CharacterBody.BodyFlags.IgnoreFallDamage;
-            orig(self, characterBody, impactVelocity);
-        }*/
-
-
-        /*
-        private void ContentManager_collectContentPackProviders(RoR2.ContentManagement.ContentManager.AddContentPackProviderDelegate addContentPackProvider)
-        {
-            addContentPackProvider(new Content());
-        }
-        */
     }
 }
 

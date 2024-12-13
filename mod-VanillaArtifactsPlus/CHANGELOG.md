@@ -1,5 +1,39 @@
 ## Changelog:
 ```
+v3.2.0
+Devotion : 
+-You can now give Void Items to Lemurians
+-UnBlacklists Breaching Fin and Luminious Shot, and makes them function.
+(They are blacklisted because enemies cant proc them normally, so I made it so that Lemurian/Elders can)
+-Devotion inventory should be more consistent. (Fix for base game)
+-(Lemurians always had 1 less stacks of some items after evolving)
+-Devoted Lemurians teleport far more often to get stuck less.
+-Fixed Devoted Inventory not showing up if your oldest minion wasn't a lemurian.
+-Fixes Twisteds not being able to tether to players. (Might be a much deeper issue)
+-Fixed some items like Opal randomly breaking on Devoted lemurians.
+
+
+Honor Changes:
+-Tier2 also have half the stats and cost, not just Tier 1.
+-Works better with modded elites.
+(Halves HP and Damage of all elite types, so "Honor" elite versions are no longer needed)
+
+Rebirth now accepts Void and Lunar items.
+Rebirth will store a random item from your previous run with Rebirth, if no item is specifically stored. 
+(Or infinite rebirth mods are installed)
+
+Added Risk of Options config.
+
+Removed items from Soul Wisps generally lowered health.
+AIBlacklisted Luminious Shot as it does not function for enemies.
+Artifact of Glass makes you look glass
+Fixed Evolution + Eulogy not using blacklist.
+Fixed Vengence + Swarms not working. (Vanilla bug ever since SotV)
+Fixed Artifact of Soul changes being disabled by default.
+Fixed Command Void Particles not working on Clients.
+
+
+
 v3.1.1
 Fixed an issue with removing Fire from Elite Worms, leading to REX root not disappearing
 Bundled few assets mod does have.
@@ -11,7 +45,8 @@ Ported Nuxlars Devotion Lemurian Inventory mod. (with Permission)
 False Son will be Gilded when Honor is enabled.
 
 Fixed Devotion eggs not working properly if Devotion is diabled (Vanilla bug)
-Fixed Lemurians not properly evolving after Devotion gets disabled.
+Fixed Lemurians not properly evolving after Devotion gets disabled (Vanilla bug)
+(Still broken if it never got enabled in the first place)
 Fixed Family Lines being broadcast even with Dissonance on. (Vanilla, SotS bug)
 
 v3.0.3 - Fixed an issue preventing Dissonance from working.

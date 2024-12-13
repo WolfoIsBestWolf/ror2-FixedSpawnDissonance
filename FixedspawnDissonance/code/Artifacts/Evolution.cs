@@ -1,3 +1,4 @@
+using MonoMod.Cil;
 using RoR2;
 using RoR2.Artifacts;
 using RoR2.Items;
@@ -19,7 +20,7 @@ namespace FixedspawnDissonance
             BasicPickupDropTable dtMonsterTeamTier3Item = Addressables.LoadAssetAsync<BasicPickupDropTable>(key: "RoR2/Base/MonsterTeamGainsItems/dtMonsterTeamTier3Item.asset").WaitForCompletion();
 
 
-            ItemTag[] TagsMonsterTeamGain = { ItemTag.AIBlacklist, ItemTag.OnKillEffect, ItemTag.EquipmentRelated, ItemTag.SprintRelated, ItemTag.PriorityScrap, ItemTag.InteractableRelated, ItemTag.HoldoutZoneRelated, ItemTag.Count };
+            ItemTag[] TagsMonsterTeamGain = { ItemTag.AIBlacklist, ItemTag.OnKillEffect, ItemTag.EquipmentRelated, ItemTag.SprintRelated, ItemTag.InteractableRelated, ItemTag.HoldoutZoneRelated, ItemTag.Count };
 
             dtMonsterTeamTier1Item.bannedItemTags = TagsMonsterTeamGain;
             dtMonsterTeamTier2Item.bannedItemTags = TagsMonsterTeamGain;
@@ -35,185 +36,204 @@ namespace FixedspawnDissonance
 
 
 
-            if (WConfig.EvoMoreItems.Value == true)
-            {
-                //Debug.Log("More Evolution Items");
-                //On.RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.GrantMonsterTeamItem += EvolutionMoreItems;
+           
+            IL.RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.GrantMonsterTeamItem += Evolution_MoreItems;
+            On.RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.OnServerCardSpawnedGlobal += Evo_VoidTeamCorrupted;
 
-                //Shouldn't relly on methods that add/remove hooks
-                /*On.RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.GrantMonsterTeamItem += (orig) =>
-                {
-                    if (InProcessOfMoreEvoItems == false)
-                    {
-                        On.RoR2.Inventory.GiveItem_ItemIndex_int += EvolutionGiveMoreItemsOld;
-                    }
-                   orig();
-                };*/
-
-                On.RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.GrantMonsterTeamItem += EvolutionGiveMoreItems;
-            }
-
-
-            //Void Team getting Void replacements of normal items
-            On.RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.OnServerCardSpawnedGlobal += (orig, spawnResult) =>
-            {
-                orig(spawnResult);
-                CharacterMaster characterMaster = spawnResult.spawnedInstance ? spawnResult.spawnedInstance.GetComponent<CharacterMaster>() : null;
-                if (characterMaster && characterMaster.teamIndex == TeamIndex.Void)
-                {
-                    characterMaster.inventory.AddItemsFrom(MonsterTeamGainsItemsArtifactManager.monsterTeamInventory);
-
-                    foreach (ContagiousItemManager.TransformationInfo transformationInfo in ContagiousItemManager.transformationInfos)
-                    {
-                        ContagiousItemManager.TryForceReplacement(characterMaster.inventory, transformationInfo.originalItem);
-                    }
-                }
-            };
         }
 
-        private static void EvolutionGiveMoreItems(On.RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.orig_GrantMonsterTeamItem orig)
+        private static void Evo_VoidTeamCorrupted(On.RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.orig_OnServerCardSpawnedGlobal orig, SpawnCard.SpawnResult spawnResult)
         {
-            bool GiveMoreEvoItems = false;
-            if (WConfig.EvoMoreAfterLoop.Value == false)
+            orig(spawnResult);
+            CharacterMaster characterMaster = spawnResult.spawnedInstance ? spawnResult.spawnedInstance.GetComponent<CharacterMaster>() : null;
+            if (characterMaster && characterMaster.teamIndex == TeamIndex.Void)
             {
-                GiveMoreEvoItems = true;
-            }
-            else if (WConfig.EvoMoreAfterLoop.Value == true && RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.currentItemIterator >= 5)
-            {
-                GiveMoreEvoItems = true;
-            }
-            if (GiveMoreEvoItems == true)
-            {
-                PickupDropTable pickupDropTable = MonsterTeamGainsItemsArtifactManager.dropPattern[MonsterTeamGainsItemsArtifactManager.currentItemIterator++ % MonsterTeamGainsItemsArtifactManager.dropPattern.Length];
-                if (!pickupDropTable)
+                characterMaster.inventory.AddItemsFrom(MonsterTeamGainsItemsArtifactManager.monsterTeamInventory);
+                foreach (ContagiousItemManager.TransformationInfo transformationInfo in ContagiousItemManager.transformationInfos)
                 {
-                    return;
+                    ContagiousItemManager.TryForceReplacement(characterMaster.inventory, transformationInfo.originalItem);
                 }
-                PickupIndex pickupIndex = pickupDropTable.GenerateDrop(MonsterTeamGainsItemsArtifactManager.treasureRng);
-                if (pickupIndex != PickupIndex.none)
+            }
+        }
+
+        private static void Evolution_MoreItems(MonoMod.Cil.ILContext il)
+        {
+            ILCursor c = new ILCursor(il);
+            if (c.TryGotoNext(MoveType.Before,
+                x => x.MatchCallvirt("RoR2.Inventory", "GiveItem")))
+            {
+                c.Index--;
+                c.EmitDelegate<System.Func<ItemIndex, ItemIndex>>((item) =>
                 {
-                    PickupDef pickupDef = PickupCatalog.GetPickupDef(pickupIndex);
-                    if (pickupDef != null)
+                    ItemDef def = ItemCatalog.GetItemDef(item);
+                    if (def.tier == ItemTier.Lunar)
                     {
-                        int iterator = (RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.currentItemIterator - 1) % RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.dropPattern.Length;
-                        //Debug.LogWarning(iterator);
-                        switch (iterator)
+                        PickupIndex pickupIndex = dtMonsterTeamLunarItem.GenerateDrop(MonsterTeamGainsItemsArtifactManager.treasureRng);
+                        if (pickupIndex != PickupIndex.none)
                         {
-                            case 0:
-                            case 1:
-                                MonsterTeamGainsItemsArtifactManager.monsterTeamInventory.GiveItem(pickupDef.itemIndex, WConfig.EvoMoreWhite.Value);
-                                return;
-                            case 2:
-                            case 3:
-                                MonsterTeamGainsItemsArtifactManager.monsterTeamInventory.GiveItem(pickupDef.itemIndex, WConfig.EvoMoreGreen.Value);
-                                return;
-                            case 4:
-                                MonsterTeamGainsItemsArtifactManager.monsterTeamInventory.GiveItem(pickupDef.itemIndex, WConfig.EvoMoreRed.Value);
-                                return;
+                            PickupDef pickupDef = PickupCatalog.GetPickupDef(pickupIndex);
+                            if (pickupDef != null)
+                            {
+                                return pickupDef.itemIndex;
+                            }
                         }
                     }
-                }
-            }
-            else
-            {
-                orig();
-            }
-        }
+                    return item;
+                });
+                c.Index++;
 
-        public static void EvolutionGiveMoreItemsOld(On.RoR2.Inventory.orig_GiveItem_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int count)
-        {
-            //Debug.LogWarning(self);
-            //Inventory MonsterTeamGainItemRandom = GameObject.Find("MonsterTeamGainsItemsArtifactInventory(Clone)").GetComponent<RoR2.Inventory>();
-            if (self == MonsterTeamGainsItemsArtifactManager.monsterTeamInventory)
-            {
-                //InProcessOfMoreEvoItems = true;
-                bool GiveMoreEvoItems = false;
-                if (WConfig.EvoMoreAfterLoop.Value == false)
+                c.EmitDelegate<System.Func<int, int>>((amount) =>
                 {
-                    GiveMoreEvoItems = true;
-                }
-                else if (WConfig.EvoMoreAfterLoop.Value == true && RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.currentItemIterator >= 5)
-                {
-                    GiveMoreEvoItems = true;
-                }
-                //Debug.LogWarning(GiveMoreEvoItems);
-
-                //Debug.LogWarning(iterator-1);
-
-                if (ItemCatalog.GetItemDef(itemIndex).tier == ItemTier.Lunar)
-                {
-                    itemIndex = dtMonsterTeamLunarItem.GenerateDrop(RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.treasureRng).itemIndex;
-                    //Debug.LogWarning(ItemCatalog.GetItemDef(itemIndex));
-                }
-                if (GiveMoreEvoItems == true)
-                {
-                    int iterator = (RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.currentItemIterator - 1) % RoR2.Artifacts.MonsterTeamGainsItemsArtifactManager.dropPattern.Length;
-                    //Debug.LogWarning(iterator);
-                    switch (iterator)
+                    if (WConfig.EvoMoreItems.Value == true)
                     {
-                        case 0:
-                        case 1:
-                            orig(self, itemIndex, WConfig.EvoMoreWhite.Value);
-                            return;
-                        case 2:
-                        case 3:
-                            orig(self, itemIndex, WConfig.EvoMoreGreen.Value);
-                            return;
-                        case 4:
-                            orig(self, itemIndex, WConfig.EvoMoreRed.Value);
-                            return;
+                        bool GiveMoreEvoItems = false;
+                        if (WConfig.EvoMoreAfterLoop.Value == true && MonsterTeamGainsItemsArtifactManager.currentItemIterator > 5)
+                        {
+                            GiveMoreEvoItems = true;
+                        }
+                        else if (WConfig.EvoMoreAfterLoop.Value == false)
+                        {
+                            GiveMoreEvoItems = true;
+                        }
+                        if (GiveMoreEvoItems)
+                        {
+                            int iterator = (MonsterTeamGainsItemsArtifactManager.currentItemIterator-1) % MonsterTeamGainsItemsArtifactManager.dropPattern.Length;
+                            switch (iterator)
+                            {
+                                case 0:
+                                case 1:
+                                    return WConfig.EvoMoreWhite.Value;
+                                case 2:
+                                case 3:
+                                    return WConfig.EvoMoreGreen.Value;
+                                case 4:
+                                    return WConfig.EvoMoreRed.Value;
+                            }
+                        }
                     }
-                };
-
+                    return amount;
+                });
             }
             else
             {
-                //InProcessOfMoreEvoItems = false;
-                //On.RoR2.Inventory.GiveItem_ItemIndex_int -= EvolutionGiveMoreItemsOld;
+                Debug.LogWarning("IL Failed: Evolution_MoreItems");
             }
-
-            orig(self, itemIndex, count);
         }
 
+         
 
         public static void Tagchanger()
         {
+            #region White
+
+
+
+            #endregion
+            #region Green
+            DLC1Content.Items.PrimarySkillShuriken.tags = DLC1Content.Items.PrimarySkillShuriken.tags.Add(ItemTag.AIBlacklist);
+
             DLC1Content.Items.MoveSpeedOnKill.tags = DLC1Content.Items.MoveSpeedOnKill.tags.Add(ItemTag.OnKillEffect);
+            DLC1Content.Items.RegeneratingScrap.tags = DLC1Content.Items.RegeneratingScrap.tags.Add(ItemTag.AIBlacklist);
+            DLC2Content.Items.LowerPricedChests.tags = DLC2Content.Items.LowerPricedChests.tags.Add(ItemTag.AIBlacklist);
+            DLC2Content.Items.ExtraShrineItem.tags = DLC2Content.Items.ExtraShrineItem.tags.Add(ItemTag.AIBlacklist);
+            DLC2Content.Items.IncreasePrimaryDamage.tags = DLC2Content.Items.IncreasePrimaryDamage.tags.Add(ItemTag.AIBlacklist);
+            DLC2Content.Items.ExtraStatsOnLevelUp.tags = DLC2Content.Items.ExtraStatsOnLevelUp.tags.Add(ItemTag.AIBlacklist);
 
+            RoR2Content.Items.BonusGoldPackOnKill.tags = RoR2Content.Items.BonusGoldPackOnKill.tags.Add(ItemTag.AIBlacklist);
+            RoR2Content.Items.Infusion.tags = RoR2Content.Items.Infusion.tags.Add(ItemTag.AIBlacklist);
+            #endregion
+            #region Red
+            RoR2Content.Items.NovaOnHeal.tags = RoR2Content.Items.NovaOnHeal.tags.Add(ItemTag.AIBlacklist);
+            DLC2Content.Items.GoldOnStageStart.tags = DLC2Content.Items.GoldOnStageStart.tags.Add(ItemTag.AIBlacklist);
 
+            RoR2Content.Items.BarrierOnOverHeal.tags = RoR2Content.Items.BarrierOnOverHeal.tags.Add(ItemTag.Count);
+            DLC1Content.Items.MoreMissile.tags = DLC1Content.Items.MoreMissile.tags.Add(ItemTag.Count);
+            #endregion
+            #region Boss
+            RoR2Content.Items.TitanGoldDuringTP.tags = RoR2Content.Items.TitanGoldDuringTP.tags.Add(ItemTag.HoldoutZoneRelated);
+            RoR2Content.Items.TitanGoldDuringTP.tags = RoR2Content.Items.TitanGoldDuringTP.tags.Add(ItemTag.AIBlacklist);
+            RoR2Content.Items.SprintWisp.tags = RoR2Content.Items.SprintWisp.tags.Add(ItemTag.AIBlacklist);
+            RoR2Content.Items.SiphonOnLowHealth.tags = RoR2Content.Items.SiphonOnLowHealth.tags.Add(ItemTag.AIBlacklist);
+            DLC1Content.Items.MinorConstructOnKill.tags = DLC1Content.Items.MinorConstructOnKill.tags.Add(ItemTag.AIBlacklist);
+
+            #endregion
+            #region Lunar
             RoR2Content.Items.MonstersOnShrineUse.tags = RoR2Content.Items.MonstersOnShrineUse.tags.Add(ItemTag.InteractableRelated);
             RoR2Content.Items.GoldOnHit.tags = RoR2Content.Items.GoldOnHit.tags.Add(ItemTag.AIBlacklist);
             RoR2Content.Items.LunarTrinket.tags = RoR2Content.Items.LunarTrinket.tags.Add(ItemTag.AIBlacklist);
+            RoR2Content.Items.FocusConvergence.tags = RoR2Content.Items.FocusConvergence.tags.Add(ItemTag.AIBlacklist);
             DLC1Content.Items.LunarSun.tags = DLC1Content.Items.LunarSun.tags.Add(ItemTag.AIBlacklist);
-
-            RoR2Content.Items.LunarPrimaryReplacement.tags = RoR2Content.Items.LunarPrimaryReplacement.tags.Remove(ItemTag.AIBlacklist);
-            RoR2Content.Items.LunarSecondaryReplacement.tags = RoR2Content.Items.LunarSecondaryReplacement.tags.Remove(ItemTag.AIBlacklist);
-            RoR2Content.Items.LunarUtilityReplacement.tags = RoR2Content.Items.LunarUtilityReplacement.tags.Remove(ItemTag.AIBlacklist);
-            RoR2Content.Items.LunarSpecialReplacement.tags = RoR2Content.Items.LunarSpecialReplacement.tags.Remove(ItemTag.AIBlacklist);
-
-            RoR2Content.Items.NovaOnHeal.tags = RoR2Content.Items.NovaOnHeal.tags.Add(ItemTag.AIBlacklist);
-            RoR2Content.Items.ShockNearby.tags = RoR2Content.Items.ShockNearby.tags.Add(ItemTag.Count);
-            DLC1Content.Items.DroneWeapons.tags = DLC1Content.Items.DroneWeapons.tags.Add(ItemTag.AIBlacklist);
-            RoR2Content.Items.BarrierOnOverHeal.tags = RoR2Content.Items.BarrierOnOverHeal.tags.Add(ItemTag.Count);
-            DLC1Content.Items.CritDamage.tags = DLC1Content.Items.CritDamage.tags.Add(ItemTag.AIBlacklist);
-            DLC1Content.Items.RegeneratingScrap.tags = DLC1Content.Items.RegeneratingScrap.tags.Add(ItemTag.AIBlacklist);
+            DLC1Content.Items.RandomlyLunar.tags = DLC1Content.Items.RandomlyLunar.tags.Add(ItemTag.AIBlacklist);
+            DLC2Content.Items.OnLevelUpFreeUnlock.tags = DLC2Content.Items.OnLevelUpFreeUnlock.tags.Add(ItemTag.AIBlacklist);
 
 
+            #endregion
+            #region Void
+            DLC1Content.Items.ElementalRingVoid.tags = DLC1Content.Items.ElementalRingVoid.tags.Add(ItemTag.AIBlacklist);
+            DLC1Content.Items.ExplodeOnDeathVoid.tags = DLC1Content.Items.ExplodeOnDeathVoid.tags.Add(ItemTag.AIBlacklist);
+
+            DLC1Content.Items.MushroomVoid.tags = DLC1Content.Items.MushroomVoid.tags.Add(ItemTag.SprintRelated);
+            DLC1Content.Items.MushroomVoid.tags = DLC1Content.Items.MushroomVoid.tags.Add(ItemTag.AIBlacklist);
+            DLC1Content.Items.TreasureCacheVoid.tags = DLC1Content.Items.TreasureCacheVoid.tags.Add(ItemTag.AIBlacklist);
+            #endregion
+
+            #region Modded
+            //SS2 Missing some tags
+            ItemDef tempDef = ItemCatalog.GetItemDef(ItemCatalog.FindItemIndex("WatchMetronome"));
+            if (tempDef != null)
+            {
+                tempDef.tags = tempDef.tags.Add(ItemTag.SprintRelated);
+            }
+            tempDef = ItemCatalog.GetItemDef(ItemCatalog.FindItemIndex("PortableReactor"));
+            if (tempDef != null)
+            {
+                tempDef.tags = tempDef.tags.Add(ItemTag.AIBlacklist);
+            }
+            tempDef = ItemCatalog.GetItemDef(ItemCatalog.FindItemIndex("HuntersSigil"));
+            if (tempDef != null)
+            {
+                tempDef.tags = tempDef.tags.Add(ItemTag.AIBlacklist);
+            }
+            tempDef = ItemCatalog.GetItemDef(ItemCatalog.FindItemIndex("VV_ITEM_EHANCE_VIALS_ITEM"));
+            if (tempDef != null)
+            {
+                tempDef.tags = tempDef.tags.Add(ItemTag.AIBlacklist);
+            }
+            #endregion
 
 
-            DLC2Content.Items.IncreaseDamageOnMultiKill.tags = DLC2Content.Items.IncreaseDamageOnMultiKill.tags.Add(ItemTag.AIBlacklist); //Blacklisted because it can bug things.
-            DLC2Content.Items.DelayedDamage.tags = DLC2Content.Items.DelayedDamage.tags.Add(ItemTag.AIBlacklist); //Blacklisted because it can bug things.
+            #region Category stuff
 
-            DLC2Content.Items.ExtraStatsOnLevelUp.tags = DLC2Content.Items.ExtraStatsOnLevelUp.tags.Add(ItemTag.AIBlacklist);
-            DLC2Content.Items.LowerPricedChests.tags = DLC2Content.Items.LowerPricedChests.tags.Add(ItemTag.AIBlacklist);
-            DLC2Content.Items.ExtraShrineItem.tags = DLC2Content.Items.ExtraShrineItem.tags.Add(ItemTag.AIBlacklist);
+            RoR2Content.Items.ParentEgg.tags[0] = ItemTag.Healing;
+            RoR2Content.Items.ShieldOnly.tags[0] = ItemTag.Healing;
+            RoR2Content.Items.LunarUtilityReplacement.tags[0] = ItemTag.Healing;
+            RoR2Content.Items.RandomDamageZone.tags[0] = ItemTag.Damage;
+            DLC1Content.Items.HalfSpeedDoubleHealth.tags[0] = ItemTag.Healing;
+            DLC1Content.Items.LunarSun.tags[0] = ItemTag.Damage;
 
-            DLC2Content.Items.TeleportOnLowHealth.tags = DLC2Content.Items.TeleportOnLowHealth.tags.Add(ItemTag.Count);
+            DLC1Content.Items.MinorConstructOnKill.tags = DLC1Content.Items.MinorConstructOnKill.tags.Add(ItemTag.Utility);
+            RoR2Content.Items.Knurl.tags = RoR2Content.Items.Knurl.tags.Remove(ItemTag.Utility);
+            RoR2Content.Items.Pearl.tags = RoR2Content.Items.Pearl.tags.Remove(ItemTag.Utility);
+            RoR2Content.Items.Pearl.tags = RoR2Content.Items.Pearl.tags.Add(ItemTag.Healing);
 
-            DLC2Content.Items.GoldOnStageStart.tags = DLC2Content.Items.GoldOnStageStart.tags.Add(ItemTag.AIBlacklist);
-            DLC2Content.Items.ResetChests.tags = DLC2Content.Items.ResetChests.tags.Add(ItemTag.AIBlacklist);
-            DLC2Content.Items.BoostAllStats.tags = DLC2Content.Items.BoostAllStats.tags.Add(ItemTag.AIBlacklist);
+            RoR2Content.Items.Infusion.tags = RoR2Content.Items.Infusion.tags.Remove(ItemTag.Utility);
+            RoR2Content.Items.GhostOnKill.tags = RoR2Content.Items.GhostOnKill.tags.Remove(ItemTag.Damage);
+            RoR2Content.Items.HeadHunter.tags = RoR2Content.Items.HeadHunter.tags.Remove(ItemTag.Utility);
+            RoR2Content.Items.BarrierOnKill.tags = RoR2Content.Items.BarrierOnKill.tags.Remove(ItemTag.Utility);
+            RoR2Content.Items.BarrierOnOverHeal.tags = RoR2Content.Items.BarrierOnOverHeal.tags.Remove(ItemTag.Utility);
+            RoR2Content.Items.FallBoots.tags = RoR2Content.Items.FallBoots.tags.Remove(ItemTag.Damage);
 
+            RoR2Content.Items.NovaOnHeal.tags = RoR2Content.Items.NovaOnHeal.tags.Remove(ItemTag.Damage);
+            RoR2Content.Items.NovaOnHeal.tags = RoR2Content.Items.NovaOnHeal.tags.Add(ItemTag.Healing);
+
+            //RoR2Content.Items.PersonalShield.tags = RoR2Content.Items.PersonalShield.tags.Add(ItemTag.Healing);
+            DLC1Content.Items.ImmuneToDebuff.tags = DLC1Content.Items.ImmuneToDebuff.tags.Add(ItemTag.Healing);
+            DLC1Content.Items.ElementalRingVoid.tags = DLC1Content.Items.ElementalRingVoid.tags.Remove(ItemTag.Utility);
+
+            #endregion
+
+            DLC2Content.Items.KnockBackHitEnemies.tags = DLC2Content.Items.KnockBackHitEnemies.tags.Remove(ItemTag.DevotionBlacklist);
+            DLC2Content.Items.IncreasePrimaryDamage.tags = DLC2Content.Items.IncreasePrimaryDamage.tags.Remove(ItemTag.DevotionBlacklist);
         }
 
 

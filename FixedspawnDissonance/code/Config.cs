@@ -1,5 +1,11 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
+using RiskOfOptions.Options;
+using RiskOfOptions;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using RiskOfOptions.OptionConfigs;
+using RoR2;
 
 namespace FixedspawnDissonance
 {
@@ -19,25 +25,21 @@ namespace FixedspawnDissonance
         public static ConfigEntry<bool> KinChanges;
         public static ConfigEntry<bool> SacrificeChanges;
         public static ConfigEntry<bool> SoulChanges;
-        public static ConfigEntry<bool> SwarmsChanges;
+ 
         public static ConfigEntry<bool> VenganceChanges;
         public static ConfigEntry<bool> SpiteChanges;
-        //public static ConfigEntry<bool> FrailtyChanges;
-        //public static ConfigEntry<bool> EnableGeneralChanges;
+        public static ConfigEntry<bool> RebirthChanges;
+
+        public static ConfigEntry<bool> RebirthStoreAlways;
 
 
-
-
-        //public static ConfigEntry<bool> DissonanceScavsAllStage;
-        //public static ConfigEntry<bool> DissonancePerfectedForAll;
-
-        //public static ConfigEntry<bool> KinNoRepeatConfig;
         public static ConfigEntry<bool> KinYellowsForEnemies;
 
-        public static ConfigEntry<string> HonorEliteWormRules;
-        public static ConfigEntry<bool> HonorPerfectedLunarBosses;
-        public static ConfigEntry<bool> HonorStartingEliteEquip;
-        public static ConfigEntry<bool> HonorMinionAlwaysElite;
+        public static ConfigEntry<bool> Honor_EliteWorms;
+        public static ConfigEntry<bool> Honor_EliteWormsAlways;
+        public static ConfigEntry<bool> Honor_PerfectMithrix;
+        public static ConfigEntry<bool> Honor_EliteMinions;
+        public static ConfigEntry<bool> Honor_RedoneElites;
 
         public static ConfigEntry<bool> VengenceEquipment;
         public static ConfigEntry<bool> VenganceHealthRebalance;
@@ -46,12 +48,8 @@ namespace FixedspawnDissonance
 
         public static ConfigEntry<float> EnigmaCooldownReduction;
         public static ConfigEntry<bool> EnigmaInterrupt;
-        //public static ConfigEntry<bool> EnigmaDestructive;
-        //public static ConfigEntry<bool> EnigmaDirectional;
         public static ConfigEntry<bool> EnigmaMovement;
-        //public static ConfigEntry<bool> EnigmaTonic;
-
-        //public static ConfigEntry<bool> SacrificeVoids;
+ 
         public static ConfigEntry<bool> SacrificeMoreEnemySpawns;
 
         public static ConfigEntry<bool> EvoBetterBlacklist;
@@ -60,32 +58,13 @@ namespace FixedspawnDissonance
         public static ConfigEntry<int> EvoMoreWhite;
         public static ConfigEntry<int> EvoMoreGreen;
         public static ConfigEntry<int> EvoMoreRed;
-        public static ConfigEntry<int> EvoVoidTeam;
+        public static ConfigEntry<bool> EvoVoidTeam;
 
         public static ConfigEntry<bool> DevotionInventory;
-        public static ConfigEntry<bool> DevotionOnlyOneInventory;
+        public static ConfigEntry<bool> DevotionShowAllInventory;
+        public static ConfigEntry<bool> DevotionAllowVoids;
+        public static ConfigEntry<bool> DevotionAllowLunars;
 
-        //public static ConfigEntry<bool> RarerEnemies;
-        //public static ConfigEntry<bool> BullshitScavs;
-        //public static ConfigEntry<bool> DebugPrintDissonanceSpawns;
-        //public static ConfigEntry<int> ScavWithYellowItem;
-        //public static ConfigEntry<bool> VengenceAmbient;
-        //public static ConfigEntry<bool> VengencePlayerLevelMulti;
-        //public static ConfigEntry<bool> CommandAffixChoice;
-        //public static ConfigEntry<bool> ScavEquipmentBlacklist;
-        //public static ConfigEntry<bool> VengenceHelfire;
-
-        //public static ConfigEntry<bool> MoreEvoLimboThing;
-        //public static ConfigEntry<bool> MoreEvoMoon2Thing;
-        //public static ConfigEntry<int> EnigmaCooldown;
-        //public static ConfigEntry<bool> EnigmaUpgrade;
-        //public static ConfigEntry<bool> EnigmaChatMessage;
-
-        //public static ConfigEntry<bool> SoulImmortal;
-        //public static ConfigEntry<bool> SoulStats;
-        //public static ConfigEntry<bool> SoulSpeed;
-        //public static ConfigEntry<bool> SoulLesserDecay;
-        //public static ConfigEntry<bool> SoulGreaterDecay;
 
 
         public static void InitConfig()
@@ -103,28 +82,28 @@ namespace FixedspawnDissonance
                 ": Main :",
                 "Enable Artifact of Command changes",
                 true,
-                "Command Essences with 1 choices automatically pick the item. Command giving choices for Elite Equipment"
+                "Command giving choices for Elite Equipment. Void Command Essences have Particles now."
             );
 
             DissonanceChanges = ConfigFile.Bind(
                 ": Main :",
                 "Enable Artifact of Dissonance changes",
                 true,
-                "General balance. Enemies spawning as Perfected in Commencement. Random skins for enemies that have skins such as Titans"
+                "Adds Sots enemies and Hermit Crabs. Enemies spawn as Perfected in Commencement. Random skins for enemies that have skins such as Titans"
             );
 
             EnigmaChanges = ConfigFile.Bind(
                 ": Main :",
                 "Enable Artifact of Enigma changes",
                 true,
-                "Replacing Equipment Drops with Enigma Fragment. Enabling/Disabling various Equipment for Enigma Compatible"
+                "Equipment Drops replaced with Enigma Fragment that lower cooldown. Removes equipment like Recycler from Enigma allowed equipment list."
             );
 
             DevotionChanges = ConfigFile.Bind(
                 ": Main :",
                 "Enable Artifact of Devotion changes",
                 true,
-                "Currently, only adds missing elite types. Does not need to be disabled when official added"
+                "Adds Devoted Lemurian inventory to TAB. Allow Voids to be given. Adds Sots Elite types. Various fixes to various issues with Devotion."
             );
 
             EvolutionChanges = ConfigFile.Bind(
@@ -139,7 +118,7 @@ namespace FixedspawnDissonance
                 ": Main :",
                 "Enable Artifact of Honor changes",
                 true,
-                "Elite Worms. Starting with Elite Equip. Minions get Elite Equips. Perfected Mithrix, Voidtouched Voidling"
+                "Elite Worms. Minions get Elite Equips. Perfected Mithrix, Voidtouched Voidling"
             );
 
             KinChanges = ConfigFile.Bind(
@@ -153,7 +132,7 @@ namespace FixedspawnDissonance
                 ": Main :",
                 "Enable Artifact of Sacrifice changes",
                 true,
-                "Void Team drops Void Items. Stages start with 50% more enemies on them as they replace chests"
+                "Bosses drop large chest items. Void Team drops Void Items. Slight nerf to green amounts from regular enemies. Stages start with 50% more enemies."
             );
 
             SoulChanges = ConfigFile.Bind(
@@ -162,66 +141,66 @@ namespace FixedspawnDissonance
                 true,
                 "Big enemies spawn Greater Soul Wisps. Soul Wisps inherit elites. General Soul stat adjustments"
             );
-
-            SwarmsChanges = ConfigFile.Bind(
-                ": Main :",
-                "Enable Artifact of Swarm changes",
-                true,
-                "Get like 4 empathy cores instead of 2 like how you get 2 beetle guards instead of 1."
-            );
+ 
 
             VenganceChanges = ConfigFile.Bind(
                 ": Main :",
                 "Enable Artifact of Vengance changes",
                 true,
-                "Umbras can use Equipment. General Umbra balance hopefully for the better. Umbras drop better Items."
+                "Umbras can use Equipment. Umbras drop better Items. General balancing, like less healing, innate defense, get less items."
             );
 
             SpiteChanges = ConfigFile.Bind(
                 ": Main :",
                 "Enable Artifact of Spite changes",
                 true,
-                "Spite, but like, more. Damage scales with stages beaten"
+                "More chaotic Spite Bombs. Spite Bombs hurt enemies too."
             );
-
-            /*FrailtyChanges = ConfigFile.Bind(
-                ": Main :",
-                "Enable Artifact of Frailty changes",
-                false,
-                "Remove all fall damage immunity"
-            );*/
-
-
-
-
-
-
-
-            HonorPerfectedLunarBosses = ConfigFile.Bind(
-                "Honor",
-                "Honor making Perfected Lunar Bosses and Voidtouched Void bosses",
+            RebirthChanges = ConfigFile.Bind(
+                            ": Main :",
+                            "Enable Artifact of Rebirth changes",
+                            true,
+                            "Allow Void and Lunars to be given. Get a random item from your last Rebirth run if you failed to be reborn in Prime Meridian."
+                        );
+            RebirthStoreAlways = ConfigFile.Bind(
+                "Rebirth",
+                "Rebirth store random item",
                 true,
-                "Affects all Mithrix phases, Twisted Scavengers and Voidling. If turned off they will go back to being their guaranteed specific tier 1 elite."
+                "Get a random item from your last Rebirth run if you failed to be reborn in Prime Meridian."
             );
-            HonorStartingEliteEquip = ConfigFile.Bind(
+
+            Honor_PerfectMithrix = ConfigFile.Bind(
                 "Honor",
-                "Elite Starting Equip",
-                false,
-                "When starting a run with Artifact of Honor, recieve a random Tier 1 Elite Equipment"
+                "Final Bosses specific elite type",
+                true,
+                "Perfected Mithrix, Voidtouched Voidling, Gilded False Son."
             );
-            HonorMinionAlwaysElite = ConfigFile.Bind(
+            Honor_EliteMinions = ConfigFile.Bind(
                 "Honor",
                 "Force Minions to be Elite",
                 true,
                 "When Honor is active, new Minions will be given a Tier 1 Elite Equipment"
             );
-            HonorEliteWormRules = ConfigFile.Bind<string>(
+            Honor_RedoneElites = ConfigFile.Bind(
                 "Honor",
-                "Elite Worm Rules",
-                "HonorOnly",
-                "Enable/Disable Elite Magma & Overloading Worms. Elites with an effect around the character might look weird as the Worm character can often be far away from the Worm\nValid Options:\nAlways:        Worms can always spawn as elites\nHonorOnly:  Worms will be Elites when Artifact of Honor is enabled\nNever:          Worms will never be Elite (Vanilla)"
+                "Honor affect all elite types",
+                true,
+                "Make all elite types cheaper and weaker, not just tier 1. Allows for more modded elite types to show up."
             );
-
+            Honor_EliteWorms = ConfigFile.Bind(
+                "Honor",
+                "Elite Worms",
+                true,
+                "Allow Elite Worms to spawn during Honor. Vanilla removes Worms entirely."
+            );
+            Honor_EliteWorms.SettingChanged += Honor_EliteWormsAlways_SettingChanged;
+            Honor_EliteWormsAlways = ConfigFile.Bind(
+                "Honor",
+                "Elite Worms Always",
+                false,
+                "Allow Elite Worms to spawn always."
+            );
+            Honor_EliteWormsAlways.SettingChanged += Honor_EliteWormsAlways_SettingChanged;
             EvoMoreItems = ConfigFile.Bind(
                 "Evolution",
                 "Give more items",
@@ -230,9 +209,9 @@ namespace FixedspawnDissonance
             );
             EvoMoreAfterLoop = ConfigFile.Bind(
                 "Evolution",
-                "Multiply items only after Loop",
+                "Evo more items only after Loop",
                 true,
-                "For when you think 3/5 Whites at the start is too much but want enemies to still get a powerboost later."
+                "For when you think 2/3 Whites at the start is too much but want enemies to still get a powerboost later."
             );
 
             EvoMoreWhite = ConfigFile.Bind(
@@ -284,9 +263,9 @@ namespace FixedspawnDissonance
             );
             SacrificeMoreEnemySpawns = ConfigFile.Bind(
                 "Sacrifice",
-                "More Stage enemy spawns",
+                "Sacrifice more monsters at Stage Start",
                 true,
-                "Stages spawn with more enemy on them"
+                "Stages spawn 50% more enemies to replace the chests. Enemies during the stage unaffected."
             );
 
             EnigmaInterrupt = ConfigFile.Bind(
@@ -295,18 +274,7 @@ namespace FixedspawnDissonance
                false,
                "Should Recycler and Tricorn be an option for Enigma"
             );
-            /*EnigmaDestructive = ConfigFile.Bind(
-               "Enigma",
-               "Enable Descructive Equipment",
-               true,
-               "Should Helfire Tincture, Glowing Meteorite, Effigy of Grief be an option for Enigma"
-           );*/
-            /*EnigmaTonic = ConfigFile.Bind(
-                "Enigma",
-                "Enable Spinel Tonic",
-                false,
-                 "Should Spinel Tonic be an option for Enigma"
-                       );*/
+ 
             EnigmaMovement = ConfigFile.Bind(
                            "Enigma",
                            "Enable Movement affecting Equipment",
@@ -337,59 +305,94 @@ namespace FixedspawnDissonance
                 "Prevents Scavs and Enemies from spawning with; Nkuhanas Opinion, Aegis, Happiest Mask, Ghors Tome, Death Mark, Infusion\n Prevents Artifact of Evolution giving; Tesla Coil, Razorwire"
             );
 
-            DevotionOnlyOneInventory = ConfigFile.Bind(
+            DevotionShowAllInventory = ConfigFile.Bind(
                 "Devotion",
-                "Show everybodies Lemurians Inventory",
+                "Show every players Devotion Inventory",
                 true,
                 "Should every players, lemurians, inventory be shown, or only your lemurians inventory."
             );
+            DevotionAllowVoids = ConfigFile.Bind(
+                 "Devotion",
+                 "Devotion Void Items",
+                 true,
+                 "Allow Void Items to be given to Lemurians"
+             );
+            DevotionAllowLunars = ConfigFile.Bind(
+                 "Devotion",
+                 "Devotion Lunar Items",
+                 false,
+                 "Allow Lunar Items to be given to Lemurians"
+             );
             DevotionInventory = ConfigFile.Bind(
                 "Devotion",
-                "Show Lemurians Inventory",
+                "Show Devoted Lemurian Inventory",
                 true,
                 "Show the oldest Lemurians inventory on the scoreboard. Every players is shown alternating player, lem. See other config."
             );
 
 
-            /*
-            SoulImmortal = ConfigFile.Bind(
-                           "1h - Soul",
-                           "Greater Soul Wisps",
-                           true,
-                           "Should tougher enemies spawn Greater Soul Wisps"
-                       );
-            */
 
 
 
-            /*SacrificeVoids = ConfigFile.Bind(
-                "1k - Sacrifice",
-                "Void Enemies drop Void Items",
-                true,
-                "While they have added ways to get void items from Sacrifice, it still feels fitting."
-            );*/
-
-            /*KinNoRepeatConfig = ConfigFile.Bind(
-    "1d - Kin",
-    "No Kin repeats",
-    true,
-    "Tries to pick a different enemy than the one you had last stage when using Artifact of Kin."
-);*/
-            /*DissonanceScavsAllStage = ConfigFile.Bind(
-    "Dissonance",
-    "Scavengers on every stage while Dissonant",
-    false,
-    "While using Artifact of Dissonance\nIf disabled Scavengers will have a 25% chance to be possible spawn on the current stage like every other boss\nIf enabled Scavengers will be a possible spawn on every stage"
-);
-DissonancePerfectedForAll = ConfigFile.Bind(
-    "Dissonance",
-    "All enemies can be Perfected on Commencement",
-    true,
-    "Sets the EliteRules for all enemies selected by Dissonance on Commencement to the Lunar rule.\nMeaning only Perfected elites normally and Perfected + Tier 1 Elites with Honor"
-);*/
-
-
+            RiskConfig();
         }
 
+        private static void Honor_EliteWormsAlways_SettingChanged(object sender, System.EventArgs e)
+        {
+            if (RunArtifactManager.instance && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.EliteOnly))
+            {
+                Honor.Worm_EliteStuff(true);
+            }
+            else
+            {
+                Honor.Worm_EliteStuff(false);
+            }
+        }
+
+        public static void RiskConfig()
+        {
+            Texture2D texture = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/icon_old.png");
+            Sprite modIconS = Sprite.Create(texture, new Rect(0, 0, 256, 256), new Vector2(0.5f, 0.5f));
+            ModSettingsManager.SetModIcon(modIconS);
+            ModSettingsManager.SetModDescription("Additions to various vanilla Artifacts.");
+
+
+            ModSettingsManager.AddOption(new CheckBoxOption(DevotionInventory, false));
+            ModSettingsManager.AddOption(new CheckBoxOption(DevotionShowAllInventory, false));
+            ModSettingsManager.AddOption(new CheckBoxOption(DevotionAllowVoids, false));
+            ModSettingsManager.AddOption(new CheckBoxOption(DevotionAllowLunars, false));
+            CheckBoxConfig overwriteName = new CheckBoxConfig
+            {
+                category = "General",
+                restartRequired = false,
+            };
+            ModSettingsManager.AddOption(new CheckBoxOption(RebirthStoreAlways, overwriteName));   
+
+            ModSettingsManager.AddOption(new CheckBoxOption(VenganceHealthRebalance, overwriteName));
+            ModSettingsManager.AddOption(new CheckBoxOption(SacrificeMoreEnemySpawns, overwriteName));
+            ModSettingsManager.AddOption(new CheckBoxOption(EvoMoreItems, overwriteName));
+            overwriteName.restartRequired = true;
+            ModSettingsManager.AddOption(new CheckBoxOption(KinYellowsForEnemies, overwriteName));
+
+            ModSettingsManager.AddOption(new CheckBoxOption(Honor_EliteWorms, false));
+            ModSettingsManager.AddOption(new CheckBoxOption(Honor_EliteWormsAlways, false));
+            ModSettingsManager.AddOption(new CheckBoxOption(Honor_PerfectMithrix, false));
+            ModSettingsManager.AddOption(new CheckBoxOption(Honor_EliteMinions, false));
+            ModSettingsManager.AddOption(new CheckBoxOption(Honor_RedoneElites, false));
+
+
+            ModSettingsManager.AddOption(new CheckBoxOption(DisableNewContent, true));
+
+            ModSettingsManager.AddOption(new CheckBoxOption(SacrificeChanges, true));
+            ModSettingsManager.AddOption(new CheckBoxOption(RebirthChanges, true));
+            ModSettingsManager.AddOption(new CheckBoxOption(HonorChanges, true));
+            ModSettingsManager.AddOption(new CheckBoxOption(VenganceChanges, true));
+            ModSettingsManager.AddOption(new CheckBoxOption(EnigmaChanges, true));
+            ModSettingsManager.AddOption(new CheckBoxOption(SoulChanges, true));
+            ModSettingsManager.AddOption(new CheckBoxOption(EvolutionChanges, true));
+            ModSettingsManager.AddOption(new CheckBoxOption(DevotionChanges, true));
+            ModSettingsManager.AddOption(new CheckBoxOption(DissonanceChanges, true));
+            ModSettingsManager.AddOption(new CheckBoxOption(SpiteChanges, true));
+        }
     }
 }

@@ -1,87 +1,174 @@
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 
 namespace FixedspawnDissonance
 {
     public class Honor
     {
-        public static List<EquipmentDef> EliteEquipmentDefs = new List<EquipmentDef>();
+        public static List<EliteDef> minionEliteDefs = new List<EliteDef>();
 
         public static void Start()
         {
-            if (WConfig.HonorPerfectedLunarBosses.Value == true)
-            {
-                On.RoR2.ScriptedCombatEncounter.BeginEncounter += ScriptedCombatEncounter_BeginEncounter;
-                On.RoR2.InfiniteTowerExplicitSpawnWaveController.Initialize += InfiniteTowerExplicitSpawnWaveController_Initialize;
-            }
+            On.RoR2.ScriptedCombatEncounter.BeginEncounter += Honor_ForceSpecialEliteType;
+            On.RoR2.InfiniteTowerExplicitSpawnWaveController.Initialize += Honor_SimuForceSpecialEliteType;
 
             //Probably don't remove this based on Honor
             On.RoR2.CharacterBody.UpdateItemAvailability += RemoveFireTrailFromWorm;
 
-            if (WConfig.HonorStartingEliteEquip.Value)
+            Addressables.LoadAssetAsync<EliteDef>(key: "RoR2/DLC1/EliteEarth/edEarthHonor.asset").WaitForCompletion().healthBoostCoefficient = 2;
+        }
+
+     
+        public static void Honor_EliteTiers(bool activate)
+        {
+            if (!WConfig.Honor_RedoneElites.Value)
             {
-                On.RoR2.Run.Start += Honor.HonorGiveEliteEquipOnStart;
+                return;
+            }
+            List<EliteDef> changedList = new List<EliteDef>();
+
+            float value = 2f;
+            if (activate)
+            {
+                //On.RoR2.CombatDirector.IsEliteOnlyArtifactActive += DisableHonorEliteTier;
+                On.RoR2.CombatDirector.NotEliteOnlyArtifactActive += AllowNormalTiersHonor;
+                CombatDirector.eliteTiers[0].isAvailable = (SpawnCard.EliteRules rules) => false;
+                value = 0.5f;
+            }
+            else
+            {
+                //On.RoR2.CombatDirector.IsEliteOnlyArtifactActive -= DisableHonorEliteTier;
+                On.RoR2.CombatDirector.NotEliteOnlyArtifactActive -= AllowNormalTiersHonor;
+                CombatDirector.eliteTiers[0].isAvailable = (SpawnCard.EliteRules rules) => true;
+            }
+            //Ideally keep Lunars being allowed to spawn as Tier1, if anything add Tier2
+            //How do we force ignore spawn card rules ig ig
+
+            foreach (EliteDef eliteDef in EliteCatalog.eliteDefs)
+            {
+                if (!eliteDef.name.EndsWith("Honor"))
+                {
+                    eliteDef.healthBoostCoefficient = Mathf.LerpUnclamped(1f, eliteDef.healthBoostCoefficient, value);
+                    eliteDef.damageBoostCoefficient = Mathf.LerpUnclamped(1f, eliteDef.damageBoostCoefficient, value);
+                    //Debug.Log(eliteDef + " hp:" + eliteDef.healthBoostCoefficient+ " dmg:"+ eliteDef.damageBoostCoefficient); 
+                }
+                else
+                {
+                    if (eliteDef.IsAvailable())
+                    {
+                        minionEliteDefs.Add(eliteDef);
+                    }
+                }
+            }
+
+
+            for (int i = 1; i < CombatDirector.eliteTiers.Length; i++)
+            {
+                //Debug.Log("EliteTier " + i);
+                if (CombatDirector.eliteTiers[i].eliteTypes[0] == RoR2Content.Elites.LightningHonor)
+                {
+                    //Should help with Adaptive Elite spam, I think??
+                    var Temp = CombatDirector.eliteTiers[0];
+                    CombatDirector.eliteTiers[0] = CombatDirector.eliteTiers[i];
+                    CombatDirector.eliteTiers[i] = Temp;
+                    continue;
+                }
+                CombatDirector.eliteTiers[i].costMultiplier = Mathf.LerpUnclamped(1f, CombatDirector.eliteTiers[i].costMultiplier, value);
             }
         }
 
-        private static void InfiniteTowerExplicitSpawnWaveController_Initialize(On.RoR2.InfiniteTowerExplicitSpawnWaveController.orig_Initialize orig, InfiniteTowerExplicitSpawnWaveController self, int waveIndex, Inventory enemyInventory, GameObject spawnTargetObject)
+        private static bool AllowNormalTiersHonor(On.RoR2.CombatDirector.orig_NotEliteOnlyArtifactActive orig)
+        {
+            return true;
+        }
+        public static bool DisableHonorEliteTier(On.RoR2.CombatDirector.orig_IsEliteOnlyArtifactActive orig)
+        {
+            //Disable original Honor
+            return false;
+        }
+
+        private static void Honor_SimuForceSpecialEliteType(On.RoR2.InfiniteTowerExplicitSpawnWaveController.orig_Initialize orig, InfiniteTowerExplicitSpawnWaveController self, int waveIndex, Inventory enemyInventory, GameObject spawnTargetObject)
         {
             if (RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.EliteOnly))
             {
-                string name = self.spawnList[0].spawnCard.name;
-                if (name.StartsWith("cscBrother"))
+                if (WConfig.Honor_PerfectMithrix.Value)
                 {
-                    self.spawnList[0].eliteDef = RoR2Content.Elites.Lunar;
-                }
-                else if (name.StartsWith("cscScavLunar"))
-                {
-                    self.spawnList[0].eliteDef = RoR2Content.Elites.Lunar;
-                }
-                else if (name.StartsWith("cscMiniVoidR"))
-                {
-                    self.spawnList[0].eliteDef = DLC1Content.Elites.Void;
-                }
-                else if (name.StartsWith("cscITVoidMe"))
-                {
-                    self.spawnList[0].eliteDef = DLC1Content.Elites.Void;
-                }
-                else if (name.StartsWith("cscFalseSon"))
-                {
-                    self.spawnList[0].eliteDef = DLC2Content.Elites.Aurelionite;
-                }
+                    string name = self.spawnList[0].spawnCard.name;
+                    if (name.StartsWith("cscBrother"))
+                    {
+                        self.spawnList[0].eliteDef = RoR2Content.Elites.Lunar;
+                    }
+                    else if (name.StartsWith("cscScavLunar"))
+                    {
+                        self.spawnList[0].eliteDef = RoR2Content.Elites.Lunar;
+                    }
+                    else if (name.StartsWith("cscMiniVoidR"))
+                    {
+                        self.spawnList[0].eliteDef = DLC1Content.Elites.Void;
+                    }
+                    else if (name.StartsWith("cscITVoidMe"))
+                    {
+                        self.spawnList[0].eliteDef = DLC1Content.Elites.Void;
+                    }
+                    else if (name.StartsWith("cscVoidInfestor"))
+                    {
+                        self.spawnList[0].eliteDef = DLC1Content.Elites.Void;
+                    }
+                    else if (name.StartsWith("cscFalseSon"))
+                    {
+                        self.spawnList[0].eliteDef = DLC2Content.Elites.Aurelionite;
+                    }
+                    else if (name.StartsWith("cscTitanGold"))
+                    {
+                        if (Run.instance.IsExpansionEnabled(DLC2Content.Elites.Aurelionite.eliteEquipmentDef.requiredExpansion))
+                        {
+                            self.spawnList[0].eliteDef = DLC2Content.Elites.Aurelionite;
+                        }
+                    }
+                }   
             }
-
-
             orig(self, waveIndex, enemyInventory, spawnTargetObject);
         }
 
-        private static void ScriptedCombatEncounter_BeginEncounter(On.RoR2.ScriptedCombatEncounter.orig_BeginEncounter orig, ScriptedCombatEncounter self)
+        private static void Honor_ForceSpecialEliteType(On.RoR2.ScriptedCombatEncounter.orig_BeginEncounter orig, ScriptedCombatEncounter self)
         {
             orig(self);
             if (RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.EliteOnly))
             {
+                if (!WConfig.Honor_PerfectMithrix.Value)
+                {
+                    return;
+                }
                 string name = self.spawns[0].spawnCard.name;
-                if (name.StartsWith("cscBrother"))
+                bool doIt = false;
+                EquipmentDef elite = null;
+
+                if (name.StartsWith("cscBrother") || name.StartsWith("cscScavLunar"))
                 {
-                    for (int i = 0; i < self.combatSquad.memberCount; i++)
-                    {
-                        self.combatSquad.membersList[i].inventory.SetEquipmentIndex(RoR2Content.Equipment.AffixLunar.equipmentIndex);
-                    }
+                    doIt = true;
+                    elite = RoR2Content.Equipment.AffixLunar;            
                 }
-                else if (name.StartsWith("cscMiniVoidR"))
+                else if (name.StartsWith("cscMiniVoidR") || name.StartsWith("cscVoidInfe"))
                 {
-                    for (int i = 0; i < self.combatSquad.memberCount; i++)
-                    {
-                        self.combatSquad.membersList[i].inventory.SetEquipmentIndex(DLC1Content.Equipment.EliteVoidEquipment.equipmentIndex);
-                    }
+                    doIt = true;
+                    elite = DLC1Content.Equipment.EliteVoidEquipment;
                 }
-                else if (name.StartsWith("cscFalseSon"))
+                else if (name.StartsWith("cscFalseSon") || name.StartsWith("cscTitanGold"))
+                {
+                    elite = DLC2Content.Equipment.EliteAurelioniteEquipment;
+                    if (Run.instance.IsExpansionEnabled(elite.requiredExpansion))
+                    {
+                        doIt = true;
+                    }                 
+                }
+                if (doIt)
                 {
                     for (int i = 0; i < self.combatSquad.memberCount; i++)
                     {
-                        self.combatSquad.membersList[i].inventory.SetEquipmentIndex(DLC2Content.Equipment.EliteAurelioniteEquipment.equipmentIndex);
+                        self.combatSquad.membersList[i].inventory.SetEquipmentIndex(elite.equipmentIndex);
                     }
                 }
             }
@@ -111,97 +198,52 @@ namespace FixedspawnDissonance
             orig(ownerId, minion);
             if (NetworkServer.active)
             {
-                //Maybe just check if eq drone
                 Inventory inventory = minion.gameObject.GetComponent<Inventory>();
                 if (inventory && inventory.currentEquipmentIndex == EquipmentIndex.None)
                 {
-                    if (EliteEquipmentDefs.Count > 0)
+                    if (minionEliteDefs.Count > 0)
                     {
-                        int index = Main.Random.Next(EliteEquipmentDefs.Count);
-
-                        inventory.SetEquipment(new EquipmentState(EliteEquipmentDefs[index].equipmentIndex, Run.FixedTimeStamp.negativeInfinity, 0), 0);
-                        //inventory.SetEquipmentIndex(EliteEquipmentHonorDefs[index].equipmentIndex);
-                        inventory.GiveItem(RoR2Content.Items.BoostDamage, 5);
-                        inventory.GiveItem(RoR2Content.Items.BoostHp, 15);
+                        int index = Main.Random.Next(minionEliteDefs.Count);
+                        inventory.SetEquipmentIndex(minionEliteDefs[index].eliteEquipmentDef.equipmentIndex);
+                        inventory.GiveItem(RoR2Content.Items.BoostHp, (int)(minionEliteDefs[index].healthBoostCoefficient - 1) * 10);
+                        inventory.GiveItem(RoR2Content.Items.BoostDamage, (int)(minionEliteDefs[index].damageBoostCoefficient - 1) * 10);
                     }
                 }
 
             }
         }
 
-        /*public static void HonorSpecialBossEliteFix()
+
+
+        public static void Worm_EliteStuff(bool honorActive)
         {
-            //Does this really need to run each stage
-            EliteEquipmentHonorDefs.Clear();
-            CombatDirector.EliteTierDef[] tempelitetierdefs = CombatDirector.eliteTiers;
-            for (int i = 0; i < tempelitetierdefs[1].eliteTypes.Length; i++)
+            if (WConfig.Honor_EliteWormsAlways.Value)
             {
-                EliteEquipmentHonorDefs.Add(tempelitetierdefs[1].eliteTypes[i].eliteEquipmentDef);
+                CharacterSpawnCard cscMagmaWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
+                cscMagmaWorm.noElites = false;
+                cscMagmaWorm.eliteRules = SpawnCard.EliteRules.Default;
+                CharacterSpawnCard cscElectricWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");
+                cscElectricWorm.noElites = false;
+                cscElectricWorm.eliteRules = SpawnCard.EliteRules.Default;
             }
-            if (Run.instance.stageClearCount > 4)
+            else if (WConfig.Honor_EliteWorms.Value)
             {
-                for (int i = 0; i < tempelitetierdefs[3].eliteTypes.Length; i++)
+                if (honorActive)
                 {
-                    EliteEquipmentHonorDefs.Add(tempelitetierdefs[3].eliteTypes[i].eliteEquipmentDef);
+                    CharacterSpawnCard cscMagmaWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
+                    cscMagmaWorm.noElites = false;
+                    cscMagmaWorm.eliteRules = SpawnCard.EliteRules.Default;
+                    CharacterSpawnCard cscElectricWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");
+                    cscElectricWorm.noElites = false;
+                    cscElectricWorm.eliteRules = SpawnCard.EliteRules.Default;
                 }
-            }
-
-            if (EliteEquipmentHonorDefs.Count > 0)
-            {
-                int affix1 = Main.Random.Next(EliteEquipmentHonorDefs.Count);
-                int affix2 = Main.Random.Next(EliteEquipmentHonorDefs.Count);
-
-                GoldTitanAllyHonorGiver.equipmentString = EliteEquipmentHonorDefs[affix1].name;
-                HonorAffixGiverGoldTitan.equipmentString = EliteEquipmentHonorDefs[affix1].name;
-                HonorAffixGiverSuperRoboBall.equipmentString = EliteEquipmentHonorDefs[affix2].name;
-            }
-        }*/
-
-        public static void HonorGiveEliteEquipOnStart(On.RoR2.Run.orig_Start orig, Run self)
-        {
-            orig(self);
-            if (RunArtifactManager.instance && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.eliteOnlyArtifactDef))
-            {
-                foreach (var playerController in PlayerCharacterMasterController.instances)
+                else
                 {
-                    int index = Main.Random.Next(Honor.EliteEquipmentDefs.Count);
-                    playerController.master.inventory.GiveEquipmentString(Honor.EliteEquipmentDefs[index].name);
+                    CharacterSpawnCard cscMagmaWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
+                    cscMagmaWorm.noElites = true;
+                    CharacterSpawnCard cscElectricWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");
+                    cscElectricWorm.noElites = true;
                 }
-            }
-        }
-
-
-        public static void WormStart()
-        {
-            if (WConfig.HonorEliteWormRules.Value == "Never")
-            {
-                CharacterSpawnCard MagmaWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
-                MagmaWormEliteHonor.noElites = true;
-                MagmaWormEliteHonor.eliteRules = SpawnCard.EliteRules.Default;
-
-                CharacterSpawnCard ElectricWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");
-                ElectricWormEliteHonor.noElites = true;
-                ElectricWormEliteHonor.eliteRules = SpawnCard.EliteRules.Default;
-                //Logger.LogMessage($"Worms will not be Elites");
-            }
-            else if (WConfig.HonorEliteWormRules.Value == "HonorOnly")
-            {
-                //Logger.LogMessage($"Worms will be Elites with Artifact of Honor");
-            }
-            else if (WConfig.HonorEliteWormRules.Value == "Always")
-            {
-                CharacterSpawnCard MagmaWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
-                MagmaWormEliteHonor.noElites = false;
-                MagmaWormEliteHonor.eliteRules = SpawnCard.EliteRules.Default;
-
-                CharacterSpawnCard ElectricWormEliteHonor = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");
-                ElectricWormEliteHonor.noElites = false;
-                ElectricWormEliteHonor.eliteRules = SpawnCard.EliteRules.Default;
-                //Logger.LogMessage($"Worms can be Elites");
-            }
-            else
-            {
-                Debug.LogWarning("Invalid String for Worm Elite Rules");
             }
         }
 

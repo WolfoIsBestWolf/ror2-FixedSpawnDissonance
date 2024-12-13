@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RoR2;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -16,92 +17,17 @@ namespace FixedspawnDissonance
         public static DirectorCard DissoBeetleGuard = null;
         public static DirectorCard DissoBeetleQueen = null;
 
-        public static WeightedSelection<DirectorCard> LunarifiedList = new WeightedSelection<DirectorCard>();
-        public static int LunarDone = 0;
+        //public static WeightedSelection<DirectorCard> LunarifiedList = new WeightedSelection<DirectorCard>();
+        public static List<SpawnCard> LunarifiedList;
 
         public static void Start()
         {
             Mixenemymaker();
             On.RoR2.ClassicStageInfo.RebuildCards += DissoanceLunerEliteAll;
-            On.RoR2.ClassicStageInfo.HandleMixEnemyArtifact += ClassicStageInfo_HandleMixEnemyArtifact;
-
-            On.RoR2.FamilyDirectorCardCategorySelection.OnSelected += FamilyDirectorCardCategorySelection_OnSelected;
+            On.RoR2.ClassicStageInfo.HandleMixEnemyArtifact += FindSkinForSkinnedEnemies;
         }
 
-        private static void FamilyDirectorCardCategorySelection_OnSelected(On.RoR2.FamilyDirectorCardCategorySelection.orig_OnSelected orig, FamilyDirectorCardCategorySelection self, ClassicStageInfo stageInfo)
-        {
-            if (RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.MixEnemy))
-            {
-
-            }
-            else
-            {
-                orig(self, stageInfo);
-            }
-
-        }
-
-        public static void ModdedEnemiesSupport()
-        {
-            //Most Modded Enemies get added via R2API which adds to MixEnemy
-
-            CharacterSpawnCard[] CSCList = Object.FindObjectsOfType(typeof(CharacterSpawnCard)) as CharacterSpawnCard[];
-            for (var i = 0; i < CSCList.Length; i++)
-            {
-                //Debug.LogWarning(CSCList[i]);
-                switch (CSCList[i].name)
-                {
-                    case "cscArchWisp":
-                        /*DirectorCard DC_ArchWisp = new DirectorCard
-                        {
-                            spawnCard = CSCList[i],
-                            selectionWeight = 1,
-                            preventOverhead = true,
-                            minimumStageCompletions = 0,
-                            spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
-                        };
-                        dccsMixEnemy.AddCard(1, DC_ArchWisp); */
-                        break;
-                    case "cscClayMan":
-                        /*DirectorCard DC_ClayMan = new DirectorCard
-                        {
-                            spawnCard = CSCList[i],
-                            selectionWeight = 1,
-                            preventOverhead = false,
-                            minimumStageCompletions = 0,
-                            spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
-                        };
-                        dccsMixEnemy.AddCard(2, DC_ClayMan);  //30
-                        BossPickupEdit.tempClayMan = CSCList[i].prefab.GetComponent<CharacterMaster>();*/
-                        break;
-                    case "cscAncientWisp":
-                        /*DirectorCard DC_AncientWisp = new DirectorCard
-                        {
-                            spawnCard = CSCList[i],
-                            selectionWeight = 1,
-                            preventOverhead = true,
-                            minimumStageCompletions = 0,
-                            spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
-                        };
-                        dccsMixEnemy.AddCard(0, DC_AncientWisp);  //30*/
-                        break;
-                    case "cscSigmaConstruct":
-                        /*CSCList[i].directorCreditCost = 125;
-                        DirectorCard DC_cscSigmaConstruct = new DirectorCard
-                        {
-                            spawnCard = CSCList[i],
-                            selectionWeight = 1,
-                            preventOverhead = true,
-                            minimumStageCompletions = 0,
-                            spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
-                        };
-                        dccsMixEnemy.AddCard(1, DC_cscSigmaConstruct);  //30*/
-                        //If only Sigma Construct was a good enemy
-                        break;
-                }
-            }
-        }
-
+         
 
         public static void DissoanceLunerEliteAll(On.RoR2.ClassicStageInfo.orig_RebuildCards orig, global::RoR2.ClassicStageInfo self, global::RoR2.DirectorCardCategorySelection forcedMonsterCategory, global::RoR2.DirectorCardCategorySelection forcedInteractableCategory)
         {
@@ -110,35 +36,30 @@ namespace FixedspawnDissonance
             if (self != null)
             {
                 //Maybe I could've done this like replacing normal EliteTiers with only the Lunar one or whatever but this seems to work even with mods
-                if (LunarDone == 1)
+                if (LunarifiedList != null)
                 {
-                    Debug.Log("UnLunarify");
+                    Debug.Log("Dissonance : Un-Lunar");
                     for (int k = 0; k < LunarifiedList.Count; k++)
                     {
-                        WeightedSelection<DirectorCard>.ChoiceInfo Card3 = LunarifiedList.GetChoice(k);
-                        if (!(Card3.value.spawnCard.name == "cscLunarWisp" || Card3.value.spawnCard.name == "cscLunarGolem" || Card3.value.spawnCard.name == "cscLunarExploder"))
-                        {
-                            //Debug.Log(Card3.value.spawnCard);
-                            Card3.value.spawnCard.eliteRules = SpawnCard.EliteRules.Default;
-                        }
+                        LunarifiedList[k].eliteRules = SpawnCard.EliteRules.Default;
                     }
-                    LunarDone = 0;
+                    LunarifiedList = null;
                 }
                 if (RunArtifactManager.instance && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.mixEnemyArtifactDef))
                 {
                     if (SceneInfo.instance.sceneDef.baseSceneName == "moon2" || SceneInfo.instance.sceneDef.baseSceneName == "itmoon")
                     {
-                        WeightedSelection<DirectorCard> CurrentMonsterList = new WeightedSelection<DirectorCard>();
-                        CurrentMonsterList = ClassicStageInfo.instance.monsterSelection;
-
-                        LunarDone = 1;
-                        LunarifiedList = CurrentMonsterList;
-
-                        Debug.Log("Lunarified");
+                        Debug.Log("Dissonance : Lunar");
+                        WeightedSelection<DirectorCard> CurrentMonsterList = ClassicStageInfo.instance.monsterSelection;
+                        LunarifiedList = new List<SpawnCard>();
                         for (int j = 0; j < CurrentMonsterList.Count; j++)
                         {
                             WeightedSelection<DirectorCard>.ChoiceInfo Card2 = CurrentMonsterList.GetChoice(j);
-                            Card2.value.spawnCard.eliteRules = SpawnCard.EliteRules.Lunar;
+                            if (Card2.value.spawnCard.eliteRules != SpawnCard.EliteRules.Lunar)
+                            {
+                                Card2.value.spawnCard.eliteRules = SpawnCard.EliteRules.Lunar;
+                                LunarifiedList.Add(Card2.value.spawnCard);
+                            }    
                         }
                     }
                 }
@@ -156,7 +77,7 @@ namespace FixedspawnDissonance
 
             DirectorCard DSScav = new DirectorCard
             {
-                spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscScav"),
+                spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscScav"),
                 preventOverhead = false,
                 selectionWeight = 1,
                 minimumStageCompletions = 0,
@@ -166,7 +87,7 @@ namespace FixedspawnDissonance
 
             DirectorCard DSHermitCrab = new DirectorCard
             {
-                spawnCard = RoR2.LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscHermitCrab"),
+                spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscHermitCrab"),
                 selectionWeight = 1,
                 preventOverhead = false,
                 minimumStageCompletions = 0,
@@ -232,7 +153,7 @@ namespace FixedspawnDissonance
             {
                 if (dccsMixEnemy.categories[0].cards[ii].spawnCard.name.Equals("cscTitanBlackBeach"))
                 {
-                    DissoTitan = dccsMixEnemy.categories[1].cards[ii];
+                    DissoTitan = dccsMixEnemy.categories[0].cards[ii];
                 }
                 else if (dccsMixEnemy.categories[0].cards[ii].spawnCard.name.Equals("cscBeetleQueen"))
                 {
@@ -274,12 +195,12 @@ namespace FixedspawnDissonance
         }
 
 
-        public static void ClassicStageInfo_HandleMixEnemyArtifact(On.RoR2.ClassicStageInfo.orig_HandleMixEnemyArtifact orig, DirectorCardCategorySelection monsterCategories, Xoroshiro128Plus rng)
+        public static void FindSkinForSkinnedEnemies(On.RoR2.ClassicStageInfo.orig_HandleMixEnemyArtifact orig, DirectorCardCategorySelection monsterCategories, Xoroshiro128Plus rng)
         {
             orig(monsterCategories, rng);
             if (DissoTitan != null)
             {
-                int DecideTitan = Main.Random.Next(1, 5);
+                int DecideTitan = rng.RangeInt(1, 5);
                 switch (DecideTitan)
                 {
                     case 1:
@@ -298,7 +219,7 @@ namespace FixedspawnDissonance
             }
             if (DissoGolem != null)
             {
-                int DecideGolem = Main.Random.Next(1, 5);
+                int DecideGolem = rng.RangeInt(1, 5);
                 switch (DecideGolem)
                 {
                     case 1:
@@ -317,7 +238,7 @@ namespace FixedspawnDissonance
             }
             if (DissoVermin != null)
             {
-                int DecideVermin = Main.Random.Next(1, 3);
+                int DecideVermin = rng.RangeInt(1, 3);
                 switch (DecideVermin)
                 {
                     case 1:
@@ -330,7 +251,7 @@ namespace FixedspawnDissonance
             }
             if (DissoVerminFlying != null)
             {
-                int DecideFlyingVermin = Main.Random.Next(1, 3);
+                int DecideFlyingVermin = rng.RangeInt(1, 3);
                 switch (DecideFlyingVermin)
                 {
                     case 1:
@@ -341,7 +262,49 @@ namespace FixedspawnDissonance
                         break;
                 }
             }
+            if (DissoBeetle != null)
+            {
+                int choice = rng.RangeInt(1, 3);
+                switch (choice)
+                {
+                    case 1:
+                        DissoBeetle.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Beetle/cscBeetle.asset").WaitForCompletion();
+                        break;
+                    case 2:
+                        DissoBeetle.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Beetle/cscBeetleSulfur.asset").WaitForCompletion();
+                        break;
+                }
+            }
+            if (DissoBeetleGuard != null)
+            {
+                int choice = rng.RangeInt(1, 3);
+                switch (choice)
+                {
+                    case 1:
+                        DissoBeetleGuard.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Beetle/cscBeetleGuard.asset").WaitForCompletion();
+                        break;
+                    case 2:
+                        DissoBeetleGuard.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Beetle/cscBeetleGuardSulfur.asset").WaitForCompletion();
+                        break;
+                }
+            }
+            if (DissoBeetleQueen != null)
+            {
+                int choice = rng.RangeInt(1, 3);
+                switch (choice)
+                {
+                    case 1:
+                        DissoBeetleQueen.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Beetle/cscBeetleQueen.asset").WaitForCompletion();
+                        break;
+                    case 2:
+                        DissoBeetleQueen.spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/Base/Beetle/cscBeetleQueenSulfur.asset").WaitForCompletion();
+                        break;
+                }
+            }
+
         }
 
     }
+
+    
 }

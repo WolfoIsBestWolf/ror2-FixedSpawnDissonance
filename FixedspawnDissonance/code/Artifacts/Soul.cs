@@ -1,4 +1,3 @@
-using R2API;
 using RoR2;
 using UnityEngine;
 
@@ -6,8 +5,8 @@ namespace FixedspawnDissonance
 {
     public class Soul
     {
-        public static GameObject SoulLesserWispBody = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/WispSoulBody");
-        public static GameObject SoulLesserWispMaster = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/charactermasters/WispSoulMaster");
+        public static GameObject SoulLesserWispBody = LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/WispSoulBody");
+        public static GameObject SoulLesserWispMaster = LegacyResourcesAPI.Load<GameObject>("prefabs/charactermasters/WispSoulMaster");
 
         public static GameObject SoulGreaterWispBody;
         public static GameObject SoulGreaterWispMaster;
@@ -38,40 +37,27 @@ namespace FixedspawnDissonance
             Texture2D TexSoulWisp = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/texBodyWispSoul.png");
             TexSoulWisp.wrapMode = TextureWrapMode.Clamp;
 
-            SoulWispBody.baseMaxHealth = 50;  //35 base
-            SoulWispBody.levelMaxHealth = 50; //10 base
-            SoulWispBody.baseMoveSpeed *= 1.25f;
-            SoulWispBody.baseAcceleration *= 1.25f;
+            SoulWispBody.baseMaxHealth = 105;  //35 base
+            SoulWispBody.levelMaxHealth = 31.5f; //10 base
+            SoulWispBody.baseMoveSpeed *= 1.1f;
+            SoulWispBody.baseAcceleration *= 1.1f;
+            SoulWispBody.baseAttackSpeed = 1.1f;
             SoulWispBody.baseRegen = 0f;
             SoulWispBody.levelRegen = 0f;
             SoulWispBody.baseDamage *= 0.65f;
-            SoulWispBody.levelDamage *= 0.65f;
-            SoulWispBody.baseAttackSpeed *= 1.1f;
-            //SoulWispBody.bodyFlags = CharacterBody.BodyFlags.OverheatImmune | CharacterBody.BodyFlags.ResistantToAOE | CharacterBody.BodyFlags.ImmuneToGoo | CharacterBody.BodyFlags.ImmuneToVoidDeath;
-            SoulWispBody.autoCalculateLevelStats = false;
+            SoulWispBody.levelDamage *= 0.65f;      
 
-            GivePickupsOnStart.ItemInfo Cooldown = new GivePickupsOnStart.ItemInfo { itemString = ("AlienHead"), count = 1, };
-            GivePickupsOnStart.ItemInfo DeathMark = new GivePickupsOnStart.ItemInfo { itemString = ("DeathMark"), count = 2, };
-            //GivePickupsOnStart.ItemInfo StunGrenade = new GivePickupsOnStart.ItemInfo { itemString = ("StunChanceOnHit"), count = 20, };
-            GivePickupsOnStart.ItemInfo SlowOnHit1 = new GivePickupsOnStart.ItemInfo { itemString = ("SlowOnHit"), count = 1, };
-            //GivePickupsOnStart.ItemInfo SlowOnHit2 = new GivePickupsOnStart.ItemInfo { itemString = ("SlowOnHit"), count = 2, };
-            GivePickupsOnStart.ItemInfo[] SoulStartingItemInfo = new GivePickupsOnStart.ItemInfo[0];
-            //GivePickupsOnStart.ItemInfo[] Soul2StartingItemInfo = new GivePickupsOnStart.ItemInfo[0];
-
-            SoulStartingItemInfo = SoulStartingItemInfo.Add(Cooldown, SlowOnHit1, DeathMark);
-            //Soul2StartingItemInfo = Soul2StartingItemInfo.Add(Cooldown, SlowOnHit2, DeathMark);
-
-            SoulLesserWispMaster.AddComponent<GivePickupsOnStart>().itemInfos = SoulStartingItemInfo;
+ 
             SoulLesserWispMaster.AddComponent<MasterSuicideOnTimer>().lifeTimer = 15f;
 
             if (!WConfig.DisableNewContent.Value)
             {
 
-                SoulGreaterWispBody = R2API.PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/GreaterWispBody"), "GreaterWispSoulBody", true);
-                SoulGreaterWispMaster = R2API.PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/charactermasters/GreaterWispMaster"), "GreaterWispSoulMaster", true);
+                SoulGreaterWispBody = R2API.PrefabAPI.InstantiateClone(LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/GreaterWispBody"), "GreaterWispSoulBody", true);
+                SoulGreaterWispMaster = R2API.PrefabAPI.InstantiateClone(LegacyResourcesAPI.Load<GameObject>("prefabs/charactermasters/GreaterWispMaster"), "GreaterWispSoulMaster", true);
 
-                SoulArchWispBody = R2API.PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/ArchWispBody"), "SoulArchWispBody", true);
-                SoulArchWispMaster = R2API.PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterMasters/ArchWispMaster"), "SoulArchWispMaster", true);
+                SoulArchWispBody = R2API.PrefabAPI.InstantiateClone(LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/ArchWispBody"), "SoulArchWispBody", true);
+                SoulArchWispMaster = R2API.PrefabAPI.InstantiateClone(LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterMasters/ArchWispMaster"), "SoulArchWispMaster", true);
 
 
 
@@ -130,38 +116,31 @@ namespace FixedspawnDissonance
 
 
                 //
-                GreaterSoulWispBody.baseMaxHealth = 500; //750
-                GreaterSoulWispBody.levelMaxHealth = 500;   //225
-                GreaterSoulWispBody.baseMoveSpeed *= 1.5f;
-                GreaterSoulWispBody.baseAcceleration *= 1.5f;
+                GreaterSoulWispBody.baseMaxHealth = 480; //750
+                GreaterSoulWispBody.levelMaxHealth = 144;   //225
+                GreaterSoulWispBody.baseMoveSpeed *= 1.2f;
+                GreaterSoulWispBody.baseAcceleration *= 1.2f;
+                GreaterSoulWispBody.baseAttackSpeed = 1.2f;
                 GreaterSoulWispBody.baseRegen = 0f;
                 GreaterSoulWispBody.levelRegen = 0f;
                 GreaterSoulWispBody.baseDamage *= 0.65f;
-                GreaterSoulWispBody.levelDamage *= 0.65f;
-                GreaterSoulWispBody.baseAttackSpeed *= 1.2f;
-                //GreaterSoulWispBody.bodyFlags = CharacterBody.BodyFlags.OverheatImmune | CharacterBody.BodyFlags.ResistantToAOE | CharacterBody.BodyFlags.ImmuneToGoo | CharacterBody.BodyFlags.ImmuneToVoidDeath;
-                GreaterSoulWispBody.autoCalculateLevelStats = false;
+                GreaterSoulWispBody.levelDamage *= 0.65f;         
                 //
-                ArchSoulWispBody.baseMaxHealth = 1500;       //1500
-                ArchSoulWispBody.levelMaxHealth = 1500;   //300
-                ArchSoulWispBody.baseMoveSpeed *= 1.75f;
-                ArchSoulWispBody.baseAcceleration *= 1.75f;
+                ArchSoulWispBody.baseMaxHealth = 1000;  //1000
+                ArchSoulWispBody.levelMaxHealth = 300;  //300
+                ArchSoulWispBody.baseMoveSpeed *= 1.3f;
+                ArchSoulWispBody.baseAcceleration *= 1.3f;
+                ArchSoulWispBody.baseAttackSpeed = 1.3f;
                 ArchSoulWispBody.baseRegen = 0f;
                 ArchSoulWispBody.levelRegen = 0f;
                 ArchSoulWispBody.baseDamage *= 0.65f;
-                ArchSoulWispBody.levelDamage *= 0.65f;
-                ArchSoulWispBody.baseAttackSpeed *= 1.35f;
-                //ArchSoulWispBody.bodyFlags = CharacterBody.BodyFlags.OverheatImmune | CharacterBody.BodyFlags.ResistantToAOE | CharacterBody.BodyFlags.ImmuneToGoo | CharacterBody.BodyFlags.ImmuneToVoidDeath;
-                ArchSoulWispBody.autoCalculateLevelStats = false;
+                ArchSoulWispBody.levelDamage *= 0.65f;  
                 //
 
+ 
 
-                SoulGreaterWispMaster.AddComponent<GivePickupsOnStart>().itemInfos = SoulStartingItemInfo;
-                SoulArchWispMaster.AddComponent<GivePickupsOnStart>().itemInfos = SoulStartingItemInfo;
-
-
-                SoulGreaterWispMaster.AddComponent<MasterSuicideOnTimer>().lifeTimer = 25f;
-                SoulArchWispMaster.AddComponent<MasterSuicideOnTimer>().lifeTimer = 40f;
+                SoulGreaterWispMaster.AddComponent<MasterSuicideOnTimer>().lifeTimer = 22.5f;
+                SoulArchWispMaster.AddComponent<MasterSuicideOnTimer>().lifeTimer = 30f;
 
                 //
                 R2API.ContentAddition.AddBody(SoulGreaterWispBody);
@@ -171,17 +150,15 @@ namespace FixedspawnDissonance
             }
         }
 
-        public static RoR2.CharacterMaster SoulSpawnGreaterUniversal(On.RoR2.MasterSummon.orig_Perform orig, global::RoR2.MasterSummon self)
+        public static CharacterMaster SoulSpawnGreaterUniversal(On.RoR2.MasterSummon.orig_Perform orig, global::RoR2.MasterSummon self)
         {
             //if (self.masterPrefab == GlobalEventManager.CommonAssets.wispSoulMasterPrefabMasterComponent.gameObject)
             //Idk how this comparison works so I have no idea how optimal this is
             if (self.masterPrefab == SoulLesserWispMaster && self.summonerBodyObject)
             {
                 CharacterBody victimBody = self.summonerBodyObject.GetComponent<CharacterBody>();
-
-                uint SoulMoney;
-                self.inventoryToCopy = victimBody.inventory;
-                if (victimBody.bodyIndex == SoulGreaterWispIndex || victimBody.bodyIndex == SoulArchWispIndex || victimBody.bodyIndex == IndexAffixHealingCore)
+                uint SoulMoney;         
+                if (victimBody.bodyIndex == IndexAffixHealingCore || victimBody.bodyIndex == SoulGreaterWispIndex || victimBody.bodyIndex == SoulArchWispIndex)
                 {
                     return null;
                 }
@@ -199,7 +176,7 @@ namespace FixedspawnDissonance
                 {
                     SoulMoney = victimBody.master.money / 3;
                 }
-
+                self.inventoryToCopy = victimBody.inventory;
                 CharacterMaster tempmaster = orig(self);
                 tempmaster.money = SoulMoney;
                 return tempmaster;

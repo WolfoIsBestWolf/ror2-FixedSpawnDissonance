@@ -15,13 +15,13 @@ namespace FixedspawnDissonance
         public static void Start()
         {
             dtSacrificeArtifact.tier1Weight = 0.8f; //0.7 default
-            dtSacrificeArtifact.tier2Weight = 0.25f; //0.3 default
-            dtSacrificeArtifact.tier3Weight = 0.015f; //0.01 default
+            dtSacrificeArtifact.tier2Weight = 0.24f; //0.3 default
+            dtSacrificeArtifact.tier3Weight = 0.01f; //0.01 default
 
             dtSacrificeArtifactBoss.tier1Weight = 0;
-            dtSacrificeArtifactBoss.tier2Weight = 0.75f;
+            dtSacrificeArtifactBoss.tier2Weight = 0.8f;
             dtSacrificeArtifactBoss.tier3Weight = 0.2f;
-            dtSacrificeArtifactBoss.bossWeight = 0.2f;
+            dtSacrificeArtifactBoss.bossWeight = 0.15f;
             dtSacrificeArtifactBoss.equipmentWeight = 0f;
             dtSacrificeArtifactBoss.name = "dtSacrificeArtifactBoss";
 
@@ -30,19 +30,19 @@ namespace FixedspawnDissonance
             dtSacrificeArtifactVoid.tier2Weight = 0;
             dtSacrificeArtifactVoid.tier3Weight = 0;
             dtSacrificeArtifactVoid.equipmentWeight = 0;
-            dtSacrificeArtifactVoid.voidTier1Weight = 6; //6
+            dtSacrificeArtifactVoid.voidTier1Weight = 6.5f; //6
             dtSacrificeArtifactVoid.voidTier2Weight = 3; //3
-            dtSacrificeArtifactVoid.voidTier3Weight = 1; //1
+            dtSacrificeArtifactVoid.voidTier3Weight = 0.5f; //1
             dtSacrificeArtifactVoid.name = "dtSacrificeArtifactVoid";
 
-            if (WConfig.SacrificeMoreEnemySpawns.Value)
+            On.RoR2.Artifacts.SacrificeArtifactManager.OnPrePopulateSceneServer += (orig, sceneDirector) =>
             {
-                On.RoR2.Artifacts.SacrificeArtifactManager.OnPrePopulateSceneServer += (orig, sceneDirector) =>
+                if (WConfig.SacrificeMoreEnemySpawns.Value)
                 {
-                    sceneDirector.monsterCredit = (int)(sceneDirector.monsterCredit * 1.6f);
-                    orig(sceneDirector);
-                };
-            }
+                    sceneDirector.monsterCredit = (int)(sceneDirector.monsterCredit * 1.5f);
+                }
+                orig(sceneDirector);
+            };
         }
 
         public static void SacrificeArtifactManager_OnServerCharacterDeath(On.RoR2.Artifacts.SacrificeArtifactManager.orig_OnServerCharacterDeath orig, DamageReport damageReport)

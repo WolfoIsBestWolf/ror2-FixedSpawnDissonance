@@ -13,33 +13,29 @@ namespace FixedspawnDissonance
 
         public static void Start()
         {
-            //On.RoR2.UI.GenericNotification.SetItem += PickupItemNotification;
-            ColorUtility.TryParseHtmlString("#AE6BCB", out CustomColor);
-
-
-
+            //Lightning and Volcanic Egg both are interuptive but are okay
             if (WConfig.EnigmaInterrupt.Value == false)
             {
-                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/BossHunter").enigmaCompatible = false;
-                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/BossHunterConsumed").enigmaCompatible = false;
-                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Recycle").enigmaCompatible = false;
+                LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/BossHunter").enigmaCompatible = false;
+                LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/BossHunterConsumed").enigmaCompatible = false;
+                LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Recycle").enigmaCompatible = false;
             }
 
             if (WConfig.EnigmaMovement.Value == true)
             {
-                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Jetpack").enigmaCompatible = true;
-                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/FireBallDash").enigmaCompatible = true;
+                LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Jetpack").enigmaCompatible = true;
+                LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/FireBallDash").enigmaCompatible = true;
             }
             else
             {
-                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Jetpack").enigmaCompatible = false;
-                RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/FireBallDash").enigmaCompatible = false;
+                LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Jetpack").enigmaCompatible = false;
+                LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/FireBallDash").enigmaCompatible = false;
             }
 
-            RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Tonic").enigmaCompatible = false;
-            RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Meteor").enigmaCompatible = false;
-            RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/BurnNearby").enigmaCompatible = false;
-            RoR2.LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/CrippleWard").enigmaCompatible = true;
+            LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Tonic").enigmaCompatible = false;
+            LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/Meteor").enigmaCompatible = false;
+            LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/BurnNearby").enigmaCompatible = false;
+            LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/CrippleWard").enigmaCompatible = true;
 
             if (!WConfig.DisableNewContent.Value)
             {
@@ -50,8 +46,8 @@ namespace FixedspawnDissonance
         public static void MakeEnigmaFragment()
         {
             //var EnigmaArtifactDisplay = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("ArtifactIndex.Enigma")).displayPrefab;
-  
-            ArtifactDef EnigmaArtifactDefTemp = RoR2.LegacyResourcesAPI.Load<ArtifactDef>("artifactdefs/Enigma");
+
+            ArtifactDef EnigmaArtifactDefTemp = LegacyResourcesAPI.Load<ArtifactDef>("artifactdefs/Enigma");
             ItemDef EnigmaFragment = ScriptableObject.CreateInstance<ItemDef>();
 
             EnigmaFragment.name = "EnigmaFragment_ArtifactHelper";
@@ -108,7 +104,7 @@ namespace FixedspawnDissonance
 
 
                 PickupDef boostequipdef = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("ItemIndex.EnigmaFragment_ArtifactHelper"));
-
+                ColorUtility.TryParseHtmlString("#AE6BCB", out CustomColor);
                 boostequipdef.baseColor = CustomColor;
                 boostequipdef.darkColor = CustomColor;
 
@@ -123,6 +119,19 @@ namespace FixedspawnDissonance
             if (tempDef != null)
             {
                 tempDef.enigmaCompatible = false;
+                EquipmentCatalog.enigmaEquipmentList.Remove(tempDef.equipmentIndex);
+            }
+            tempDef = EquipmentCatalog.GetEquipmentDef(EquipmentCatalog.FindEquipmentIndex("EQUIPMENT_REUSER"));
+            if (tempDef != null)
+            {
+                tempDef.enigmaCompatible = false;
+                EquipmentCatalog.enigmaEquipmentList.Remove(tempDef.equipmentIndex);
+            }
+            tempDef = EquipmentCatalog.GetEquipmentDef(EquipmentCatalog.FindEquipmentIndex("EQUIPMENT_Reducer"));
+            if (tempDef != null)
+            {
+                tempDef.enigmaCompatible = false;
+                EquipmentCatalog.enigmaEquipmentList.Remove(tempDef.equipmentIndex);
             }
         }
 
@@ -133,8 +142,6 @@ namespace FixedspawnDissonance
             if (tempPickup != null && tempPickup.equipmentIndex != EquipmentIndex.None)
             {
                 EquipmentDef tempEquip = EquipmentCatalog.GetEquipmentDef(tempPickup.equipmentIndex);
-                //Only transform Equipment that you'd get anyways but not Recyclers/BossHunter
-                //If Elite Equipment drop 15 Wake of Vultures real?
                 if (tempEquip.enigmaCompatible)
                 {
                     createPickupInfo.pickupIndex = PickupCatalog.FindPickupIndex(EnigmaFragmentPurple.itemIndex);
@@ -162,58 +169,44 @@ namespace FixedspawnDissonance
                 self.pickupIndex = PickupCatalog.FindPickupIndex(EnigmaArtifactManager.GetRandomEquipment(EnigmaArtifactManager.serverInitialEquipmentRng, 0));
                 RoR2.Util.PlaySound("Play_UI_insufficient_funds", self.gameObject);
                 RoR2.Util.PlaySound("Play_UI_insufficient_funds", self.gameObject);
-                RoR2.Util.PlaySound("Play_UI_insufficient_funds", self.gameObject);
-                /*if (body.master.hasAuthority)
+                if (body.master.hasAuthority)
                 {
                     CharacterMasterNotificationQueue notificationQueueForMaster = CharacterMasterNotificationQueue.GetNotificationQueueForMaster(body.master);
                     CharacterMasterNotificationQueue.TransformationInfo transformation = new CharacterMasterNotificationQueue.TransformationInfo(CharacterMasterNotificationQueue.TransformationType.Default, EnigmaFragmentPurple);
                     CharacterMasterNotificationQueue.NotificationInfo info = new CharacterMasterNotificationQueue.NotificationInfo(EquipmentCatalog.GetEquipmentDef(self.pickupIndex.pickupDef.equipmentIndex), transformation);
                     notificationQueueForMaster.PushNotification(info, 6f);
-                    return;
-                }*/
-            }
-            bool hasEquip = body.inventory.currentEquipmentIndex != EquipmentIndex.None && PickupCatalog.GetPickupDef(self.pickupIndex).equipmentIndex != EquipmentIndex.None;
-            orig(self, body);
-            //Debug.LogWarning(replace);
-            if (hasEquip)
-            {
-                if (PickupCatalog.GetPickupDef(self.pickupIndex).equipmentIndex != EquipmentIndex.None)
-                {
-                    EquipmentDef tempA = EquipmentCatalog.GetEquipmentDef(PickupCatalog.GetPickupDef(self.pickupIndex).equipmentIndex);
-                    if (tempA.passiveBuffDef && tempA.passiveBuffDef.isElite)
-                    {
-                        RoR2.GenericPickupController.CreatePickup(new GenericPickupController.CreatePickupInfo
-                        {
-                            position = self.transform.position,
-                            rotation = self.transform.rotation,
-                            pickupIndex = PickupCatalog.FindPickupIndex(RoR2Content.Items.ShinyPearl.itemIndex)
-                        });
-                        RoR2.Util.PlaySound("Play_item_proc_crit_cooldown", self.gameObject);
-                        RoR2.Util.PlaySound("Play_item_proc_crit_cooldown", self.gameObject);
-                        RoR2.Util.PlaySound("Play_item_proc_crit_cooldown", self.gameObject);
-                    }
-                    else
-                    {
-                        RoR2.GenericPickupController.CreatePickup(new GenericPickupController.CreatePickupInfo
-                        {
-                            position = self.transform.position,
-                            rotation = self.transform.rotation,
-                            pickupIndex = PickupCatalog.FindPickupIndex(RoR2Content.Equipment.Fruit.equipmentIndex)
-                        });
-                    }
-                    Object.Destroy(self.gameObject);
                 }
             }
-        }
-
-        public static void PickupItemNotification(On.RoR2.UI.GenericNotification.orig_SetItem orig, RoR2.UI.GenericNotification self, global::RoR2.ItemDef itemDef)
-        {
-            orig(self, itemDef);
-
-            if (itemDef == EnigmaFragmentPurple)
+            var Pickup = PickupCatalog.GetPickupDef(self.pickupIndex).equipmentIndex;
+            bool hasEquipisEquip = body.inventory.currentEquipmentIndex != EquipmentIndex.None && Pickup != EquipmentIndex.None;
+            orig(self, body);
+            if (hasEquipisEquip)
             {
-                self.titleTMP.color = CustomColor;
+                EquipmentDef tempA = EquipmentCatalog.GetEquipmentDef(Pickup);
+                if (tempA.passiveBuffDef && tempA.passiveBuffDef.isElite)
+                {
+                    GenericPickupController.CreatePickup(new GenericPickupController.CreatePickupInfo
+                    {
+                        position = self.transform.position,
+                        rotation = self.transform.rotation,
+                        pickupIndex = PickupCatalog.FindPickupIndex(RoR2Content.Items.ShinyPearl.itemIndex)
+                    });
+                    RoR2.Util.PlaySound("Play_item_proc_crit_cooldown", self.gameObject);
+                    RoR2.Util.PlaySound("Play_item_proc_crit_cooldown", self.gameObject);
+                }
+                else
+                {
+                    GenericPickupController.CreatePickup(new GenericPickupController.CreatePickupInfo
+                    {
+                        position = self.transform.position,
+                        rotation = self.transform.rotation,
+                        pickupIndex = PickupCatalog.FindPickupIndex(RoR2Content.Equipment.Fruit.equipmentIndex)
+                    });
+                }
+                Object.Destroy(self.gameObject);
             }
         }
+
+        
     }
 }

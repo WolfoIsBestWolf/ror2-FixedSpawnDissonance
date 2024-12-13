@@ -1,16 +1,44 @@
+using MonoMod.Cil;
+using Mono.Cecil.Cil;
 using RoR2;
-
-
+using UnityEngine;
+using System;
+ 
 namespace FixedspawnDissonance
 {
     public class Swarms
     {
-        public static void BaseSplitDeath_OnEnter(On.EntityStates.Gup.BaseSplitDeath.orig_OnEnter orig, EntityStates.Gup.BaseSplitDeath self)
+        public static void Start()
         {
-            //Gup splits into twice the Geep
-            self.spawnCount *= 2;
-            orig(self);
+            IL.RoR2.Artifacts.SwarmsArtifactManager.OnSpawnCardOnSpawnedServerGlobal += VengenceAndEnemyGooboFix;
         }
+
+        private static void VengenceAndEnemyGooboFix(MonoMod.Cil.ILContext il)
+        {
+            ILCursor c = new ILCursor(il);
+            if (c.TryGotoNext(MoveType.After,
+                x => x.MatchCallOrCallvirt("RoR2.DirectorCore","TrySpawnObject")))
+            {
+                c.Index-=2;
+                c.EmitDelegate<Func<SpawnCard.SpawnResult, SpawnCard.SpawnResult>>((result) =>
+                {
+                    if (result.spawnedInstance)
+                    {
+                         if (result.spawnRequest.spawnCard is MasterCopySpawnCard)
+                         {
+                            result.spawnRequest.spawnCard = MasterCopySpawnCard.FromMaster(result.spawnedInstance.GetComponent<CharacterMaster>(), true, true, null);
+                         }
+                    }
+                    return result;
+                });
+            }
+            else
+            {
+                Debug.LogWarning("IL Failed: SwarmsArtifactManager_OnSpawnCardOnSpawnedServerGlobal");
+            }
+        }
+
+        
 
         public static int SwarmsDeployableLimitChanger(On.RoR2.CharacterMaster.orig_GetDeployableSameSlotLimit orig, CharacterMaster self, DeployableSlot slot)
         {
@@ -18,11 +46,8 @@ namespace FixedspawnDissonance
             switch (slot)
             {
                 case DeployableSlot.RoboBallMini:
-                case DeployableSlot.GummyClone:
-                case DeployableSlot.VendingMachine:
                 case DeployableSlot.VoidMegaCrabItem:
                 case DeployableSlot.DroneWeaponsDrone:
-                case DeployableSlot.MinorConstructOnKill:
                     count *= 2;
                     break;
             }
