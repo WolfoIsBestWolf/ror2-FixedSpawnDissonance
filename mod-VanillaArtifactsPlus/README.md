@@ -103,13 +103,13 @@ This mod is required by everyone by default, see notes if you wish to use it any
 			</td>
 			<td>
 				Makes all elite types cheaper and weaker not just Tier 1.<br>
-				Allows for Gilded and more modded elite types to spawn.<br>
+				Allows for more modded elite types to spawn.<br>
 				<br>
 				Final bosses will be asigned a specific elite type. (Perfected Mithrix, Voidtouched Voidling)<br>
 				<br>
 				Worms now spawn as Elite instead of not at all.<br>
 				<br>
-				Minions will be given a elite aspect.<br>
+				Minions will be given a elite aspect but without stat boosts.<br>
 				<br>
 			</td>
 		</tr>

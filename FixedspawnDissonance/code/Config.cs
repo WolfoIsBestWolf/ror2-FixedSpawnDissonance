@@ -39,6 +39,7 @@ namespace FixedspawnDissonance
         public static ConfigEntry<bool> Honor_EliteWormsAlways;
         public static ConfigEntry<bool> Honor_PerfectMithrix;
         public static ConfigEntry<bool> Honor_EliteMinions;
+        public static ConfigEntry<bool> Honor_EliteMinionsNoGilded;
         public static ConfigEntry<bool> Honor_RedoneElites;
 
         public static ConfigEntry<bool> VengenceEquipment;
@@ -65,7 +66,18 @@ namespace FixedspawnDissonance
         public static ConfigEntry<bool> DevotionAllowVoids;
         public static ConfigEntry<bool> DevotionAllowLunars;
 
-
+        public enum HonorWorms
+        {
+            Off,
+            Honor,
+            Always,
+        }
+        public enum HonorMinions
+        {
+            Off,
+            NoDrones,
+            All,
+        }
 
         public static void InitConfig()
         {
@@ -179,7 +191,13 @@ namespace FixedspawnDissonance
                 "Honor",
                 "Force Minions to be Elite",
                 true,
-                "When Honor is active, new Minions will be given a Tier 1 Elite Equipment"
+                "When Honor is active, new Minions will be given a Tier 1 Elite Equipment. They will not recieve stat boosts."
+            );
+            Honor_EliteMinionsNoGilded = ConfigFile.Bind(
+                "Honor",
+                "Minions no Gilded",
+                true,
+                "Remove Gilded from the allowed pool of Minion elites. For the previous config."
             );
             Honor_RedoneElites = ConfigFile.Bind(
                 "Honor",
@@ -205,7 +223,7 @@ namespace FixedspawnDissonance
                 "Evolution",
                 "Give more items",
                 true,
-                "Turn the whole module on or off."
+                "Turn the whole module on or off.  If you use Moffeins Evolution Config, this will be turned off."
             );
             EvoMoreAfterLoop = ConfigFile.Bind(
                 "Evolution",
@@ -378,6 +396,7 @@ namespace FixedspawnDissonance
             ModSettingsManager.AddOption(new CheckBoxOption(Honor_EliteWormsAlways, false));
             ModSettingsManager.AddOption(new CheckBoxOption(Honor_PerfectMithrix, false));
             ModSettingsManager.AddOption(new CheckBoxOption(Honor_EliteMinions, false));
+            ModSettingsManager.AddOption(new CheckBoxOption(Honor_EliteMinionsNoGilded, false));
             ModSettingsManager.AddOption(new CheckBoxOption(Honor_RedoneElites, false));
 
 

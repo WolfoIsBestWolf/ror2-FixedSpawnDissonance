@@ -1,6 +1,6 @@
 {
     "name": "VanillaArtifactsPlus",
-    "version_number": "3.2.0",
+    "version_number": "3.2.3",
     "website_url": "https://github.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance",
     "description": "Updates most vanilla Artifacts to make them more interesting or diverse. Includes Devotion Inventory Display",
     "dependencies": [

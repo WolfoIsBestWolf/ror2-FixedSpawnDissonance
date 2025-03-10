@@ -1,5 +1,18 @@
 ## Changelog:
 ```
+v3.2.3
+Fixed for False Son patch and Removed some redundant fixes as they were fixed officially.
+
+v3.2.2
+Fixed a bug with Sacrifice and Forgive me Please. (Missing body check)
+
+v3.2.1
+Removed Gilded from Honor spawns Minions as elites.
+Removed stat boosts from Honor Minions.
+If you have Moffein-Evolution-Config, "Evolution more items" from this mod no longer loads as it conflicts.
+(Why would you use both at the same time is beyond me, since they do the same thing)
+
+
 v3.2.0
 Devotion : 
 -You can now give Void Items to Lemurians

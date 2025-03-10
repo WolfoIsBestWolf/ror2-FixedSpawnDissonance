@@ -162,36 +162,7 @@ namespace FixedspawnDissonance
             }
 
             dccsMixEnemy.AddCard(0, LunarWispTemp); //550
-            if (Child == false)
-            {
-                DirectorCard DLC2_Child = new DirectorCard
-                {
-                    spawnCard = Addressables.LoadAssetAsync<SpawnCard>(key: "RoR2/DLC2/Child/cscChild.asset").WaitForCompletion(),
-                    selectionWeight = 1,
-                    preventOverhead = false,
-                    minimumStageCompletions = 0,
-                    spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
-                };
-                DirectorCard DLC2_Scorch = new DirectorCard
-                {
-                    spawnCard = Addressables.LoadAssetAsync<SpawnCard>(key: "RoR2/DLC2/Scorchling/cscScorchling.asset").WaitForCompletion(),
-                    selectionWeight = 1,
-                    preventOverhead = false,
-                    minimumStageCompletions = 0,
-                    spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
-                };
-                DirectorCard DLC2_Halc = new DirectorCard
-                {
-                    spawnCard = Addressables.LoadAssetAsync<SpawnCard>(key: "RoR2/DLC2/Halcyonite/cscHalcyonite.asset").WaitForCompletion(),
-                    selectionWeight = 1,
-                    preventOverhead = false,
-                    minimumStageCompletions = 0,
-                    spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
-                };
-                dccsMixEnemy.AddCard(2, DLC2_Child);
-                dccsMixEnemy.AddCard(1, DLC2_Scorch);
-                dccsMixEnemy.AddCard(0, DLC2_Halc);
-            }
+            
         }
 
 

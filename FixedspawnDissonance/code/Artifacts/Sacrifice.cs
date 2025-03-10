@@ -47,13 +47,24 @@ namespace FixedspawnDissonance
 
         public static void SacrificeArtifactManager_OnServerCharacterDeath(On.RoR2.Artifacts.SacrificeArtifactManager.orig_OnServerCharacterDeath orig, DamageReport damageReport)
         {
-            if (damageReport.victimTeamIndex == TeamIndex.Void || damageReport.victimBody && damageReport.victimBody.bodyFlags.HasFlag(CharacterBody.BodyFlags.Void))
+            if (!damageReport.victimMaster)
             {
-                RoR2.Artifacts.SacrificeArtifactManager.dropTable = dtSacrificeArtifactVoid;
+                return;
             }
-            else if (damageReport.victimBody.isChampion)
+            if (damageReport.victimBody)
             {
-                RoR2.Artifacts.SacrificeArtifactManager.dropTable = dtSacrificeArtifactBoss;
+                if (damageReport.victimTeamIndex == TeamIndex.Void || damageReport.victimBody.bodyFlags.HasFlag(CharacterBody.BodyFlags.Void))
+                {
+                    RoR2.Artifacts.SacrificeArtifactManager.dropTable = dtSacrificeArtifactVoid;
+                }
+                else if (damageReport.victimBody.isChampion || damageReport.victimMaster.isBoss)
+                {
+                    RoR2.Artifacts.SacrificeArtifactManager.dropTable = dtSacrificeArtifactBoss;
+                }
+                else
+                {
+                    RoR2.Artifacts.SacrificeArtifactManager.dropTable = dtSacrificeArtifact;
+                }
             }
             else
             {

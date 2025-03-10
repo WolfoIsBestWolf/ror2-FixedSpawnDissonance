@@ -8,7 +8,7 @@ namespace FixedspawnDissonance
 {
     public class Honor
     {
-        public static List<EliteDef> minionEliteDefs = new List<EliteDef>();
+        public static List<EliteDef> minionEliteDefs;
 
         public static void Start()
         {
@@ -24,11 +24,42 @@ namespace FixedspawnDissonance
      
         public static void Honor_EliteTiers(bool activate)
         {
+            if (activate)
+            {
+                minionEliteDefs = new List<EliteDef>();
+                foreach (EliteDef eliteDef in EliteCatalog.eliteDefs)
+                {
+                    if (eliteDef.name.EndsWith("Honor"))
+                    {
+                        if (eliteDef.IsAvailable())
+                        {
+                            minionEliteDefs.Add(eliteDef);
+                        }
+                    }
+                }
+                if (WConfig.Honor_EliteMinionsNoGilded.Value)
+                {
+                    minionEliteDefs.Remove(DLC2Content.Elites.AurelioniteHonor);
+                }
+            }
+            else
+            {
+                minionEliteDefs = null;
+            }
+
+
+
+
+
+
+
+
+
             if (!WConfig.Honor_RedoneElites.Value)
             {
                 return;
             }
-            List<EliteDef> changedList = new List<EliteDef>();
+            //List<EliteDef> changedList = new List<EliteDef>();
 
             float value = 2f;
             if (activate)
@@ -55,26 +86,21 @@ namespace FixedspawnDissonance
                     eliteDef.damageBoostCoefficient = Mathf.LerpUnclamped(1f, eliteDef.damageBoostCoefficient, value);
                     //Debug.Log(eliteDef + " hp:" + eliteDef.healthBoostCoefficient+ " dmg:"+ eliteDef.damageBoostCoefficient); 
                 }
-                else
-                {
-                    if (eliteDef.IsAvailable())
-                    {
-                        minionEliteDefs.Add(eliteDef);
-                    }
-                }
             }
 
-
-            for (int i = 1; i < CombatDirector.eliteTiers.Length; i++)
+            for (int i = 0; i < CombatDirector.eliteTiers.Length; i++)
             {
                 //Debug.Log("EliteTier " + i);
-                if (CombatDirector.eliteTiers[i].eliteTypes[0] == RoR2Content.Elites.LightningHonor)
+                if (CombatDirector.eliteTiers[i].eliteTypes.Length > 0)
                 {
-                    //Should help with Adaptive Elite spam, I think??
-                    var Temp = CombatDirector.eliteTiers[0];
-                    CombatDirector.eliteTiers[0] = CombatDirector.eliteTiers[i];
-                    CombatDirector.eliteTiers[i] = Temp;
-                    continue;
+                    if (CombatDirector.eliteTiers[i].eliteTypes[0] == RoR2Content.Elites.LightningHonor)
+                    {
+                        //Should help with Adaptive Elite spam, I think??
+                        var Temp = CombatDirector.eliteTiers[0];
+                        CombatDirector.eliteTiers[0] = CombatDirector.eliteTiers[i];
+                        CombatDirector.eliteTiers[i] = Temp;
+                        continue;
+                    }
                 }
                 CombatDirector.eliteTiers[i].costMultiplier = Mathf.LerpUnclamped(1f, CombatDirector.eliteTiers[i].costMultiplier, value);
             }
@@ -205,8 +231,8 @@ namespace FixedspawnDissonance
                     {
                         int index = Main.Random.Next(minionEliteDefs.Count);
                         inventory.SetEquipmentIndex(minionEliteDefs[index].eliteEquipmentDef.equipmentIndex);
-                        inventory.GiveItem(RoR2Content.Items.BoostHp, (int)(minionEliteDefs[index].healthBoostCoefficient - 1) * 10);
-                        inventory.GiveItem(RoR2Content.Items.BoostDamage, (int)(minionEliteDefs[index].damageBoostCoefficient - 1) * 10);
+                        //inventory.GiveItem(RoR2Content.Items.BoostHp, (int)(minionEliteDefs[index].healthBoostCoefficient - 1) * 10);
+                        //inventory.GiveItem(RoR2Content.Items.BoostDamage, (int)(minionEliteDefs[index].damageBoostCoefficient - 1) * 10);
                     }
                 }
 
