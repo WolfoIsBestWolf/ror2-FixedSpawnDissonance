@@ -87,8 +87,8 @@ namespace FixedspawnDissonance
 
         public static void Start()
         {
-            On.RoR2.Artifacts.DoppelgangerInvasionManager.CreateDoppelganger += DoppelgangerInvasionManager_CreateDoppelganger;
-
+      
+            On.RoR2.Artifacts.DoppelgangerSpawnCard.FromMaster += DoppelgangerSpawnCard_FromMaster;
             On.RoR2.Artifacts.DoppelgangerSpawnCard.FromMaster += VengenceMetamorphosisSynergy;
 
             if (WConfig.VengenceGoodDrop.Value == true)
@@ -110,6 +110,64 @@ namespace FixedspawnDissonance
                 On.RoR2.DoppelgangerDropTable.GenerateWeightedSelection += DoppelGanger_AllowDiosDrop;
             }
 
+        }
+
+        private static DoppelgangerSpawnCard DoppelgangerSpawnCard_FromMaster(On.RoR2.Artifacts.DoppelgangerSpawnCard.orig_FromMaster orig, CharacterMaster srcCharacterMaster)
+        {
+            DoppelgangerSpawnCard tempCSC = orig(srcCharacterMaster);
+            if (RunArtifactManager.instance && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.RandomSurvivorOnRespawn))
+            {
+                BodyIndex bodyIndex = BodyIndex.None;
+                SurvivorDef survivorDef = null;
+                do
+                {
+                    int randomint = Main.Random.Next(SurvivorCatalog.survivorCount);
+                    bodyIndex = SurvivorCatalog.GetBodyIndexFromSurvivorIndex((SurvivorIndex)randomint);
+                    survivorDef = SurvivorCatalog.GetSurvivorDef((SurvivorIndex)randomint);
+                }
+                while (survivorDef.hidden == true);
+                tempCSC.prefab = MasterCatalog.GetMasterPrefab(MasterCatalog.FindAiMasterIndexForBody(bodyIndex));
+            }
+            tempCSC.onPreSpawnSetup += OnPreSpawnSetup;
+            srcCharacterMasterTEMP = srcCharacterMaster;
+            return tempCSC;
+        }
+
+        private static CharacterMaster srcCharacterMasterTEMP;
+        public static void OnPreSpawnSetup(CharacterMaster spawnedMaster)
+        {
+            Debug.Log("Umbra of " + spawnedMaster.name);
+            if (WConfig.VengenceBlacklist.Value == true)
+            {
+                VenganceItemFilter(spawnedMaster.inventory);
+                spawnedMaster.inventory.GiveItem(RoR2Content.Items.UseAmbientLevel);
+            }
+
+            if (WConfig.VenganceHealthRebalance.Value == true)
+            {
+                CharacterBody tempbody = spawnedMaster.GetBody();
+
+                tempbody.autoCalculateLevelStats = false;
+                tempbody.baseMaxHealth = 80f;
+                tempbody.levelMaxHealth = 24f;
+                tempbody.baseDamage = 12f;
+                tempbody.levelDamage = 2.4f;
+                tempbody.MarkAllStatsDirty();
+                spawnedMaster.inventory.GiveItem(RoR2Content.Items.LevelBonus, 1);
+                spawnedMaster.inventory.GiveItem(RoR2Content.Items.AdaptiveArmor);
+            }
+
+            if (WConfig.VengenceGoodDrop.Value == true)
+            {
+                List<ItemIndex> temporder = new List<ItemIndex>();
+                temporder.AddRange(srcCharacterMasterTEMP.inventory.itemAcquisitionOrder);
+                spawnedMaster.inventory.itemAcquisitionOrder = temporder;
+                temporder.Remove(RoR2Content.Items.ExtraLifeConsumed.itemIndex);
+                spawnedMaster.inventory.RemoveItem(RoR2Content.Items.ExtraLifeConsumed, 10000);
+                temporder.Remove(DLC1Content.Items.ExtraLifeVoidConsumed.itemIndex);
+                spawnedMaster.inventory.RemoveItem(DLC1Content.Items.ExtraLifeVoidConsumed, 10000);
+                spawnedMaster.inventory.itemAcquisitionOrder = temporder;
+            }
         }
 
         private static void DoppelGanger_AllowDiosDrop(On.RoR2.DoppelgangerDropTable.orig_GenerateWeightedSelection orig, DoppelgangerDropTable self)
@@ -213,63 +271,7 @@ namespace FixedspawnDissonance
                 inventory.SetEquipmentIndex(EquipmentIndex.None);
             }
         }
-
-        public static void DoppelgangerInvasionManager_CreateDoppelganger(On.RoR2.Artifacts.DoppelgangerInvasionManager.orig_CreateDoppelganger orig, CharacterMaster srcCharacterMaster, Xoroshiro128Plus rng)
-        {
-            orig(srcCharacterMaster, rng);      
-                CombatSquad[] bossgrouplist2 = Object.FindObjectsOfType(typeof(CombatSquad)) as CombatSquad[];  
-                for (var i = 0; i < bossgrouplist2.Length; i++)
-                {
-                    //Debug.LogWarning(bossgrouplist2[i]);
-                    if (bossgrouplist2[i].name.Equals("ShadowCloneEncounter(Clone)"))
-                    {
-                        //Debug.Log("Shadow Encounter");
-                        bossgrouplist2[i].name = "ShadowCloneEncounterAltered";
-                        List<CharacterMaster> clonelist = bossgrouplist2[i].membersList;
-
-                        for (var j = 0; j < 1; j++)
-                        {
-                            Debug.Log("Umbra of " + clonelist[j].name);
-                            if (WConfig.VengenceBlacklist.Value == true)
-                            {
-                                VenganceItemFilter(clonelist[j].inventory);
-                                clonelist[j].inventory.GiveItem(RoR2Content.Items.UseAmbientLevel);
-                            }
-
-                            if (WConfig.VenganceHealthRebalance.Value == true)
-                            {
-                                CharacterBody tempbody = clonelist[j].GetBody();
-
-                                tempbody.autoCalculateLevelStats = false;
-                                tempbody.baseMaxHealth = 80f;
-                                tempbody.levelMaxHealth = 24f;
-                                tempbody.baseDamage = 12f;
-                                tempbody.levelDamage = 2.4f;
-                                tempbody.MarkAllStatsDirty();
-                                clonelist[j].inventory.GiveItem(RoR2Content.Items.LevelBonus, 1);
-                                clonelist[j].inventory.GiveItem(RoR2Content.Items.AdaptiveArmor);
-                            }
-
-                            if (WConfig.VengenceGoodDrop.Value == true)
-                            {
-                                List<ItemIndex> temporder = new List<ItemIndex>();
-                                temporder.AddRange(srcCharacterMaster.inventory.itemAcquisitionOrder);
-                                clonelist[j].inventory.itemAcquisitionOrder = temporder;
-                                temporder.Remove(RoR2Content.Items.ExtraLifeConsumed.itemIndex);
-                                clonelist[j].inventory.RemoveItem(RoR2Content.Items.ExtraLifeConsumed, 10000);
-                                temporder.Remove(DLC1Content.Items.ExtraLifeVoidConsumed.itemIndex);
-                                clonelist[j].inventory.RemoveItem(DLC1Content.Items.ExtraLifeVoidConsumed, 10000);
-                                clonelist[j].inventory.itemAcquisitionOrder = temporder;
-                            }
-
-                        }
-                    }
-                }
-           
-        }
-
-
-
+ 
         public static void EnableEquipmentForVengence()
         {
             for (int i = 0; i < SurvivorCatalog.survivorDefs.Length; i++)

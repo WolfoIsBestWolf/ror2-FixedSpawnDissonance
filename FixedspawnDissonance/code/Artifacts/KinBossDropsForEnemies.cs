@@ -7,8 +7,7 @@ namespace FixedspawnDissonance
     public class KinBossDropsForEnemies
     {
         public static CharacterMaster tempClayMan;
-
-        public static string ol = Language.GetString("ELITE_MODIFIER_LIGHTNING");
+ 
         public static void Start()
         {
             SerializablePickupIndex BossItemWisp = new SerializablePickupIndex() { pickupName = "ItemIndex.SprintWisp" };
@@ -137,21 +136,7 @@ namespace FixedspawnDissonance
             }
         }
 
-        //Unused
-        public static void BossDropChanger(On.RoR2.BossGroup.orig_OnMemberDefeatedServer orig, global::RoR2.BossGroup self, global::RoR2.CharacterMaster memberMaster, global::RoR2.DamageReport damageReport)
-        {
-            //If ever used again should just check for elite equip index
-            //Debug.LogWarning(Language.GetString("LEMURIANBRUISER_BODY_NAME"));*/
-            if (self.bestObservedName.Contains(Language.GetString("LEMURIAN_BODY_NAME")) && self.bestObservedName.Contains(ol))
-            {
-                foreach (CharacterMaster charactermaster in self.combatSquad.readOnlyMembersList)
-                {
-                    //charactermaster.GetBody().GetComponent<DeathRewards>().bossPickup = BossItemElectric;
-                }
-            }
-            orig(self, memberMaster, damageReport);
-
-        }
+        
 
 
     }

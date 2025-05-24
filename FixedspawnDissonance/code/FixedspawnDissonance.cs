@@ -2,6 +2,7 @@
 using R2API.Utils;
 using RoR2;
 using RoR2.Artifacts;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
@@ -9,13 +10,14 @@ using UnityEngine.Networking;
 namespace FixedspawnDissonance
 {
     [BepInDependency("com.bepis.r2api")]
-    [BepInPlugin("com.Wolfo.VanillaArtifactsPlus", "VanillaArtifactsPlus", "3.2.2")]
+    [BepInPlugin("Wolfo.VanillaArtifactsPlus", "VanillaArtifactsPlus", "3.3.0")]
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
 
 
     public class Main : BaseUnityPlugin
     {
         public static readonly System.Random Random = new System.Random();
+        public static bool EnableNewContent = false;
 
         public void Awake()
         {
@@ -70,11 +72,24 @@ namespace FixedspawnDissonance
             Swarms.Start();
             Glass.Start();
             Rebirth.Start();
- 
+
+            EnableNewContent = WConfig.cfgContent.Value;
+            Debug.Log("VanillaArtifactTweaks | Content? " + EnableNewContent); 
+            if (EnableNewContent)
+            {
+                string mod = Info.Metadata.GUID + ";" + Info.Metadata.GUID;
+                NetworkModCompatibilityHelper.networkModList = NetworkModCompatibilityHelper.networkModList.Append(mod);
+
+                Soul.MakeGreaterSoulWisp();
+                Enigma.MakeEnigmaFragment();
+            }
+
         }
 
         private void Start() //Called at the first frame of the game.
         {
+
+           
             //Needs to be called late for reasons
             if (WConfig.DissonanceChanges.Value == true)
             {
@@ -84,27 +99,14 @@ namespace FixedspawnDissonance
             {
                 KinBossDropsForEnemies.Start();
             }
-            if (WConfig.HonorChanges.Value == true)
-            {
-                Honor.Worm_EliteStuff(false);
-            }
+            WConfig.cfgEliteWorms_Changed(null, null);
         }
 
 
         internal static void ModSupport()
         {
-    
-            
-
-
-            GameObject AffixEarthHealerBody = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC1/EliteEarth/AffixEarthHealerBody.prefab").WaitForCompletion();
-            Soul.IndexAffixHealingCore = AffixEarthHealerBody.GetComponent<CharacterBody>().bodyIndex;
-            if (!WConfig.DisableNewContent.Value)
-            {
-                Soul.SoulGreaterWispIndex = Soul.SoulGreaterWispBody.GetComponent<CharacterBody>().bodyIndex;
-                Soul.SoulArchWispIndex = Soul.SoulArchWispBody.GetComponent<CharacterBody>().bodyIndex;
-            }
-
+            WConfig.RiskConfig();
+            Soul.CallLate();        
             if (WConfig.EvolutionChanges.Value == true && WConfig.EvoBetterBlacklist.Value == true)
             {
                 Evolution.Tagchanger();
@@ -112,7 +114,7 @@ namespace FixedspawnDissonance
             if (WConfig.EnigmaChanges.Value == true)
             {
                 R2API.LanguageAPI.Add("ITEM_ENIGMAEQUIPMENTBOOST_DESC", string.Format(Language.GetString("ITEM_ENIGMAEQUIPMENTBOOST_DESC"), WConfig.EnigmaCooldownReduction.Value, WConfig.EnigmaCooldownReduction.Value));
-                Enigma.EnigmaCallLate();
+                Enigma.CallLate();
             }
             if (WConfig.KinChanges.Value == true && WConfig.KinYellowsForEnemies.Value == true)
             {
@@ -133,21 +135,23 @@ namespace FixedspawnDissonance
 
         public void RunArtifactManager_onArtifactEnabledGlobal(RunArtifactManager runArtifactManager, ArtifactDef artifactDef)
         {
-            if (artifactDef == RoR2Content.Artifacts.wispOnDeath && WConfig.SoulChanges.Value == true)
+            if (EnableNewContent)
             {
-                if (NetworkServer.active)
+                if (artifactDef == RoR2Content.Artifacts.WispOnDeath && WConfig.SoulChanges.Value == true)
                 {
-                    if (!WConfig.DisableNewContent.Value)
-                    {
-                        On.RoR2.MasterSummon.Perform += Soul.SoulSpawnGreaterUniversal;
-                    }
+                    On.RoR2.MasterSummon.Perform += Soul.SoulSpawnGreaterUniversal;
+                }
+                else if (artifactDef == RoR2Content.Artifacts.Enigma && WConfig.EnigmaChanges.Value == true)
+                {
+                    On.RoR2.GenericPickupController.AttemptGrant += Enigma.EnigmaEquipmentGranter;
+                    On.RoR2.GenericPickupController.CreatePickup += Enigma.EnigmaFragmentMaker;
                 }
             }
-            else if (artifactDef == RoR2Content.Artifacts.eliteOnlyArtifactDef && WConfig.HonorChanges.Value == true)
+            if (artifactDef == RoR2Content.Artifacts.EliteOnly && WConfig.HonorChanges.Value == true)
             {
                 if (NetworkServer.active)
                 {
-                    Honor.Worm_EliteStuff(true);
+                    WConfig.cfgEliteWorms_Changed(null, null);
                     Honor.Honor_EliteTiers(true);
                     if (WConfig.Honor_PerfectMithrix.Value == true)
                     {
@@ -159,32 +163,26 @@ namespace FixedspawnDissonance
                     }
                 }
             }
-            else if (artifactDef == RoR2Content.Artifacts.enigmaArtifactDef && WConfig.EnigmaChanges.Value == true)
-            {
-                if (NetworkServer.active)
-                {
-                    if (!WConfig.DisableNewContent.Value)
-                    {
-                        On.RoR2.GenericPickupController.AttemptGrant += Enigma.EnigmaEquipmentGranter;
-                        On.RoR2.GenericPickupController.CreatePickup += Enigma.EnigmaFragmentMaker;
-                    }
-                }
-            }
-            else if (artifactDef == RoR2Content.Artifacts.singleMonsterTypeArtifactDef && WConfig.KinChanges.Value == true)
+            else if (artifactDef == RoR2Content.Artifacts.SingleMonsterType)
             {
                 RoR2.UI.EnemyInfoPanel.MarkDirty();
                 LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscHermitCrab").requiredFlags = 0;
                 LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscVulture").requiredFlags = 0;
             }
-            else if (artifactDef == RoR2Content.Artifacts.swarmsArtifactDef)
+            else if (artifactDef == RoR2Content.Artifacts.MixEnemy)
+            {
+                //LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscHermitCrab").requiredFlags = 0;
+                LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscVulture").requiredFlags = 0;
+            }
+            else if (artifactDef == RoR2Content.Artifacts.Swarms)
             {
                 On.RoR2.CharacterMaster.GetDeployableSameSlotLimit += Swarms.SwarmsDeployableLimitChanger;
             }
-            else if (artifactDef == RoR2Content.Artifacts.sacrificeArtifactDef && WConfig.SacrificeChanges.Value == true)
+            else if (artifactDef == RoR2Content.Artifacts.Sacrifice && WConfig.SacrificeChanges.Value == true)
             {
                 On.RoR2.Artifacts.SacrificeArtifactManager.OnServerCharacterDeath += Sacrifice.SacrificeArtifactManager_OnServerCharacterDeath;
             }
-            else if (artifactDef == RoR2Content.Artifacts.shadowCloneArtifactDef && WConfig.VenganceChanges.Value == true)
+            else if (artifactDef == RoR2Content.Artifacts.ShadowClone && WConfig.VenganceChanges.Value == true)
             {
                 Vengence.OnArtifactEnable();
             }
@@ -192,16 +190,21 @@ namespace FixedspawnDissonance
 
         public void RunArtifactManager_onArtifactDisabledGlobal(RunArtifactManager runArtifactManager, ArtifactDef artifactDef)
         {
-            if (artifactDef == RoR2Content.Artifacts.wispOnDeath && WConfig.SoulChanges.Value == true)
+            if (EnableNewContent)
             {
-                if (!WConfig.DisableNewContent.Value)
+                if (artifactDef == RoR2Content.Artifacts.WispOnDeath && WConfig.SoulChanges.Value == true)
                 {
                     On.RoR2.MasterSummon.Perform -= Soul.SoulSpawnGreaterUniversal;
                 }
-            }
-            else if (artifactDef == RoR2Content.Artifacts.eliteOnlyArtifactDef && WConfig.HonorChanges.Value == true)
+                else if (artifactDef == RoR2Content.Artifacts.Enigma && WConfig.EnigmaChanges.Value == true)
+                {
+                    On.RoR2.GenericPickupController.AttemptGrant -= Enigma.EnigmaEquipmentGranter;
+                    On.RoR2.GenericPickupController.CreatePickup -= Enigma.EnigmaFragmentMaker;
+                }
+            }      
+            if (artifactDef == RoR2Content.Artifacts.EliteOnly && WConfig.HonorChanges.Value == true)
             {
-                Honor.Worm_EliteStuff(false);
+                WConfig.cfgEliteWorms_Changed(null, null);
                 Honor.Honor_EliteTiers(false);
                 if (WConfig.Honor_PerfectMithrix.Value == true)
                 {
@@ -212,15 +215,7 @@ namespace FixedspawnDissonance
                     On.RoR2.MinionOwnership.MinionGroup.AddMinion -= Honor.MinionsInheritHonor;
                 }
             }
-            else if (artifactDef == RoR2Content.Artifacts.enigmaArtifactDef && WConfig.EnigmaChanges.Value == true)
-            {
-                if (!WConfig.DisableNewContent.Value)
-                {
-                    On.RoR2.GenericPickupController.AttemptGrant -= Enigma.EnigmaEquipmentGranter;
-                    On.RoR2.GenericPickupController.CreatePickup -= Enigma.EnigmaFragmentMaker;
-                }
-            }
-            else if (artifactDef == RoR2Content.Artifacts.singleMonsterTypeArtifactDef && WConfig.KinChanges.Value == true)
+            else if (artifactDef == RoR2Content.Artifacts.SingleMonsterType)
             {
                 if (Stage.instance)
                 {
@@ -230,15 +225,20 @@ namespace FixedspawnDissonance
                 LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscHermitCrab").requiredFlags = RoR2.Navigation.NodeFlags.NoCeiling;
                 LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscVulture").requiredFlags = RoR2.Navigation.NodeFlags.NoCeiling;
             }
-            else if (artifactDef == RoR2Content.Artifacts.swarmsArtifactDef)
+            else if (artifactDef == RoR2Content.Artifacts.MixEnemy)
+            {
+                //LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscHermitCrab").requiredFlags = RoR2.Navigation.NodeFlags.NoCeiling;
+                LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscVulture").requiredFlags = RoR2.Navigation.NodeFlags.NoCeiling;
+            }
+            else if (artifactDef == RoR2Content.Artifacts.Swarms)
             {
                 On.RoR2.CharacterMaster.GetDeployableSameSlotLimit -= Swarms.SwarmsDeployableLimitChanger;
             }
-            else if (artifactDef == RoR2Content.Artifacts.sacrificeArtifactDef && WConfig.SacrificeChanges.Value == true)
+            else if (artifactDef == RoR2Content.Artifacts.Sacrifice && WConfig.SacrificeChanges.Value == true)
             {
                 On.RoR2.Artifacts.SacrificeArtifactManager.OnServerCharacterDeath -= Sacrifice.SacrificeArtifactManager_OnServerCharacterDeath;
             }
-            else if (artifactDef == RoR2Content.Artifacts.shadowCloneArtifactDef && WConfig.VenganceChanges.Value == true)
+            else if (artifactDef == RoR2Content.Artifacts.ShadowClone && WConfig.VenganceChanges.Value == true)
             {
                 Vengence.OnArtifactDisable();
             }

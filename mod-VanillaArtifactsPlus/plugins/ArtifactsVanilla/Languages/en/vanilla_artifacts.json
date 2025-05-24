@@ -1,8 +1,7 @@
 {
 	"strings":
 	{      
-		"ARTIFACT_COMMAND_CUBE_INTERACTION_PROMPT": "Choose",
-	
+		
 	       "ARTIFACT_ENIGMA_DESCRIPTION": "Your equipment changes every time it's activated. Additional Equipment become fragments that reduce cooldown instead.",
 
             "ITEM_ENIGMAEQUIPMENTBOOST_NAME": "Enigma Fragment",
@@ -14,7 +13,7 @@
         "SOULGREATERWISP_BODY_NAME": "Greater Soul",
         "SOULARCHWISP_BODY_NAME": "Arch Soul",
 
-		"ARTIFACT_COMMAND_CUBE_PINK_NAME": "Pink Command Essence",
+		
 
 		
 	}

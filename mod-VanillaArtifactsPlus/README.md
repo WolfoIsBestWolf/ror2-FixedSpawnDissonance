@@ -1,4 +1,9 @@
-This mod is required by everyone by default, see notes if you wish to use it anyways*.
+This mod is RequiredByAllPlayers by default.
+
+It includes a option to make it Server-Side & Vanilla compatible.**
+
+Settings can be changed ingame via RiskOfOptions.
+
 
 <table>
 	<tbody>
@@ -12,9 +17,6 @@ This mod is required by everyone by default, see notes if you wish to use it any
 			</td>
 			<td>
 				Elite aspects now give a choice of all Elite Aspects.<br>
-				<br>
-				Fixes Void Essences lacking a name and proper particles.<br>
-				<br>
 			</td>
 		</tr>
 		<tr>
@@ -27,16 +29,17 @@ This mod is required by everyone by default, see notes if you wish to use it any
 				Adds a inventory display for the Lemurians to the scoreboard screen. (Tab)<br>
 				<br>
 				Void items can now be given to Eggs.<br>
-				Unblacklisted Breaching Fin and Luminious Shot.<br>
+				Unblacklisted Breaching Fin and Luminious Shot.*<br>
 				<br>
-				Adds Sots Elites to the evolution list.<br>
+				Lemurians Teleport more often to get stuck less.<br>
+				Lemurians are now immune to fall, lava and void fog damage.<br>
 				<br>
-				Teleport more often to get stuck less.<br>
 				Fixes Twisted elites breaking when near ally players<br>
 				Fixes evolutions often giving 1 less item than intended until Lemurians are resynced.<br>
-				Fixes various item effects randomly disappearing. (Opal)
+				Fixes various item effects randomly disappearing. (Opal)<br>
 				Fixes Lemurians being unable to evolve when the artifact gets disabled. (ie leaving Ambry)<br>
-				Fixes Breaching Fin and Lum Shot not working on devoted Lemurians.<br>
+				Fixes Breaching Fin and Lum Shot not working on devoted Lemurians.*<br>
+				Evolution shouldn't be able to fail anymore due to better checks.<br>
 				<br>
 			</td>
 		</tr>
@@ -47,7 +50,7 @@ This mod is required by everyone by default, see notes if you wish to use it any
 			</td>
 			<td>
 				<br>
-				Adds Hermit Crabs, Childs, Sorch Wurms, Halcyonites as they are missing.<br>
+				Adds Hermit Crabs to the spawn pool.<br>
 				<br>
 				On Commencement enemies can spawn as Perfected.<br>
 				<br>
@@ -58,27 +61,12 @@ This mod is required by everyone by default, see notes if you wish to use it any
 		</tr>
 		<tr>
 			<td align="center">
-				<b>Artifact of Enigma</b><br>
-				<img src="https://riskofrain2.wiki.gg/images/e/ed/Artifact_of_Enigma.png" width=64>
-			</td>
-			<td>
-				<br>
-				Dropped Equipments will be replaced by a Enigma Fragment, similiar to RoR1.<br>
-				This reduces Equipment Cooldown by 12% per stack.<br>
-				If you do not have an Equipment, the fragment gets turned back into an equipment.<br>
-				<br>
-				Enigma no longer rolls into Tricorn, Recycler, Spinel Tonic, Glowing Meteor.<br>
-				<br>				
-			</td>
-		</tr>
-		<tr>
-			<td align="center">
 				<b>Artifact of Evolution</b><br>
 				<img src="https://riskofrain2.wiki.gg/images/f/fd/Artifact_of_Evolution.png" width=64>
 			</td>
 			<td>
 				<br>
-				Will grant a 3 stack of white, 2 stack of green, after looping.<br>
+				Will grant a 3 stack of White, 2 stack of Green, after looping.<br>
 				<br>
 				Void enemies will now get items.<br>
 				Void enemies will get the corrupted version if one exists.<br>
@@ -134,8 +122,8 @@ This mod is required by everyone by default, see notes if you wish to use it any
 			</td>
 			<td>
 				Endlessly cycle Rebirth.<br>
-				If a run ends with Rebirth, a random item from that run will be the new Rebirth item.<br>
-				If one isn't specifically chosen on the Rebirth Shrine.<br>
+				If a run ends with Rebirth on, death or victory, a random item from that run will be the new Rebirth item.<br>
+				(if it isn't the Rebirth ending)<br>
 				<br>
 				Can now be given Void and Lunar items.<br>
 			</td>
@@ -148,26 +136,10 @@ This mod is required by everyone by default, see notes if you wish to use it any
 			<td>
 				<br>
 				Enemies drop slightly worse items.  (80w/24g/1r instead of 70w/30g/1r) <br>
-				Bosses will drop large chest items.  (80g/20r/15y)<br>
-				Void enemies will drop Void items.  (65w/30g/5r)<br>
+				Greater Monsters drop large chest items.  (80g/20r/5y)<br>
+				Void enemies will drop Void items.  (70/30g/5r)<br>
 				<br>
 				Stages spawn with more monsters on them.<br>
-				<br>
-			</td>
-		</tr>
-		<tr>
-			<td align="center">
-				<b>Artifact of Soul</b><br>
-				<img src="https://riskofrain2.wiki.gg/images/9/9a/Artifact_of_Soul.png" width=64>
-			</td>
-			<td>
-				<br>
-				Greater enemies spawn Greater Soul Wisps.<br>
-				Champion enemies spawn Arch Soul Wisps.<br>
-				<br>
-				Soul Wisps die on a timer instead of negative regen.<br>
-				<br>
-				Soul Wisps inherit items and elite type of their summoner.<br>
 				<br>
 			</td>
 		</tr>
@@ -226,11 +198,50 @@ This mod is required by everyone by default, see notes if you wish to use it any
 
 
 
+**These changes cannot be used with people who do not have the mod, as they're new items/enemies.
 
-## Notes
-If you wish to use this mod as a Host with players who do not have it. You can disable content added by this mod.\
-This would include Enigma Fragments and Greater Soul Wisps.\
-Rest of the changes is probably fine.
+<table>
+	<tbody>
+		<tr>
+			<td colspan="3" align="center"><h2>Changes that require [RequiredByAllCheck]</h2></td>
+		</tr>
+		<tr>
+			<td align="center">
+				<b>Artifact of Enigma</b><br>
+				<img src="https://riskofrain2.wiki.gg/images/e/ed/Artifact_of_Enigma.png" width=64>
+			</td>
+			<td>
+				<br>
+				Dropped Equipments will be replaced by a Enigma Fragment, similiar to RoR1.<br>
+				This reduces Equipment Cooldown by 12% per stack.<br>
+				If you do not have an Equipment, the fragment gets turned back into an equipment.<br>
+				<br>
+				Enigma no longer rolls into Tricorn, Recycler, Spinel Tonic, Glowing Meteor.<br>
+				<br>				
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<b>Artifact of Soul</b><br>
+				<img src="https://riskofrain2.wiki.gg/images/9/9a/Artifact_of_Soul.png" width=64>
+			</td>
+			<td>
+				<br>
+				Greater enemies spawn Greater Soul Wisps.<br>
+				Champion enemies spawn Arch Soul Wisps.<br>
+				<br>
+				Soul Wisps die on a timer instead of negative regen.<br>
+				<br>
+				Soul Wisps inherit items and elite type of their summoner.<br>
+				<br>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+
+
 ##
 Vengence is weird to balance as depending on the character the fight would always just be a nightmare.\
 SotV making it so they no longer respect AIBlacklist is also just ???.
@@ -254,7 +265,7 @@ Not going to blacklist Shipping Request.
  
  
  
-Yellow Drops for enemies, intended for Kin but always present.\
+Yellow Drops for Hordes of Many, intended for Kin but can drop during normal runs.\
 You cannot use Tricorn on enemies for these drops.
 ```
 Titanic Knurl:       Stone Golem, Halcyonite

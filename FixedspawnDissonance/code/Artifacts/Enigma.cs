@@ -37,10 +37,7 @@ namespace FixedspawnDissonance
             LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/BurnNearby").enigmaCompatible = false;
             LegacyResourcesAPI.Load<EquipmentDef>("equipmentdefs/CrippleWard").enigmaCompatible = true;
 
-            if (!WConfig.DisableNewContent.Value)
-            {
-                MakeEnigmaFragment();
-            }
+          
         }
 
         public static void MakeEnigmaFragment()
@@ -76,45 +73,26 @@ namespace FixedspawnDissonance
 
             EnigmaFragmentCooldownReduction = 1 - WConfig.EnigmaCooldownReduction.Value / 100;
 
-            On.RoR2.Inventory.CalculateEquipmentCooldownScale += (orig, self) =>
-            {
-                int itemCount = self.GetItemCount(EnigmaFragmentPurple);
-                if (itemCount > 0)
-                {
-                    float tempfloat = orig(self);
-
-                    tempfloat *= Mathf.Pow(EnigmaFragmentCooldownReduction, (float)itemCount);
-
-                    return tempfloat;
-                }
-                return orig(self);
-            };
+            On.RoR2.Inventory.CalculateEquipmentCooldownScale += EnigmaCooldownReduction;
+           
         }
 
-        public static void EnigmaCallLate()
+        private static float EnigmaCooldownReduction(On.RoR2.Inventory.orig_CalculateEquipmentCooldownScale orig, Inventory self)
         {
-            if (!WConfig.DisableNewContent.Value)
+            int itemCount = self.GetItemCount(EnigmaFragmentPurple);
+            if (itemCount > 0)
             {
-                //Idk why I call this late but I dont wanna bother finding out
-                Texture2D texItemEnigmaP = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/texItemEnigmaP.png");
-                texItemEnigmaP.wrapMode = TextureWrapMode.Clamp;
-                Sprite texItemEnigmaPS = Sprite.Create(texItemEnigmaP, new Rect(0, 0, 128, 128), new Vector2(0.5f, 0.5f));
+                float tempfloat = orig(self);
 
-                EnigmaFragmentPurple.pickupIconSprite = texItemEnigmaPS;
+                tempfloat *= Mathf.Pow(EnigmaFragmentCooldownReduction, (float)itemCount);
 
-
-                PickupDef boostequipdef = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("ItemIndex.EnigmaFragment_ArtifactHelper"));
-                ColorUtility.TryParseHtmlString("#AE6BCB", out CustomColor);
-                boostequipdef.baseColor = CustomColor;
-                boostequipdef.darkColor = CustomColor;
-
-                boostequipdef.displayPrefab = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("ArtifactIndex.Enigma")).displayPrefab;
-                boostequipdef.dropletDisplayPrefab = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("EquipmentIndex.Fruit")).dropletDisplayPrefab;
-                boostequipdef.iconSprite = texItemEnigmaPS;
+                return tempfloat;
             }
+            return orig(self);
+        }
 
-
-            //Mod Support
+        public static void CallLate()
+        {
             EquipmentDef tempDef = EquipmentCatalog.GetEquipmentDef(EquipmentCatalog.FindEquipmentIndex("EQUIPMENT_IMPULSEFROSTSHIELD"));
             if (tempDef != null)
             {
@@ -132,6 +110,27 @@ namespace FixedspawnDissonance
             {
                 tempDef.enigmaCompatible = false;
                 EquipmentCatalog.enigmaEquipmentList.Remove(tempDef.equipmentIndex);
+            }
+
+
+            if (EnigmaFragmentPurple)
+            {
+                //Idk why I call this late but I dont wanna bother finding out
+                Texture2D texItemEnigmaP = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/texItemEnigmaP.png");
+                texItemEnigmaP.wrapMode = TextureWrapMode.Clamp;
+                Sprite texItemEnigmaPS = Sprite.Create(texItemEnigmaP, new Rect(0, 0, 128, 128), new Vector2(0.5f, 0.5f));
+
+                EnigmaFragmentPurple.pickupIconSprite = texItemEnigmaPS;
+
+
+                PickupDef boostequipdef = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("ItemIndex.EnigmaFragment_ArtifactHelper"));
+                ColorUtility.TryParseHtmlString("#AE6BCB", out CustomColor);
+                boostequipdef.baseColor = CustomColor;
+                boostequipdef.darkColor = CustomColor;
+
+                boostequipdef.displayPrefab = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("ArtifactIndex.Enigma")).displayPrefab;
+                boostequipdef.dropletDisplayPrefab = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("EquipmentIndex.Fruit")).dropletDisplayPrefab;
+                boostequipdef.iconSprite = texItemEnigmaPS;
             }
         }
 

@@ -1,5 +1,16 @@
 ## Changelog:
 ```
+v3.2.5
+Enabling content that would desync with players now properly tags lobby as modded.
+Removed Devotion adding DLC2 Elites as that was changed & fixed
+Fixed vanilla issue where Evolution could sometiles fail if a Lemurian died weirdly.
+Fixed vanilla issue with Devotion where sometimes eggs wouldnt work properly if multiple runs were played.
+
+
+v3.2.4
+Fixed Artifact of Honor not disabling properly.
+Made Devoted Lemurians immune to fall damage, lava damage and fog damage.
+
 v3.2.3
 Fixed for False Son patch and Removed some redundant fixes as they were fixed officially.
 

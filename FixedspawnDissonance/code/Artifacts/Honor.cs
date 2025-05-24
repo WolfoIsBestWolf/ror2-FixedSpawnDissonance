@@ -47,14 +47,6 @@ namespace FixedspawnDissonance
                 minionEliteDefs = null;
             }
 
-
-
-
-
-
-
-
-
             if (!WConfig.Honor_RedoneElites.Value)
             {
                 return;
@@ -73,7 +65,8 @@ namespace FixedspawnDissonance
             {
                 //On.RoR2.CombatDirector.IsEliteOnlyArtifactActive -= DisableHonorEliteTier;
                 On.RoR2.CombatDirector.NotEliteOnlyArtifactActive -= AllowNormalTiersHonor;
-                CombatDirector.eliteTiers[0].isAvailable = (SpawnCard.EliteRules rules) => true;
+                //CombatDirector.eliteTiers[0].isAvailable = (SpawnCard.EliteRules rules) => true;
+                CombatDirector.eliteTiers[0].isAvailable = ((SpawnCard.EliteRules rules) => CombatDirector.NotEliteOnlyArtifactActive());
             }
             //Ideally keep Lunars being allowed to spawn as Tier1, if anything add Tier2
             //How do we force ignore spawn card rules ig ig
@@ -88,7 +81,7 @@ namespace FixedspawnDissonance
                 }
             }
 
-            for (int i = 0; i < CombatDirector.eliteTiers.Length; i++)
+            /*for (int i = 0; i < CombatDirector.eliteTiers.Length; i++)
             {
                 //Debug.Log("EliteTier " + i);
                 if (CombatDirector.eliteTiers[i].eliteTypes.Length > 0)
@@ -103,7 +96,7 @@ namespace FixedspawnDissonance
                     }
                 }
                 CombatDirector.eliteTiers[i].costMultiplier = Mathf.LerpUnclamped(1f, CombatDirector.eliteTiers[i].costMultiplier, value);
-            }
+            }*/
         }
 
         private static bool AllowNormalTiersHonor(On.RoR2.CombatDirector.orig_NotEliteOnlyArtifactActive orig)
@@ -240,38 +233,7 @@ namespace FixedspawnDissonance
         }
 
 
-
-        public static void Worm_EliteStuff(bool honorActive)
-        {
-            if (WConfig.Honor_EliteWormsAlways.Value)
-            {
-                CharacterSpawnCard cscMagmaWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
-                cscMagmaWorm.noElites = false;
-                cscMagmaWorm.eliteRules = SpawnCard.EliteRules.Default;
-                CharacterSpawnCard cscElectricWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");
-                cscElectricWorm.noElites = false;
-                cscElectricWorm.eliteRules = SpawnCard.EliteRules.Default;
-            }
-            else if (WConfig.Honor_EliteWorms.Value)
-            {
-                if (honorActive)
-                {
-                    CharacterSpawnCard cscMagmaWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
-                    cscMagmaWorm.noElites = false;
-                    cscMagmaWorm.eliteRules = SpawnCard.EliteRules.Default;
-                    CharacterSpawnCard cscElectricWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");
-                    cscElectricWorm.noElites = false;
-                    cscElectricWorm.eliteRules = SpawnCard.EliteRules.Default;
-                }
-                else
-                {
-                    CharacterSpawnCard cscMagmaWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
-                    cscMagmaWorm.noElites = true;
-                    CharacterSpawnCard cscElectricWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");
-                    cscElectricWorm.noElites = true;
-                }
-            }
-        }
+ 
 
     }
 }

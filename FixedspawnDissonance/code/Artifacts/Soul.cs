@@ -1,5 +1,6 @@
 using RoR2;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace FixedspawnDissonance
 {
@@ -18,20 +19,29 @@ namespace FixedspawnDissonance
         public static BodyIndex SoulGreaterWispIndex = BodyIndex.None;
         public static BodyIndex SoulArchWispIndex = BodyIndex.None;
         public static BodyIndex IndexAffixHealingCore = BodyIndex.None;
-
-        //public static Inventory SoulInventoryToCopy = null;
-        //public static uint SoulMoney = 0;
-        //public static int SoulGreaterDecider = 0;
-
+ 
         public static void Start()
         {
             //Reminder that Void Team does not drop/have souls
-            SoulWispCreator();
+            ChangeLesserSoulWisp();
+ 
+            //Like we can make a blue skinned Greater Wisp but it'd still show up as a normal one for clients.
+
+        }
+ 
+        public static void CallLate()
+        {
+            GameObject AffixEarthHealerBody = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC1/EliteEarth/AffixEarthHealerBody.prefab").WaitForCompletion();
+            IndexAffixHealingCore = AffixEarthHealerBody.GetComponent<CharacterBody>().bodyIndex;
+            if (SoulGreaterWispBody)
+            {
+                SoulGreaterWispIndex = SoulGreaterWispBody.GetComponent<CharacterBody>().bodyIndex;
+                SoulArchWispIndex = SoulArchWispBody.GetComponent<CharacterBody>().bodyIndex;
+            }
         }
 
-        public static void SoulWispCreator()
+        public static void ChangeLesserSoulWisp()
         {
-
             CharacterBody SoulWispBody = SoulLesserWispBody.GetComponent<CharacterBody>();
 
             Texture2D TexSoulWisp = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/texBodyWispSoul.png");
@@ -45,14 +55,16 @@ namespace FixedspawnDissonance
             SoulWispBody.baseRegen = 0f;
             SoulWispBody.levelRegen = 0f;
             SoulWispBody.baseDamage *= 0.65f;
-            SoulWispBody.levelDamage *= 0.65f;      
+            SoulWispBody.levelDamage *= 0.65f;
 
- 
             SoulLesserWispMaster.AddComponent<MasterSuicideOnTimer>().lifeTimer = 15f;
+            SoulWispBody.portraitIcon = TexSoulWisp;
+            SoulWispBody.baseNameToken = "SOULWISP_BODY_NAME";
+        }
 
-            if (!WConfig.DisableNewContent.Value)
-            {
-
+        public static void MakeGreaterSoulWisp()
+        {
+ 
                 SoulGreaterWispBody = R2API.PrefabAPI.InstantiateClone(LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/GreaterWispBody"), "GreaterWispSoulBody", true);
                 SoulGreaterWispMaster = R2API.PrefabAPI.InstantiateClone(LegacyResourcesAPI.Load<GameObject>("prefabs/charactermasters/GreaterWispMaster"), "GreaterWispSoulMaster", true);
 
@@ -104,8 +116,7 @@ namespace FixedspawnDissonance
                 Texture2D texBodyArchSoul = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/texBodyArchSoul.png");
                 texBodyArchSoul.wrapMode = TextureWrapMode.Clamp;
                 //
-                SoulWispBody.portraitIcon = TexSoulWisp;
-                SoulWispBody.baseNameToken = "SOULWISP_BODY_NAME";
+            
 
                 GreaterSoulWispBody.portraitIcon = TexGreaterSoulWisp;
                 GreaterSoulWispBody.baseNameToken = "SOULGREATERWISP_BODY_NAME";
@@ -147,22 +158,20 @@ namespace FixedspawnDissonance
                 R2API.ContentAddition.AddMaster(SoulGreaterWispMaster);
                 R2API.ContentAddition.AddBody(SoulArchWispBody);
                 R2API.ContentAddition.AddMaster(SoulArchWispMaster);
-            }
+       
         }
 
         public static CharacterMaster SoulSpawnGreaterUniversal(On.RoR2.MasterSummon.orig_Perform orig, global::RoR2.MasterSummon self)
         {
-            //if (self.masterPrefab == GlobalEventManager.CommonAssets.wispSoulMasterPrefabMasterComponent.gameObject)
-            //Idk how this comparison works so I have no idea how optimal this is
             if (self.masterPrefab == SoulLesserWispMaster && self.summonerBodyObject)
             {
                 CharacterBody victimBody = self.summonerBodyObject.GetComponent<CharacterBody>();
-                uint SoulMoney;         
                 if (victimBody.bodyIndex == IndexAffixHealingCore || victimBody.bodyIndex == SoulGreaterWispIndex || victimBody.bodyIndex == SoulArchWispIndex)
                 {
                     return null;
                 }
-                else if (victimBody.isChampion || victimBody.inventory.GetItemCount(RoR2Content.Items.InvadingDoppelganger) > 0)
+                uint SoulMoney;
+                if (victimBody.isChampion || victimBody.inventory.GetItemCount(RoR2Content.Items.InvadingDoppelganger) > 0)
                 {
                     self.masterPrefab = SoulArchWispMaster;
                     SoulMoney = victimBody.master.money;
@@ -186,4 +195,22 @@ namespace FixedspawnDissonance
 
 
     }
+
+    /*public class SoulWispIdentifier : MonoBehaviour
+    {
+        public bool isSoul = false;
+        public bool isGreater = false;
+        public Texture2D soulGreaterPortrait;
+        public void Start()
+        {
+            if (!isSoul)
+            {
+                Destroy(this);
+                return;
+            }
+            CharacterBody body = this.GetComponent<CharacterBody>();
+            body.portraitIcon = soulGreaterPortrait;
+        }
+    }*/
+
 }

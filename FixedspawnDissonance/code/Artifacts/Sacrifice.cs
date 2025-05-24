@@ -21,7 +21,7 @@ namespace FixedspawnDissonance
             dtSacrificeArtifactBoss.tier1Weight = 0;
             dtSacrificeArtifactBoss.tier2Weight = 0.8f;
             dtSacrificeArtifactBoss.tier3Weight = 0.2f;
-            dtSacrificeArtifactBoss.bossWeight = 0.15f;
+            dtSacrificeArtifactBoss.bossWeight = 0.05f;
             dtSacrificeArtifactBoss.equipmentWeight = 0f;
             dtSacrificeArtifactBoss.name = "dtSacrificeArtifactBoss";
 
@@ -30,7 +30,7 @@ namespace FixedspawnDissonance
             dtSacrificeArtifactVoid.tier2Weight = 0;
             dtSacrificeArtifactVoid.tier3Weight = 0;
             dtSacrificeArtifactVoid.equipmentWeight = 0;
-            dtSacrificeArtifactVoid.voidTier1Weight = 6.5f; //6
+            dtSacrificeArtifactVoid.voidTier1Weight = 7f; //6
             dtSacrificeArtifactVoid.voidTier2Weight = 3; //3
             dtSacrificeArtifactVoid.voidTier3Weight = 0.5f; //1
             dtSacrificeArtifactVoid.name = "dtSacrificeArtifactVoid";
@@ -57,7 +57,7 @@ namespace FixedspawnDissonance
                 {
                     RoR2.Artifacts.SacrificeArtifactManager.dropTable = dtSacrificeArtifactVoid;
                 }
-                else if (damageReport.victimBody.isChampion || damageReport.victimMaster.isBoss)
+                else if (damageReport.victimBody.baseMaxHealth > 850 || damageReport.victimMaster.isBoss)
                 {
                     RoR2.Artifacts.SacrificeArtifactManager.dropTable = dtSacrificeArtifactBoss;
                 }

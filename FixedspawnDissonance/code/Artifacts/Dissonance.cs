@@ -83,8 +83,6 @@ namespace FixedspawnDissonance
                 minimumStageCompletions = 0,
                 spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
             };
-
-
             DirectorCard DSHermitCrab = new DirectorCard
             {
                 spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscHermitCrab"),
@@ -94,8 +92,6 @@ namespace FixedspawnDissonance
                 spawnDistance = DirectorCore.MonsterSpawnDistance.Far
             };
 
-
-
             dccsMixEnemy.categories[0].selectionWeight = 3;
             dccsMixEnemy.categories[1].selectionWeight = 3;
             dccsMixEnemy.categories[2].selectionWeight = 4;
@@ -104,18 +100,38 @@ namespace FixedspawnDissonance
             dccsMixEnemy.AddCard(0, DSScav); //2000
 
 
-            bool Child = false;
+     
+
+            DissoVermin = dccsMixEnemy.categories[2].cards[11];
+            DissoVerminFlying = dccsMixEnemy.categories[2].cards[2];
+
+            DissoBeetle = dccsMixEnemy.categories[2].cards[1];
+            DissoBeetleGuard = dccsMixEnemy.categories[1].cards[0];
+            DissoBeetleQueen = dccsMixEnemy.categories[0].cards[0];
+
+            DissoGolem = dccsMixEnemy.categories[1].cards[5];
+            DissoTitan = dccsMixEnemy.categories[0].cards[9];
+
             DirectorCard SolusProbeTemp = null;
             DirectorCard LunarWispTemp = null;
+
+            SolusProbeTemp = dccsMixEnemy.categories[2].cards[10];
+            dccsMixEnemy.categories[2].cards[10] = DSHermitCrab;
+
+            LunarWispTemp = dccsMixEnemy.categories[1].cards[10];
+            dccsMixEnemy.categories[1].cards[10] = SolusProbeTemp;
+
+            dccsMixEnemy.AddCard(0, LunarWispTemp); //Lunar Wisp Boss
+
+ 
+
+            return;
+            /*
             //dccsMixEnemy.AddCard(3, DSVoidInfestor); //60
 
             for (int ii = 0; dccsMixEnemy.categories[2].cards.Length > ii; ii++)
             {
-                if (dccsMixEnemy.categories[2].cards[ii].spawnCard.name.EndsWith("Child"))
-                {
-                    Child = true;
-                }
-                else if (dccsMixEnemy.categories[2].cards[ii].spawnCard.name.EndsWith("lMini"))
+                if (dccsMixEnemy.categories[2].cards[ii].spawnCard.name.EndsWith("lMini"))
                 {
                     SolusProbeTemp = dccsMixEnemy.categories[2].cards[ii];
                     dccsMixEnemy.categories[2].cards[ii] = DSHermitCrab;
@@ -162,7 +178,7 @@ namespace FixedspawnDissonance
             }
 
             dccsMixEnemy.AddCard(0, LunarWispTemp); //550
-            
+            */
         }
 
 

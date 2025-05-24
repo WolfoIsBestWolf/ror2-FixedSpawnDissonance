@@ -1,13 +1,13 @@
-using RoR2.Projectile;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
 using RoR2;
+using RoR2.Projectile;
 using RoR2.UI;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using MonoMod.Cil;
-using Mono.Cecil.Cil;
-using System.Collections;
 
 namespace FixedspawnDissonance
 {
@@ -16,8 +16,7 @@ namespace FixedspawnDissonance
 
         public static void Start()
         {
-            On.RoR2.DevotionInventoryController.OnDevotionArtifactEnabled += FixMissingEliteTypes;
-            //IL failed to work so I'll do this stupider version
+             //IL failed to work so I'll do this stupider version
             On.RoR2.DevotionInventoryController.OnDevotionArtifactDisabled += Fix_EliteListBeingBlank;
 
             On.RoR2.CharacterAI.LemurianEggController.CreateItemTakenOrb += Fix_NullrefWhenOrb;
@@ -46,6 +45,111 @@ namespace FixedspawnDissonance
             On.RoR2.Util.HealthComponentToTransform += FixTwisteds_NotWorkingOnPlayers;
 
             On.DevotedLemurianController.Start += DevotedLemurianController_Start;
+
+            GameObject DevotedLemurian = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/CU8/DevotedLemurianBody.prefab").WaitForCompletion();
+            GameObject DevotedLemurianElder = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/CU8/DevotedLemurianBruiserBody.prefab").WaitForCompletion();
+
+            DevotedLemurian.GetComponent<CharacterBody>().bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
+            DevotedLemurianElder.GetComponent<CharacterBody>().bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
+            DevotedLemurian.GetComponent<CharacterBody>().bodyFlags |= CharacterBody.BodyFlags.ImmuneToLava;
+            DevotedLemurianElder.GetComponent<CharacterBody>().bodyFlags |= CharacterBody.BodyFlags.ImmuneToLava;
+
+            //DevotedLemurian.GetComponent<CharacterBody>().bodyFlags |= CharacterBody.BodyFlags.Devotion; //They don't have this by default ???
+            //DevotedLemurianElder.GetComponent<CharacterBody>().bodyFlags |= CharacterBody.BodyFlags.Devotion; //This somehow makes them get DroneWeapons ????
+
+            IL.RoR2.FogDamageController.MyFixedUpdate += NoFogLemurianDamage;
+
+            IL.RoR2.DevotionInventoryController.UpdateMinionInventory += CheckIfNullBody;
+            On.DevotedLemurianController.OnDevotedBodyDead += CheckIfInventoryNull;
+
+            On.RoR2.DevotionInventoryController.GetOrCreateDevotionInventoryController += CheckIfRandomlyPlayerMasterNull;
+
+            On.RoR2.DevotionInventoryController.EvolveDevotedLumerian += FixEvolveWithoutBody;
+        }
+
+
+        private static void FixEvolveWithoutBody(On.RoR2.DevotionInventoryController.orig_EvolveDevotedLumerian orig, DevotionInventoryController self, DevotedLemurianController devotedLemurianController)
+        {
+            if (devotedLemurianController.LemurianBody == null)
+            {
+                switch (devotedLemurianController.DevotedEvolutionLevel)
+                {
+                    case 1:
+                        devotedLemurianController.LemurianInventory.SetEquipmentIndex(DevotionInventoryController.lowLevelEliteBuffs[Random.Range(0, DevotionInventoryController.lowLevelEliteBuffs.Count)]);
+                        return;
+                    case 2:
+                        devotedLemurianController.LemurianInventory.SetEquipmentIndex(EquipmentIndex.None);
+                        devotedLemurianController._lemurianMaster.TransformBody("DevotedLemurianBruiserBody");
+                        return;
+                    case 3:
+                        devotedLemurianController.LemurianInventory.SetEquipmentIndex(DevotionInventoryController.highLevelEliteBuffs[Random.Range(0, DevotionInventoryController.highLevelEliteBuffs.Count)]);
+                        return;
+                }
+                return;
+            }
+            orig(self, devotedLemurianController);
+        }
+
+
+        private static DevotionInventoryController CheckIfRandomlyPlayerMasterNull(On.RoR2.DevotionInventoryController.orig_GetOrCreateDevotionInventoryController orig, Interactor summoner)
+        {
+            foreach (DevotionInventoryController devotionInventoryController2 in DevotionInventoryController.InstanceList)
+            {
+                if (devotionInventoryController2._summonerMaster == null)
+                {
+                    Object.Destroy(devotionInventoryController2);
+                }
+            }
+            return orig(summoner);
+        }
+
+        private static void CheckIfInventoryNull(On.DevotedLemurianController.orig_OnDevotedBodyDead orig, DevotedLemurianController self)
+        {
+            //?? idk how but it sometimes was
+            if (self && self._devotionInventoryController != null)
+            {
+                orig(self);
+            }
+        }
+
+        private static void CheckIfNullBody(ILContext il)
+        {
+            ILCursor c = new ILCursor(il);
+            if (c.TryGotoNext(MoveType.After,
+             x => x.MatchLdsfld("RoR2.DevotionInventoryController", "activationSoundEventDef")
+            ))
+            {
+                c.Emit(OpCodes.Ldarg_1);
+                c.EmitDelegate<System.Func<GameObject, DevotedLemurianController, GameObject>>((obj, lem) =>
+                {
+                    if (lem.LemurianBody == null)
+                    {
+                        return null;
+                    }
+                    return obj;
+                });
+            }
+            else
+            {
+                Debug.LogWarning("IL Failed : CheckIfNullBody");
+            }
+        }
+
+        private static void NoFogLemurianDamage(ILContext il)
+        {
+            ILCursor c = new ILCursor(il);
+            if (c.TryGotoNext(MoveType.Before,
+             x => x.MatchLdcR4(0.5f),
+             x => x.MatchMul()
+            ))
+            {
+                c.Next.Operand = 0.00f;
+            }
+            else
+            {
+                Debug.LogWarning("IL Failed : IL.RoR2.FogDamageController.FixedUpdate");
+            }
+
         }
 
         private static void FixOneBehindRemoveItemHere(MonoMod.Cil.ILContext il)
@@ -97,7 +201,7 @@ namespace FixedspawnDissonance
         private static void DevotedLemurianController_Start(On.DevotedLemurianController.orig_Start orig, DevotedLemurianController self)
         {
             orig(self);
-            self._leashDistSq = 12000f;
+            self._leashDistSq = 16000f;
         }
 
         private static Transform FixTwisteds_NotWorkingOnPlayers(On.RoR2.Util.orig_HealthComponentToTransform orig, HealthComponent healthComponent)
@@ -243,6 +347,7 @@ namespace FixedspawnDissonance
             if (WConfig.DevotionInventory.Value)
             {
                 //Better this than checking Artifact
+                //Because you might have Lems after the Artifact is disabled.
                 if (DevotionInventoryController.InstanceList.Count > 0)
                 {
                     List<CharacterMaster> list = new List<CharacterMaster>();
@@ -300,24 +405,6 @@ namespace FixedspawnDissonance
         }
 
 
-        private static void FixMissingEliteTypes(On.RoR2.DevotionInventoryController.orig_OnDevotionArtifactEnabled orig, RunArtifactManager runArtifactManager, ArtifactDef artifactDef)
-        {
-            orig(runArtifactManager, artifactDef);
-            if (artifactDef != CU8Content.Artifacts.Devotion)
-            {
-                return;
-            }
-            RoR2Content.Items.BoostDamage.hidden = true;
-            RoR2Content.Items.BoostHp.hidden = true;
-            if (!DevotionInventoryController.lowLevelEliteBuffs.Contains(DLC2Content.Elites.Aurelionite.eliteEquipmentDef.equipmentIndex))
-            {
-                if (DLC2Content.Elites.Aurelionite.IsAvailable())
-                {
-                    DevotionInventoryController.lowLevelEliteBuffs.Add(DLC2Content.Elites.Aurelionite.eliteEquipmentDef.equipmentIndex);
-                    DevotionInventoryController.highLevelEliteBuffs.Add(DLC2Content.Elites.Aurelionite.eliteEquipmentDef.equipmentIndex);
-                    DevotionInventoryController.highLevelEliteBuffs.Add(DLC2Content.Elites.Bead.eliteEquipmentDef.equipmentIndex);
-                }
-            }
-        }
+         
     }
 }
