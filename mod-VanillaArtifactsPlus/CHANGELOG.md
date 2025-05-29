@@ -1,5 +1,19 @@
 ## Changelog:
 ```
+v3.3.0
+Mod now auto-chooses to add content based on if you have any other content mod.
+Fixed vanilla issue where Devotion Inventories sometimes wouldn't get destroyed.
+Fixed BoostDamage & BoostHealth being visibile in Devoted Lemurian inventories
+Fixed disconnected players being shown when Devotion Inventory is active.
+
+v3.2.7
+Made IL hooks more robust to avoid issues with other mods that affect Evolution/Swarms/Overlays
+
+v3.2.6
+Fixed mod breaking Vengence.
+Vengence now scales with Player Level instead of Monster level.
+
+
 v3.2.5
 Enabling content that would desync with players now properly tags lobby as modded.
 Removed Devotion adding DLC2 Elites as that was changed & fixed

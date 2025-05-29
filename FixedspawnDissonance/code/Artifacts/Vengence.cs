@@ -134,40 +134,44 @@ namespace FixedspawnDissonance
         }
 
         private static CharacterMaster srcCharacterMasterTEMP;
-        public static void OnPreSpawnSetup(CharacterMaster spawnedMaster)
+        public static void OnPreSpawnSetup(CharacterMaster master)
         {
-            Debug.Log("Umbra of " + spawnedMaster.name);
+            Debug.Log("Umbra of " + master.name);
             if (WConfig.VengenceBlacklist.Value == true)
             {
-                VenganceItemFilter(spawnedMaster.inventory);
-                spawnedMaster.inventory.GiveItem(RoR2Content.Items.UseAmbientLevel);
+                VenganceItemFilter(master.inventory);
+                master.inventory.GiveItem(RoR2Content.Items.UseAmbientLevel);
             }
 
             if (WConfig.VenganceHealthRebalance.Value == true)
             {
-                CharacterBody tempbody = spawnedMaster.GetBody();
-
-                tempbody.autoCalculateLevelStats = false;
-                tempbody.baseMaxHealth = 80f;
-                tempbody.levelMaxHealth = 24f;
-                tempbody.baseDamage = 12f;
-                tempbody.levelDamage = 2.4f;
-                tempbody.MarkAllStatsDirty();
-                spawnedMaster.inventory.GiveItem(RoR2Content.Items.LevelBonus, 1);
-                spawnedMaster.inventory.GiveItem(RoR2Content.Items.AdaptiveArmor);
+                master.onBodyStart += OnDoppelgangerBody;
+                master.inventory.RemoveItem(RoR2Content.Items.UseAmbientLevel, master.inventory.GetItemCount(RoR2Content.Items.UseAmbientLevel));
+                master.inventory.GiveItem(RoR2Content.Items.LevelBonus, (int)TeamManager.instance.GetTeamLevel(TeamIndex.Player));
+                master.inventory.GiveItem(RoR2Content.Items.AdaptiveArmor);
             }
 
             if (WConfig.VengenceGoodDrop.Value == true)
             {
                 List<ItemIndex> temporder = new List<ItemIndex>();
                 temporder.AddRange(srcCharacterMasterTEMP.inventory.itemAcquisitionOrder);
-                spawnedMaster.inventory.itemAcquisitionOrder = temporder;
+                master.inventory.itemAcquisitionOrder = temporder;
                 temporder.Remove(RoR2Content.Items.ExtraLifeConsumed.itemIndex);
-                spawnedMaster.inventory.RemoveItem(RoR2Content.Items.ExtraLifeConsumed, 10000);
+                master.inventory.RemoveItem(RoR2Content.Items.ExtraLifeConsumed, 10000);
                 temporder.Remove(DLC1Content.Items.ExtraLifeVoidConsumed.itemIndex);
-                spawnedMaster.inventory.RemoveItem(DLC1Content.Items.ExtraLifeVoidConsumed, 10000);
-                spawnedMaster.inventory.itemAcquisitionOrder = temporder;
+                master.inventory.RemoveItem(DLC1Content.Items.ExtraLifeVoidConsumed, 10000);
+                master.inventory.itemAcquisitionOrder = temporder;
             }
+        }
+
+        public static void OnDoppelgangerBody(CharacterBody body)
+        {
+            body.autoCalculateLevelStats = false;
+            body.baseMaxHealth = (body.baseMaxHealth + 110) / 2; //Less Tanky Loader and MulT
+            body.levelMaxHealth = (body.levelMaxHealth + 33) / 2;
+            body.baseDamage = 12f;
+            body.levelDamage = 2.4f;
+            body.MarkAllStatsDirty();
         }
 
         private static void DoppelGanger_AllowDiosDrop(On.RoR2.DoppelgangerDropTable.orig_GenerateWeightedSelection orig, DoppelgangerDropTable self)

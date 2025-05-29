@@ -54,17 +54,13 @@ namespace FixedspawnDissonance
         public static ConfigEntry<bool> EvoBetterBlacklist;
         public static ConfigEntry<bool> EvoMoreAfterLoop;
         public static ConfigEntry<bool> EvoMoreItems;
-        public static ConfigEntry<int> EvoMoreWhite;
-        public static ConfigEntry<int> EvoMoreGreen;
-        public static ConfigEntry<int> EvoMoreRed;
-        public static ConfigEntry<bool> EvoVoidTeam;
-
+ 
         public static ConfigEntry<bool> DevotionInventory;
         public static ConfigEntry<bool> DevotionShowAllInventory;
         public static ConfigEntry<bool> DevotionAllowVoids;
         public static ConfigEntry<bool> DevotionAllowLunars;
 
-        public static ConfigEntry<bool> cfgContent;
+        public static ConfigEntry<Content> cfgContent;
 
         public enum HonorWorms
         {
@@ -78,12 +74,29 @@ namespace FixedspawnDissonance
             NoDrones,
             All,
         }
-
+        public enum Content
+        {
+            Off,
+            AutoDetect,
+            Enabled,
+        }
         public static void InitConfig()
         {
             ConfigFile = new ConfigFile(Paths.ConfigPath + "\\Wolfo.Vanilla_Artifacts_Plus.cfg", true);
+            cfgContent = ConfigFile.Bind(
+             ": Main :",
+             "Synced Content",
+             Content.AutoDetect,
+             "Enable or Disable content needs to be synced.\nIf content is not added, mod is Vanilla compatible\n\nAutoDetect : Adds content if other content mods are enabled and modpack is not Vanilla compatible.\n\nAffected are Artifact of Soul and Enigma tweaks."
+            );
 
-        
+            /*cfgContent = ConfigFile.Bind(
+             ": Main :",
+             "RequiredByAll Content",
+             true,
+             "Option to disable certain content and allows mod to be run Server-Side with people who don't share the mod.\n\nWill disable Artifact of Soul and Enigma tweaks."
+            );*/
+
             CommandChanges = ConfigFile.Bind(
                 ": Main :",
                 "Enable Artifact of Command changes",
@@ -221,30 +234,12 @@ namespace FixedspawnDissonance
             );
             EvoMoreAfterLoop = ConfigFile.Bind(
                 "Evolution",
-                "Evolution | After Looping",
+                "Evolution | More After Looping",
                 true,
                 "Start giving more items after or before looping."
             );
 
-            EvoMoreWhite = ConfigFile.Bind(
-                "Evolution",
-                "Amount of Whites",
-                3,
-                "If a white item is given, how many. (do Not set to 0)"
-            );
-            EvoMoreGreen = ConfigFile.Bind(
-                "Evolution",
-                "Amount of Green",
-                2,
-                "If a green item is given, how many. (do Not set to 0)"
-            );
-            EvoMoreRed = ConfigFile.Bind(
-                "Evolution",
-                "Amount of Red",
-                1,
-                "If a red item is given, how many. (do Not set to 0)"
-            );
-
+ 
 
 
             VengenceEquipment = ConfigFile.Bind(
@@ -264,7 +259,7 @@ namespace FixedspawnDissonance
                 "Vengence",
                 "Umbra | Health Rebalance",
                 true,
-                "Umbras get less health but start with an Opal and Adaptive Armor."
+                "Umbras only scale with Player Level instead of Monster Level\nGet an Adaptive Armor.\nUmbras based on tanky survivors will have lower stats."
             );
 
             VengenceBlacklist = ConfigFile.Bind(
@@ -341,12 +336,7 @@ namespace FixedspawnDissonance
                 true,
                 "Show the oldest Lemurians inventory on the scoreboard. Every players is shown alternating player, lem. See other config."
             );
-            cfgContent = ConfigFile.Bind(
-              ": Main :",
-              "RequiredByAll Content",
-              true,
-              "Option to disable certain content and allows mod to be run Server-Side with people who don't share the mod.\n\nWill disable Artifact of Soul and Enigma tweaks."
-          );
+           
 
         }
 
@@ -372,14 +362,14 @@ namespace FixedspawnDissonance
             ModSettingsManager.SetModIcon(modIconS);
             ModSettingsManager.SetModDescription("Additions to various vanilla Artifacts.");
 
-            CheckBoxConfig overwriteName = new CheckBoxConfig
+            ChoiceConfig overwriteName2 = new ChoiceConfig
             {
                 category = "General",
                 restartRequired = true,
             };
-            ModSettingsManager.AddOption(new CheckBoxOption(cfgContent, overwriteName));
+            ModSettingsManager.AddOption(new ChoiceOption(cfgContent, overwriteName2));
 
-            overwriteName = new CheckBoxConfig
+            CheckBoxConfig overwriteName = new CheckBoxConfig
             {
                 category = "General",
                 restartRequired = false,

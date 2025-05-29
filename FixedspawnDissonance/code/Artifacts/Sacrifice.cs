@@ -57,8 +57,9 @@ namespace FixedspawnDissonance
                 {
                     RoR2.Artifacts.SacrificeArtifactManager.dropTable = dtSacrificeArtifactVoid;
                 }
-                else if (damageReport.victimBody.baseMaxHealth > 850 || damageReport.victimMaster.isBoss)
+                else if (damageReport.victimIsElite && damageReport.victimBody.baseMaxHealth > 690 || damageReport.victimIsChampion || damageReport.victimIsBoss)
                 {
+                    //Elite Elders and Champions
                     RoR2.Artifacts.SacrificeArtifactManager.dropTable = dtSacrificeArtifactBoss;
                 }
                 else

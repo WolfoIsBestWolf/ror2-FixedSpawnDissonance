@@ -1,14 +1,18 @@
-This mod is RequiredByAllPlayers by default.
+This mod is Vanilla Compatible by default.\
+All changes except Devotion Inventory are Server-Sided. 
 
-It includes a option to make it Server-Side & Vanilla compatible.**
+The mod will only include Enigma & Soul changes, if the modpack contains other Content mods or if it's enabled in the settings.\
+As these changes can only be used with players who also have the mod.
+ 
+This way, people can still use this mod as a vanilla compatible Server-Side Devotion / Dissonance / Vengence bug fix and tweaks mod.
+
 
 Settings can be changed ingame via RiskOfOptions.
-
 
 <table>
 	<tbody>
 		<tr>
-			<td colspan="3" align="center"><h2>Artifacts</h2></td>
+			<td colspan="3" align="center"><h2>Artifact changes</h2></td>
 		</tr>
 		<tr>
 			<td align="center">
@@ -29,7 +33,8 @@ Settings can be changed ingame via RiskOfOptions.
 				Adds a inventory display for the Lemurians to the scoreboard screen. (Tab)<br>
 				<br>
 				Void items can now be given to Eggs.<br>
-				Unblacklisted Breaching Fin and Luminious Shot.*<br>
+				<I>Config to also allow Lunar.</I><br>
+				Unblacklisted Breaching Fin and Luminious Shot & made them function on Lemurians.<br>
 				<br>
 				Lemurians Teleport more often to get stuck less.<br>
 				Lemurians are now immune to fall, lava and void fog damage.<br>
@@ -38,8 +43,7 @@ Settings can be changed ingame via RiskOfOptions.
 				Fixes evolutions often giving 1 less item than intended until Lemurians are resynced.<br>
 				Fixes various item effects randomly disappearing. (Opal)<br>
 				Fixes Lemurians being unable to evolve when the artifact gets disabled. (ie leaving Ambry)<br>
-				Fixes Breaching Fin and Lum Shot not working on devoted Lemurians.*<br>
-				Evolution shouldn't be able to fail anymore due to better checks.<br>
+				Lemurians shouldn't randomly fail to evolve anymore due to better checks.<br>
 				<br>
 			</td>
 		</tr>
@@ -66,12 +70,12 @@ Settings can be changed ingame via RiskOfOptions.
 			</td>
 			<td>
 				<br>
-				Will grant a 3 stack of White, 2 stack of Green, after looping.<br>
+				Will grant a 3 stack of White or 2 stack of Green after looping.<br>
 				<br>
-				Void enemies will now get items.<br>
-				Void enemies will get the corrupted version if one exists.<br>
+				Void enemies will now also get items.<br>
+				Void enemies will get the void version if one exists.<br>
 				<br>
-				Better blacklist for useless and overpowered items. (Sale Star, Nkuhanas Opinion)<br>
+				Better blacklist for useless and overpowered items. (Ghors Tome, Nkuhanas Opinion)<br>
 				<br>
 			</td>
 		</tr>
@@ -135,9 +139,9 @@ Settings can be changed ingame via RiskOfOptions.
 			</td>
 			<td>
 				<br>
-				Enemies drop slightly worse items.  (80w/24g/1r instead of 70w/30g/1r) <br>
-				Greater Monsters drop large chest items.  (80g/20r/5y)<br>
-				Void enemies will drop Void items.  (70/30g/5r)<br>
+				Normal Monsters drop slightly worse items.  (80w/24g/1r instead of 70w/30g/1r) <br>
+				Elite Miniboss & Boss Monsters drop large chest items. (80g/20r/5y)<br>
+				Void enemies will drop Void items.  (70vw/30vg/5vr)<br>
 				<br>
 				Stages spawn with more monsters on them.<br>
 				<br>
@@ -179,13 +183,12 @@ Settings can be changed ingame via RiskOfOptions.
 				<br>
 				Umbras can now use equipment.<br>
 				<br>
-				Umbras get half as many damage items.<br>
-				Umbras get a limited amount of defense and speed items.<br>
-				Umbras no longer get AI or Mithrix blacklisted items.<br>
+				Umbras stack most items slower.<br>
+				Umbras no longer get AI and Mithrix blacklisted items.<br>
 				Umbras no longer get revive items.<br>
 				<br>
+				Umbras scale with Player Level instead of Monster level.<br>
 				Umbras recieve less healing.<br>
-				Umbras stats are more consistent and lower but get adaptive armor.<br>
 				<br>
 				Umbras always drop a high tier item.<br>
 				<br>
@@ -197,13 +200,14 @@ Settings can be changed ingame via RiskOfOptions.
 </table>
 
 
-
-**These changes cannot be used with people who do not have the mod, as they're new items/enemies.
+#
+\*The following changes additions cannot be used with people who do not have the mod, as they're new items/enemies.\
+\*These additions are only added if the mod is used in a modpack with other content mods, or enabled in the settings,
 
 <table>
 	<tbody>
 		<tr>
-			<td colspan="3" align="center"><h2>Changes that require [RequiredByAllCheck]</h2></td>
+			<td colspan="3" align="center"><h2>Artifact Changes  |  If content enabled</h2></td>
 		</tr>
 		<tr>
 			<td align="center">
@@ -241,29 +245,9 @@ Settings can be changed ingame via RiskOfOptions.
 
 
 
-
-##
-Vengence is weird to balance as depending on the character the fight would always just be a nightmare.\
-SotV making it so they no longer respect AIBlacklist is also just ???.
-##
-Soul in vanilla is super lame, so the addition of greater wisps should help.\
-Should still allow for doubling on kill effects but less often now.
-
-![Image of Greater Soul](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsSoul.png)
-##
-Enigma not carrying over Enigma Fragments is just sad.\
-But having normal equipment instead of one "Enigma" equipment feels better so not porting that part.
-
-![Image of Enigma Fragment](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsEnigma.png) 
-##
-
-Devoted Lemurians could benefit quite a lot from Void items.\
-Not going to blacklist Shipping Request.
-
-![Devotion Inventory](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsDevotion.png) 
-##
+# General Info
  
- 
+There's a config to allow Elite Worms.
  
 Yellow Drops for Hordes of Many, intended for Kin but can drop during normal runs.\
 You cannot use Tricorn on enemies for these drops.
@@ -282,9 +266,40 @@ Defense Nucleus:     Alpha Construct
 Irradiant Pearl:     Lunar Exploder, Lunar Golem, Lunar Wisp
 Newly Hatched Zoea:  Void Barnacle, Void Reaver, Void Jailer
 ```
+## Devotion
+
+
+Devotion is probably the biggest Artifact, so it has the most flaws, code wise and in gameplay.\
+Many small bug fixes make it, just work better.
+
+AI can't recognize hazards so they shouldn't be able to die to fall damage, lava & void fog.\
+Teleporting more often to avoid getting stuck but also to make them more around you.
+
+Giving them Void items can be interesting.\
+Not going to blacklist Shipping Request.
+
+![Devotion Inventory](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsDevotion.png) 
+##
+
+Vengence is weird to balance as depending on the character the fight would always just be a nightmare.\
+Not a big fan of trying to avoid certain fun item just because of the Umbra.\
+SotV made it so they can get AIBlacklisted and uninheritable items which is not great. 
+
+##
+Enigma no longer having Fragments, like how it does in RoR1, is a missed oppurtunity for sure.
+
+I tried having only 1 Enigma equipment like in RoR1, but seeing what Equipment you have is a lot better.
+
+![Image of Enigma Fragment](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsEnigma.png) 
+
+ 
+##
+Soul in vanilla is super lame, so the addition of greater wisps should help, make it more.\
+For all I care it makes the Simulacrum Augment more interesting.\
+
+![Image of Greater Soul](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsSoul.png)
 ##
  
-
 ![Image of Honor Enemies](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsHonor.png) 
 
  

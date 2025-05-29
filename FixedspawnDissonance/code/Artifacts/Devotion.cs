@@ -17,6 +17,7 @@ namespace FixedspawnDissonance
         public static void Start()
         {
              //IL failed to work so I'll do this stupider version
+ 
             On.RoR2.DevotionInventoryController.OnDevotionArtifactDisabled += Fix_EliteListBeingBlank;
 
             On.RoR2.CharacterAI.LemurianEggController.CreateItemTakenOrb += Fix_NullrefWhenOrb;
@@ -58,16 +59,19 @@ namespace FixedspawnDissonance
             //DevotedLemurianElder.GetComponent<CharacterBody>().bodyFlags |= CharacterBody.BodyFlags.Devotion; //This somehow makes them get DroneWeapons ????
 
             IL.RoR2.FogDamageController.MyFixedUpdate += NoFogLemurianDamage;
-
+            
             IL.RoR2.DevotionInventoryController.UpdateMinionInventory += CheckIfNullBody;
             On.DevotedLemurianController.OnDevotedBodyDead += CheckIfInventoryNull;
 
             On.RoR2.DevotionInventoryController.GetOrCreateDevotionInventoryController += CheckIfRandomlyPlayerMasterNull;
 
             On.RoR2.DevotionInventoryController.EvolveDevotedLumerian += FixEvolveWithoutBody;
+
+            //This fucking gets removed/added when it should be constant
+            Run.onRunDestroyGlobal += DevotionInventoryController.OnRunDestroy;
         }
 
-
+ 
         private static void FixEvolveWithoutBody(On.RoR2.DevotionInventoryController.orig_EvolveDevotedLumerian orig, DevotionInventoryController self, DevotedLemurianController devotedLemurianController)
         {
             if (devotedLemurianController.LemurianBody == null)
@@ -332,9 +336,9 @@ namespace FixedspawnDissonance
             //Why the fuck do they null this after the artitact is disabled or before it's ever enabled.
             if (!DevotionInventoryController.s_effectPrefab)
             {
+                DevotionInventoryController.OnDevotionArtifactEnabled(RunArtifactManager.instance, CU8Content.Artifacts.Devotion);
                 RoR2Content.Items.BoostDamage.hidden = true;
                 RoR2Content.Items.BoostHp.hidden = true;
-                DevotionInventoryController.s_effectPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/OrbEffects/ItemTakenOrbEffect");
             }
             orig(self, effectOrigin, targetObject, itemIndex);
         }
@@ -353,24 +357,26 @@ namespace FixedspawnDissonance
                     List<CharacterMaster> list = new List<CharacterMaster>();
                     foreach (PlayerCharacterMasterController playerCharacterMasterController in PlayerCharacterMasterController.instances)
                     {
-                        list.Add(playerCharacterMasterController.master);
-
-                        if (WConfig.DevotionShowAllInventory.Value)
+                        if (playerCharacterMasterController.isConnected)
                         {
-                            CharacterMaster summonerMaster = playerCharacterMasterController.master;
-                            MinionOwnership.MinionGroup minionGroup = MinionOwnership.MinionGroup.FindGroup(summonerMaster.netId);
-                            if (minionGroup != null)
+                            list.Add(playerCharacterMasterController.master);
+                            if (WConfig.DevotionShowAllInventory.Value)
                             {
-                                foreach (MinionOwnership minionOwnership in minionGroup.members)
+                                CharacterMaster summonerMaster = playerCharacterMasterController.master;
+                                MinionOwnership.MinionGroup minionGroup = MinionOwnership.MinionGroup.FindGroup(summonerMaster.netId);
+                                if (minionGroup != null)
                                 {
-                                    Inventory devotedLemurianController;
-                                    if (minionOwnership && minionOwnership.TryGetComponent<Inventory>(out devotedLemurianController))
+                                    foreach (MinionOwnership minionOwnership in minionGroup.members)
                                     {
-                                        if (devotedLemurianController.GetItemCount(CU8Content.Items.LemurianHarness) > 0)
+                                        Inventory devotedLemurianController;
+                                        if (minionOwnership && minionOwnership.TryGetComponent<Inventory>(out devotedLemurianController))
                                         {
-                                            list.Add(minionOwnership.GetComponent<CharacterMaster>());
-                                            break;
-                                        }                                        
+                                            if (devotedLemurianController.GetItemCount(CU8Content.Items.LemurianHarness) > 0)
+                                            {
+                                                list.Add(minionOwnership.GetComponent<CharacterMaster>());
+                                                break;
+                                            }                                        
+                                        }
                                     }
                                 }
                             }

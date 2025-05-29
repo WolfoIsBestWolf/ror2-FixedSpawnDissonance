@@ -16,10 +16,10 @@ namespace FixedspawnDissonance
         private static void VengenceAndEnemyGooboFix(MonoMod.Cil.ILContext il)
         {
             ILCursor c = new ILCursor(il);
-            if (c.TryGotoNext(MoveType.After,
-                x => x.MatchCallOrCallvirt("RoR2.DirectorCore","TrySpawnObject")))
+            if (c.TryGotoNext(MoveType.Before,
+                x => x.MatchLdfld("RoR2.SpawnCard/SpawnResult", "spawnRequest"),
+                x => x.MatchCallvirt("RoR2.DirectorCore","TrySpawnObject")))
             {
-                c.Index-=2;
                 c.EmitDelegate<Func<SpawnCard.SpawnResult, SpawnCard.SpawnResult>>((result) =>
                 {
                     if (result.spawnedInstance)

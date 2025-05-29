@@ -7,7 +7,7 @@ namespace FixedspawnDissonance
 {
     public class Enigma
     {
-        public static ItemDef EnigmaFragmentPurple = null;
+        public static ItemDef enigmaFragmentDef = null;
         public static float EnigmaFragmentCooldownReduction = 0.88f;
         public static Color CustomColor = ColorCatalog.GetColor(ColorCatalog.ColorIndex.Artifact);
 
@@ -69,7 +69,7 @@ namespace FixedspawnDissonance
             };
             CustomItem customItemEnigmaFragment = new CustomItem(EnigmaFragment, new ItemDisplayRule[0]);
             ItemAPI.Add(customItemEnigmaFragment);
-            EnigmaFragmentPurple = EnigmaFragment;
+            enigmaFragmentDef = EnigmaFragment;
 
             EnigmaFragmentCooldownReduction = 1 - WConfig.EnigmaCooldownReduction.Value / 100;
 
@@ -79,7 +79,7 @@ namespace FixedspawnDissonance
 
         private static float EnigmaCooldownReduction(On.RoR2.Inventory.orig_CalculateEquipmentCooldownScale orig, Inventory self)
         {
-            int itemCount = self.GetItemCount(EnigmaFragmentPurple);
+            int itemCount = self.GetItemCount(enigmaFragmentDef);
             if (itemCount > 0)
             {
                 float tempfloat = orig(self);
@@ -113,14 +113,17 @@ namespace FixedspawnDissonance
             }
 
 
-            if (EnigmaFragmentPurple)
+            if (enigmaFragmentDef)
             {
+                LanguageAPI.Add("ITEM_ENIGMAEQUIPMENTBOOST_DESC", string.Format(Language.GetString("ITEM_ENIGMAEQUIPMENTBOOST_DESC"), WConfig.EnigmaCooldownReduction.Value, WConfig.EnigmaCooldownReduction.Value));
+
+
                 //Idk why I call this late but I dont wanna bother finding out
                 Texture2D texItemEnigmaP = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/texItemEnigmaP.png");
                 texItemEnigmaP.wrapMode = TextureWrapMode.Clamp;
                 Sprite texItemEnigmaPS = Sprite.Create(texItemEnigmaP, new Rect(0, 0, 128, 128), new Vector2(0.5f, 0.5f));
 
-                EnigmaFragmentPurple.pickupIconSprite = texItemEnigmaPS;
+                enigmaFragmentDef.pickupIconSprite = texItemEnigmaPS;
 
 
                 PickupDef boostequipdef = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex("ItemIndex.EnigmaFragment_ArtifactHelper"));
@@ -143,7 +146,7 @@ namespace FixedspawnDissonance
                 EquipmentDef tempEquip = EquipmentCatalog.GetEquipmentDef(tempPickup.equipmentIndex);
                 if (tempEquip.enigmaCompatible)
                 {
-                    createPickupInfo.pickupIndex = PickupCatalog.FindPickupIndex(EnigmaFragmentPurple.itemIndex);
+                    createPickupInfo.pickupIndex = PickupCatalog.FindPickupIndex(enigmaFragmentDef.itemIndex);
                     GenericPickupController tempGPC = orig(ref createPickupInfo);
                     if (tempGPC.gameObject && tempGPC.pickupDisplay)
                     {
@@ -163,7 +166,7 @@ namespace FixedspawnDissonance
 
         public static void EnigmaEquipmentGranter(On.RoR2.GenericPickupController.orig_AttemptGrant orig, global::RoR2.GenericPickupController self, global::RoR2.CharacterBody body)
         {
-            if (body.inventory.currentEquipmentIndex == EquipmentIndex.None && PickupCatalog.GetPickupDef(self.pickupIndex).itemIndex == EnigmaFragmentPurple.itemIndex)
+            if (body.inventory.currentEquipmentIndex == EquipmentIndex.None && PickupCatalog.GetPickupDef(self.pickupIndex).itemIndex == enigmaFragmentDef.itemIndex)
             {
                 self.pickupIndex = PickupCatalog.FindPickupIndex(EnigmaArtifactManager.GetRandomEquipment(EnigmaArtifactManager.serverInitialEquipmentRng, 0));
                 RoR2.Util.PlaySound("Play_UI_insufficient_funds", self.gameObject);
@@ -171,7 +174,7 @@ namespace FixedspawnDissonance
                 if (body.master.hasAuthority)
                 {
                     CharacterMasterNotificationQueue notificationQueueForMaster = CharacterMasterNotificationQueue.GetNotificationQueueForMaster(body.master);
-                    CharacterMasterNotificationQueue.TransformationInfo transformation = new CharacterMasterNotificationQueue.TransformationInfo(CharacterMasterNotificationQueue.TransformationType.Default, EnigmaFragmentPurple);
+                    CharacterMasterNotificationQueue.TransformationInfo transformation = new CharacterMasterNotificationQueue.TransformationInfo(CharacterMasterNotificationQueue.TransformationType.Default, enigmaFragmentDef);
                     CharacterMasterNotificationQueue.NotificationInfo info = new CharacterMasterNotificationQueue.NotificationInfo(EquipmentCatalog.GetEquipmentDef(self.pickupIndex.pickupDef.equipmentIndex), transformation);
                     notificationQueueForMaster.PushNotification(info, 6f);
                 }

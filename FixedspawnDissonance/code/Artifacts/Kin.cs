@@ -20,6 +20,7 @@ namespace FixedspawnDissonance
 
         private static void IL_ClassicStageInfo_HandleSingleMonsterTypeArtifact1(ILContext il)
         {
+            //Slightly stronger picks for Kin
             ILCursor c = new ILCursor(il);
             if (c.TryGotoNext(MoveType.Before,
                 x => x.MatchLdcR4(40f)))

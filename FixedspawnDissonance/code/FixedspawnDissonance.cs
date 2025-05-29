@@ -24,7 +24,7 @@ namespace FixedspawnDissonance
             Assets.Init(Info);
             WConfig.InitConfig();
 
-            GameModeCatalog.availability.CallWhenAvailable(ModSupport);
+            GameModeCatalog.availability.CallWhenAvailable(CallLate_ModSupport);
             //RoR2.ContentManagement.ContentManager.collectContentPackProviders += ContentManager_collectContentPackProviders;
 
             On.RoR2.SceneDirector.Start += DSArtifactCheckerOnStageAwake;
@@ -73,8 +73,19 @@ namespace FixedspawnDissonance
             Glass.Start();
             Rebirth.Start();
 
-            EnableNewContent = WConfig.cfgContent.Value;
-            Debug.Log("VanillaArtifactTweaks | Content? " + EnableNewContent); 
+          
+
+        }
+
+        private void Start() //Called at the first frame of the game.
+        {
+
+            EnableNewContent = WConfig.cfgContent.Value == WConfig.Content.Enabled;
+            if (WConfig.cfgContent.Value == WConfig.Content.AutoDetect)
+            {
+                EnableNewContent = NetworkModCompatibilityHelper._networkModList.Length != 0;
+            }
+            Debug.Log("VanillaArtifactTweaks | Content? " + EnableNewContent);
             if (EnableNewContent)
             {
                 string mod = Info.Metadata.GUID + ";" + Info.Metadata.GUID;
@@ -83,13 +94,6 @@ namespace FixedspawnDissonance
                 Soul.MakeGreaterSoulWisp();
                 Enigma.MakeEnigmaFragment();
             }
-
-        }
-
-        private void Start() //Called at the first frame of the game.
-        {
-
-           
             //Needs to be called late for reasons
             if (WConfig.DissonanceChanges.Value == true)
             {
@@ -103,7 +107,7 @@ namespace FixedspawnDissonance
         }
 
 
-        internal static void ModSupport()
+        internal static void CallLate_ModSupport()
         {
             WConfig.RiskConfig();
             Soul.CallLate();        
@@ -113,7 +117,6 @@ namespace FixedspawnDissonance
             }
             if (WConfig.EnigmaChanges.Value == true)
             {
-                R2API.LanguageAPI.Add("ITEM_ENIGMAEQUIPMENTBOOST_DESC", string.Format(Language.GetString("ITEM_ENIGMAEQUIPMENTBOOST_DESC"), WConfig.EnigmaCooldownReduction.Value, WConfig.EnigmaCooldownReduction.Value));
                 Enigma.CallLate();
             }
             if (WConfig.KinChanges.Value == true && WConfig.KinYellowsForEnemies.Value == true)
@@ -185,6 +188,15 @@ namespace FixedspawnDissonance
             else if (artifactDef == RoR2Content.Artifacts.ShadowClone && WConfig.VenganceChanges.Value == true)
             {
                 Vengence.OnArtifactEnable();
+            }
+            else if (artifactDef == RoR2Content.Artifacts.MonsterTeamGainsItems)
+            {
+                MonsterTeamGainsItemsArtifactManager.EnsureMonsterItemCountMatchesStageCount();
+            }
+            else if (artifactDef == CU8Content.Artifacts.Devotion)
+            {
+                RoR2Content.Items.BoostDamage.hidden = true;
+                RoR2Content.Items.BoostHp.hidden = true;
             }
         }
 
