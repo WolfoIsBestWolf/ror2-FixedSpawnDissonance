@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace FixedspawnDissonance
+namespace VanillaArtifactsPlus
 {
     public class KinBossDropsForEnemies
     {

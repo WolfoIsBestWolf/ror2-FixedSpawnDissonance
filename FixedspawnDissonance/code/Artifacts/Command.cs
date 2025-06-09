@@ -1,7 +1,8 @@
 using RoR2;
 using UnityEngine;
+using System.Collections.Generic;
 
-namespace FixedspawnDissonance
+namespace VanillaArtifactsPlus
 {
     public class Command
     {
@@ -16,44 +17,11 @@ namespace FixedspawnDissonance
        
         public static void Start()
         {
-            //Fix Void Particles
-            On.RoR2.PickupPickerController.SetOptionsInternal += AddVoidParticlesToCommand;
-
+            
             On.RoR2.PickupTransmutationManager.RebuildPickupGroups += AddEliteEquipmentsToCommand;
             On.RoR2.Run.IsEquipmentAvailable += Make_EliteEquipmentAvailable;
         }
-
-        private static void AddVoidParticlesToCommand(On.RoR2.PickupPickerController.orig_SetOptionsInternal orig, PickupPickerController self, PickupPickerController.Option[] newOptions)
-        {
-            if(self.name.StartsWith("Command"))
-            {
-                var pickup = self.GetComponent<PickupIndexNetworker>();
-                if (pickup != null)
-                {
-                    if (pickup.pickupDisplay)
-                    {
-                        var pickupDef = pickup.pickupIndex.pickupDef;
-                        if (pickupDef.itemTier >= ItemTier.VoidTier1 && pickupDef.itemTier <= ItemTier.VoidBoss)
-                        {
-                            self.gameObject.GetComponent<GenericDisplayNameProvider>().displayToken = "ARTIFACT_COMMAND_CUBE_PINK_NAME";
-                            if (!pickup.pickupDisplay.voidParticleEffect)
-                            {
-                                GameObject newVoidParticle = Object.Instantiate(LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/GenericPickup").GetComponent<GenericPickupController>().pickupDisplay.voidParticleEffect, self.transform.GetChild(0));
-                                newVoidParticle.SetActive(true);
-                                GameObject newOrb = Object.Instantiate(pickup.pickupDisplay.tier2ParticleEffect.transform.GetChild(2).gameObject, newVoidParticle.transform);
-                                newOrb.GetComponent<ParticleSystem>().startColor = ColorCatalog.GetColor(ColorCatalog.ColorIndex.VoidItem);
-                                pickup.pickupDisplay.voidParticleEffect = newVoidParticle;
-                            }
-                           
-                        }
-                    }
-                }
-                 
-            }
-            orig(self, newOptions);
-        }
-
-     
+  
 
         private static bool Make_EliteEquipmentAvailable(On.RoR2.Run.orig_IsEquipmentAvailable orig, Run self, EquipmentIndex equipmentIndex)
         {
@@ -67,6 +35,7 @@ namespace FixedspawnDissonance
 
         private static void AddEliteEquipmentsToCommand(On.RoR2.PickupTransmutationManager.orig_RebuildPickupGroups orig)
         {
+            List<EquipmentDef> list = new List<EquipmentDef>();
             for (var i = 0; i < EliteCatalog.eliteDefs.Length; i++)
             {
                 EliteDef eliteDef = EliteCatalog.eliteDefs[i];
@@ -77,6 +46,7 @@ namespace FixedspawnDissonance
                     {
                         if (tempEliteEquip.dropOnDeathChance > 0)
                         {
+                            list.Add(tempEliteEquip);
                             tempEliteEquip.canDrop = true;
                             tempEliteEquip.isBoss = true;
                             tempEliteEquip.isLunar = false;
@@ -85,18 +55,9 @@ namespace FixedspawnDissonance
                 }
             }
             orig();
-            for (var i = 0; i < EliteCatalog.eliteDefs.Length; i++)
+            for (var i = 0; i < list.Count; i++)
             {
-                EliteDef eliteDef = EliteCatalog.eliteDefs[i];
-                EquipmentDef tempEliteEquip = eliteDef.eliteEquipmentDef;
- 
-                if (tempEliteEquip != null)
-                {
-                    if (tempEliteEquip.dropOnDeathChance > 0)
-                    {
-                        tempEliteEquip.canDrop = false;
-                    }
-                }
+                list[0].canDrop = false;
             }
        
         }

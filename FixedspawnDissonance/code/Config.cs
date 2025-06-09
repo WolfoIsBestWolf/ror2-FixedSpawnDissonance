@@ -7,13 +7,17 @@ using UnityEngine.AddressableAssets;
 using RiskOfOptions.OptionConfigs;
 using RoR2;
 
-namespace FixedspawnDissonance
+namespace VanillaArtifactsPlus
 {
 
     public class WConfig
     {
         public static ConfigFile ConfigFile;
- 
+
+        public static ConfigEntry<bool> DisplayEnigmaInLog;
+        public static ConfigEntry<bool> DisplaySoulInLog;
+
+
         public static ConfigEntry<bool> CommandChanges;
         public static ConfigEntry<bool> DissonanceChanges;
         public static ConfigEntry<bool> DevotionChanges;
@@ -23,7 +27,6 @@ namespace FixedspawnDissonance
         public static ConfigEntry<bool> KinChanges;
         public static ConfigEntry<bool> SacrificeChanges;
         public static ConfigEntry<bool> SoulChanges;
- 
         public static ConfigEntry<bool> VenganceChanges;
         public static ConfigEntry<bool> SpiteChanges;
         public static ConfigEntry<bool> RebirthChanges;
@@ -33,8 +36,8 @@ namespace FixedspawnDissonance
 
         public static ConfigEntry<bool> KinYellowsForEnemies;
 
-        public static ConfigEntry<bool> Honor_EliteWorms;
-        public static ConfigEntry<bool> cfgEliteWormsAlways;
+        public static ConfigEntry<HonorWorms> Honor_EliteWorms;
+ 
         public static ConfigEntry<bool> Honor_PerfectMithrix;
         public static ConfigEntry<bool> Honor_EliteMinions;
         public static ConfigEntry<bool> Honor_EliteMinionsNoGilded;
@@ -44,14 +47,13 @@ namespace FixedspawnDissonance
         public static ConfigEntry<bool> VenganceHealthRebalance;
         public static ConfigEntry<bool> VengenceBlacklist;
         public static ConfigEntry<bool> VengenceGoodDrop;
-
-        public static ConfigEntry<float> EnigmaCooldownReduction;
+ public static ConfigEntry<bool> VengenceAlwaysRandom;
+ 
         public static ConfigEntry<bool> EnigmaInterrupt;
         public static ConfigEntry<bool> EnigmaMovement;
  
         public static ConfigEntry<bool> SacrificeMoreEnemySpawns;
-
-        public static ConfigEntry<bool> EvoBetterBlacklist;
+ 
         public static ConfigEntry<bool> EvoMoreAfterLoop;
         public static ConfigEntry<bool> EvoMoreItems;
  
@@ -90,12 +92,19 @@ namespace FixedspawnDissonance
              "Enable or Disable content needs to be synced.\nIf content is not added, mod is Vanilla compatible\n\nAutoDetect : Adds content if other content mods are enabled and modpack is not Vanilla compatible.\n\nAffected are Artifact of Soul and Enigma tweaks."
             );
 
-            /*cfgContent = ConfigFile.Bind(
-             ": Main :",
-             "RequiredByAll Content",
-             true,
-             "Option to disable certain content and allows mod to be run Server-Side with people who don't share the mod.\n\nWill disable Artifact of Soul and Enigma tweaks."
-            );*/
+            DisplayEnigmaInLog = ConfigFile.Bind(
+                 ": Main :",
+                 "Enigma Fragment in Logbook",
+                 true,
+                 "Show the 2 Enigma Fragments in the logbook."
+             );
+            DisplaySoulInLog = ConfigFile.Bind(
+                ": Main :",
+                "Soul Wisps in Logbook",
+                true,
+                "Show the 3 Soul Wisps in the logbook."
+            );
+
 
             CommandChanges = ConfigFile.Bind(
                 ": Main :",
@@ -215,17 +224,11 @@ namespace FixedspawnDissonance
             Honor_EliteWorms = ConfigFile.Bind(
                 "Honor",
                 "Elite Worms",
-                true,
+                HonorWorms.Honor,
                 "Allow Elite Worms to spawn during Honor. Vanilla removes Worms entirely."
             );
             Honor_EliteWorms.SettingChanged += cfgEliteWorms_Changed;
-            cfgEliteWormsAlways = ConfigFile.Bind(
-                "General",
-                "Allow Elite Worms always",
-                false,
-                "Allow Elite Worms to spawn even without Honor.\n\nElite Worms will function."
-            );
-            cfgEliteWormsAlways.SettingChanged += cfgEliteWorms_Changed;
+  
             EvoMoreItems = ConfigFile.Bind(
                 "Evolution",
                 "Evolution | More Items",
@@ -257,7 +260,7 @@ namespace FixedspawnDissonance
 
             VenganceHealthRebalance = ConfigFile.Bind(
                 "Vengence",
-                "Umbra | Health Rebalance",
+                "Vengence | Health Rebalance",
                 true,
                 "Umbras only scale with Player Level instead of Monster Level\nGet an Adaptive Armor.\nUmbras based on tanky survivors will have lower stats."
             );
@@ -267,6 +270,12 @@ namespace FixedspawnDissonance
                 "PreSet Item Blacklist for Umbras",
                 true,
                 "Make Umbras not spawn with items like Tougher Timers or Nkuhanas Opinion.\nThis is to prevent unfair situations or unavoidable autoplay on the Umbras part making them not fun to fight."
+            );
+            VengenceAlwaysRandom= ConfigFile.Bind(
+                "Vengence",
+                "Vengence | Random Umbra",
+                true,
+                "Umbra will always be of a random character, instead of just when playing with Metamorphosis."
             );
             SacrificeMoreEnemySpawns = ConfigFile.Bind(
                 "Sacrifice",
@@ -288,15 +297,7 @@ namespace FixedspawnDissonance
                            true,
                            "Should Volcanic Egg and Milky Chrysalis be an option for Enigma"
                        );
-
-
-            EnigmaCooldownReduction = ConfigFile.Bind(
-                           "Enigma",
-                           "Enigma Fragment Equipment Cooldown reduction",
-                           12f,
-                           ""
-                       );
-
+ 
 
             KinYellowsForEnemies = ConfigFile.Bind(
                 "Kin",
@@ -305,13 +306,7 @@ namespace FixedspawnDissonance
                 "Enable/Disable Hordes of Many dropping Yellow items depending on the Enemy\nPrimarily intended with Kin but helps in general"
             );
 
-            EvoBetterBlacklist = ConfigFile.Bind(
-                "Evolution",
-                "More AI Blacklist items",
-                true,
-                "Prevents Scavs and Enemies from spawning with; Nkuhanas Opinion, Aegis, Happiest Mask, Ghors Tome, Death Mark, Infusion\n Prevents Artifact of Evolution giving; Tesla Coil, Razorwire"
-            );
-
+  
             DevotionShowAllInventory = ConfigFile.Bind(
                 "Devotion",
                 "Show every players Devotion Inventory",
@@ -342,33 +337,42 @@ namespace FixedspawnDissonance
 
         public static void cfgEliteWorms_Changed(object sender, System.EventArgs e)
         {
-            bool SetTo = WConfig.cfgEliteWormsAlways.Value;
+            bool SetTo = Honor_EliteWorms.Value == HonorWorms.Always;
             if (!SetTo)
             {
-                SetTo = WConfig.Honor_EliteWorms.Value && RunArtifactManager.instance && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.EliteOnly);
+                SetTo = Honor_EliteWorms.Value == HonorWorms.Off && RunArtifactManager.instance && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.EliteOnly);
             }
             CharacterSpawnCard cscMagmaWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
             cscMagmaWorm.noElites = SetTo;
-            cscMagmaWorm.eliteRules = SpawnCard.EliteRules.Default;
             CharacterSpawnCard cscElectricWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");
             cscElectricWorm.noElites = SetTo;
-            cscElectricWorm.eliteRules = SpawnCard.EliteRules.Default;
         }
 
         public static void RiskConfig()
         {
-            Texture2D texture = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/icon_old.png");
-            Sprite modIconS = Sprite.Create(texture, new Rect(0, 0, 256, 256), new Vector2(0.5f, 0.5f));
-            ModSettingsManager.SetModIcon(modIconS);
+            ModSettingsManager.SetModIcon(Assets.Bundle.LoadAsset<Sprite>("Assets/ArtifactsVanilla/icon_old.png"));
             ModSettingsManager.SetModDescription("Additions to various vanilla Artifacts.");
 
-            ChoiceConfig overwriteName2 = new ChoiceConfig
+            ChoiceConfig checkNameR = new ChoiceConfig
             {
                 category = "General",
                 restartRequired = true,
             };
-            ModSettingsManager.AddOption(new ChoiceOption(cfgContent, overwriteName2));
-
+            ChoiceConfig checkName = new ChoiceConfig
+            {
+                category = "General",
+                restartRequired = false,
+            };
+            CheckBoxConfig overwriteNameR = new CheckBoxConfig
+            {
+                category = "General",
+                restartRequired = true,
+            };
+            ModSettingsManager.AddOption(new ChoiceOption(cfgContent, checkNameR));
+            ModSettingsManager.AddOption(new CheckBoxOption(DisplaySoulInLog, overwriteNameR));
+            ModSettingsManager.AddOption(new CheckBoxOption(DisplayEnigmaInLog, overwriteNameR));
+            ModSettingsManager.AddOption(new ChoiceOption(Honor_EliteWorms, checkName));
+ 
             CheckBoxConfig overwriteName = new CheckBoxConfig
             {
                 category = "General",
@@ -381,14 +385,14 @@ namespace FixedspawnDissonance
          
             ModSettingsManager.AddOption(new CheckBoxOption(RebirthStoreAlways, overwriteName));   
 
+            ModSettingsManager.AddOption(new CheckBoxOption(VengenceAlwaysRandom, overwriteName));
             ModSettingsManager.AddOption(new CheckBoxOption(VenganceHealthRebalance, overwriteName));
             ModSettingsManager.AddOption(new CheckBoxOption(SacrificeMoreEnemySpawns, overwriteName));
             ModSettingsManager.AddOption(new CheckBoxOption(EvoMoreItems, overwriteName));
-            overwriteName.restartRequired = true;
-            ModSettingsManager.AddOption(new CheckBoxOption(KinYellowsForEnemies, overwriteName));
 
-            ModSettingsManager.AddOption(new CheckBoxOption(Honor_EliteWorms, false));
-            ModSettingsManager.AddOption(new CheckBoxOption(cfgEliteWormsAlways, false));
+            ModSettingsManager.AddOption(new CheckBoxOption(KinYellowsForEnemies, overwriteNameR));
+
+
             ModSettingsManager.AddOption(new CheckBoxOption(Honor_PerfectMithrix, false));
             ModSettingsManager.AddOption(new CheckBoxOption(Honor_EliteMinions, false));
             ModSettingsManager.AddOption(new CheckBoxOption(Honor_EliteMinionsNoGilded, false));

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 
 //Thank you RedGesture mod and AI Blacklister mod
-namespace FixedspawnDissonance
+namespace VanillaArtifactsPlus
 {
     public static class Util
     {

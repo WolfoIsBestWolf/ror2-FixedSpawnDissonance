@@ -1,5 +1,23 @@
 ## Changelog:
 ```
+v3.4.0 - Fixed for DLC2.4
+__Soul__
+Removed Arch Soul.
+Replaced with Lunar Soul wisp that only uses secondary.
+-Spawns from very healthy enemies instead of just bosses.
+Soul Wisp HP now scales based on victims health.
+- Results in less hp especially in early game.
+Void team also spawn souls now.
+Changed way I block Soul Wisps to so it cant fail by mod breaking from updates.
+________
+Elite Equipment turn into a different Enigma Fragment.
+Added Enigma Fragments and Soul Wisps to log by default. (If content is enabled)
+Spite bombs will now hurt void team too.
+Spite bombs will spawn from void team too.
+Moved various fixes to fix mod.
+Added config for always random Umbra
+
+
 v3.3.0
 Mod now auto-chooses to add content based on if you have any other content mod.
 Fixed vanilla issue where Devotion Inventories sometimes wouldn't get destroyed.

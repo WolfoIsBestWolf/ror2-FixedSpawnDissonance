@@ -1,20 +1,22 @@
 {
 	"strings":
-	{      
-		
-	       "ARTIFACT_ENIGMA_DESCRIPTION": "Your equipment changes every time it's activated. Additional Equipment become fragments that reduce cooldown instead.",
+	{  
+		"ARTIFACT_ENIGMA_NEW_DESCRIPTION": "Your equipment changes every time it's activated. Additional Equipment become fragments that reduce cooldown.",
 
-            "ITEM_ENIGMAEQUIPMENTBOOST_NAME": "Enigma Fragment",
-            "ITEM_ENIGMAEQUIPMENTBOOST_PICKUP": "Reduce equipment cooldown.",
-            "ITEM_ENIGMAEQUIPMENTBOOST_DESC": "<style=cIsUtility>Reduce equipment cooldown</style> by <style=cIsUtility>{0}%</style> <style=cStack>(+{1}% per stack)</style>.",
+		"ITEM_ENIGMAFRAGMENT_NAME": "Enigma Fragment",
+		"ITEM_ENIGMAFRAGMENT_PICKUP": "Reduce equipment cooldown.",
+		"ITEM_ENIGMAFRAGMENT_DESC": "<style=cIsUtility>Reduce equipment cooldown</style> by <style=cIsUtility>{0}%</style> <style=cStack>({0}% per stack)</style>.",
  
-	
+		"ITEM_ENIGMAFRAGMENTELITE_NAME": "Elite Enigma Fragment",
+		"ITEM_ENIGMAFRAGMENTELITE_PICKUP": "Gain a random elite powers upon equipment activation.",
+		"ITEM_ENIGMAFRAGMENTELITE_DESC": "Activating your Equipment gives you the <style=cIsDamage>power of a random elite</style> for <style=cIsDamage>75%</style> <style=cStack>(+75% per stack)</style> of the equipments cooldown.",
+ 
+        "ARTIFACT_SOUL_NEW_DESCRIPTION": "{0} Greater monsters spawn greater Souls.",
+ 
 		"SOULWISP_BODY_NAME": "Lesser Soul",
         "SOULGREATERWISP_BODY_NAME": "Greater Soul",
-        "SOULARCHWISP_BODY_NAME": "Arch Soul",
-
-		
-
-		
+        "SOULBOSSWISP_BODY_NAME": "Abundant Soul",
+		 
+		"LOG_SOULS": "Monster Logs: Lesser, Greater & Abundant Soul",
 	}
 }

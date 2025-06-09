@@ -56,9 +56,9 @@ Settings can be changed ingame via RiskOfOptions.
 				<br>
 				Adds Hermit Crabs to the spawn pool.<br>
 				<br>
-				On Commencement enemies can spawn as Perfected.<br>
+				On Commencement, all monsters can spawn as Perfected.<br>
 				<br>
-				Enemies with skins will have a random skin per stage. (Titan, Golem, etc.)<br>
+				monsters with skins will have a random skin per stage. (Titan, Golem, etc.)<br>
 				Evens out the enemy categories for better balance.<br>
 				<br>
 			</td>
@@ -72,20 +72,11 @@ Settings can be changed ingame via RiskOfOptions.
 				<br>
 				Will grant a 3 stack of White or 2 stack of Green after looping.<br>
 				<br>
-				Void enemies will now also get items.<br>
-				Void enemies will get the void version if one exists.<br>
+				Void monsters will now also get items.<br>
+				Void monsters will get the void version if one exists.<br>
 				<br>
 				Better blacklist for useless and overpowered items. (Ghors Tome, Nkuhanas Opinion)<br>
 				<br>
-			</td>
-		</tr>
-		<tr>
-			<td align="center">
-				<b>Artifact of Glass</b><br>
-				<img src="https://riskofrain2.wiki.gg/images/e/e1/Artifact_of_Glass.png" width=64>
-			</td>
-			<td>
-				Makes you look glassy.<br>
 			</td>
 		</tr>
 		<tr>
@@ -100,6 +91,7 @@ Settings can be changed ingame via RiskOfOptions.
 				Final bosses will be asigned a specific elite type. (Perfected Mithrix, Voidtouched Voidling)<br>
 				<br>
 				Worms now spawn as Elite instead of not at all.<br>
+				<i>Config to also allow Elite Worms in regular gameplay</i><br>
 				<br>
 				Minions will be given a elite aspect but without stat boosts.<br>
 				<br>
@@ -114,8 +106,8 @@ Settings can be changed ingame via RiskOfOptions.
 				<br>
 				Hordes of Many can drop an appropriate Boss item.<br>
 				<br>
-				Tries to pick slightly harder enemies.<br>
-				Tries to not pick repeating enemies.<br>
+				Tries to pick slightly harder monsters.<br>
+				Tries to not pick repeating monsters.<br>
 				<br>
 			</td>
 		</tr>
@@ -141,7 +133,7 @@ Settings can be changed ingame via RiskOfOptions.
 				<br>
 				Normal Monsters drop slightly worse items.  (80w/24g/1r instead of 70w/30g/1r) <br>
 				Elite Miniboss & Boss Monsters drop large chest items. (80g/20r/5y)<br>
-				Void enemies will drop Void items.  (70vw/30vg/5vr)<br>
+				Void monsters will drop Void items.  (70vw/30vg/5vr)<br>
 				<br>
 				Stages spawn with more monsters on them.<br>
 				<br>
@@ -154,23 +146,12 @@ Settings can be changed ingame via RiskOfOptions.
 			</td>
 			<td>
 				<br>
-				Spite bomb damage is consistent across enemies.<br>
+				Spite bomb damage is consistent across monsters.<br>
 				Spite bombs spawn in a bigger radius.<br>
-				Smaller enemies spawn more bombs.<br>
+				Smaller monsters spawn more bombs.<br>
 				<br>
-				Spite bombs now hurt enemies.<br>
-				<br>
-			</td>
-		</tr>
-		<tr>
-			<td align="center">
-				<b>Artifact of Swarms</b><br>
-				<img src="https://riskofrain2.wiki.gg/images/c/c8/Artifact_of_Swarms.png" width=64>
-			</td>
-			<td>
-				Increases the limit on certain minions as they still spawn with half health. (Droneman, Zoea)<br>
-				<br>
-				Fixes Vengence + Swarms spawning one of them without any items.<br>
+				Spite bombs now hurt monsters.<br>
+				Void Team monsters also spawn bombs.
 				<br>
 			</td>
 		</tr>
@@ -193,6 +174,7 @@ Settings can be changed ingame via RiskOfOptions.
 				Umbras always drop a high tier item.<br>
 				<br>
 				Umbra + Metamorphosis will result in a random Umbra.<br>
+				<i>Config for this to always happen</i>
 				<br>
 			</td>
 		</tr>
@@ -201,7 +183,7 @@ Settings can be changed ingame via RiskOfOptions.
 
 
 #
-\*The following changes additions cannot be used with people who do not have the mod, as they're new items/enemies.\
+\*The following changes additions cannot be used with people who do not have the mod, as they're new items/monsters.\
 \*These additions are only added if the mod is used in a modpack with other content mods, or enabled in the settings,
 
 <table>
@@ -216,8 +198,9 @@ Settings can be changed ingame via RiskOfOptions.
 			</td>
 			<td>
 				<br>
-				Dropped Equipments will be replaced by a Enigma Fragment, similiar to RoR1.<br>
-				This reduces Equipment Cooldown by 12% per stack.<br>
+				Dropped Equipments will be replaced by a Enigma Fragment, like in RoR1.<br>
+				Each fragment reduces Equipment Cooldown by 12%.<br>
+				Elite Aspects result in a Elite Fragment.<br>
 				If you do not have an Equipment, the fragment gets turned back into an equipment.<br>
 				<br>
 				Enigma no longer rolls into Tricorn, Recycler, Spinel Tonic, Glowing Meteor.<br>
@@ -231,13 +214,16 @@ Settings can be changed ingame via RiskOfOptions.
 			</td>
 			<td>
 				<br>
-				Greater enemies spawn Greater Soul Wisps.<br>
-				Champion enemies spawn Arch Soul Wisps.<br>
+				Miniboss monsters spawn Greater Soul Wisps.<br>
+				Strong Miniboss & Champion monsters spawn Lunar Soul Wisps. (That only use the homing bomb)<br>
+				Void Team Monsters also spawn Souls.
 				<br>
-				Soul Wisps die on a timer instead of negative regen.<br>
+				Souls health is partially based on the enemy it came from.<br>
+				Souls inherit elite type and items of their summoner.<br>
+				Souls die on a timer instead of negative regen.<br>
+				Souls drop money.<br>
 				<br>
-				Soul Wisps inherit items and elite type of their summoner.<br>
-				<br>
+				Healing Core no longer spawn souls.
 			</td>
 		</tr>
 	</tbody>
@@ -246,11 +232,11 @@ Settings can be changed ingame via RiskOfOptions.
 
 
 # General Info
- 
-There's a config to allow Elite Worms.
- 
+
+
+
 Yellow Drops for Hordes of Many, intended for Kin but can drop during normal runs.\
-You cannot use Tricorn on enemies for these drops.
+You cannot use Tricorn on monsters for these drops.
 ```
 Titanic Knurl:       Stone Golem, Halcyonite
 Queen's Gland:       Beetle, Beetle Guard
@@ -269,14 +255,11 @@ Newly Hatched Zoea:  Void Barnacle, Void Reaver, Void Jailer
 ## Devotion
 
 
-Devotion is probably the biggest Artifact, so it has the most flaws, code wise and in gameplay.\
-Many small bug fixes make it, just work better.
-
 AI can't recognize hazards so they shouldn't be able to die to fall damage, lava & void fog.\
 Teleporting more often to avoid getting stuck but also to make them more around you.
 
-Giving them Void items can be interesting.\
-Not going to blacklist Shipping Request.
+Giving them Void items is quite a lot of fun.
+
 
 ![Devotion Inventory](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsDevotion.png) 
 ##
@@ -288,19 +271,24 @@ SotV made it so they can get AIBlacklisted and uninheritable items which is not 
 ##
 Enigma no longer having Fragments, like how it does in RoR1, is a missed oppurtunity for sure.
 
-I tried having only 1 Enigma equipment like in RoR1, but seeing what Equipment you have is a lot better.
+
 
 ![Image of Enigma Fragment](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsEnigma.png) 
 
  
 ##
-Soul in vanilla is super lame, so the addition of greater wisps should help, make it more.\
-For all I care it makes the Simulacrum Augment more interesting.\
+Soul in vanilla is a very nothing Artifact.\
+The addition of Greater and Lunar Souls Wisps should help make it feel more present and chaotic.
+
+Souls dropping money makes waiting or killing them a bit more of a choice.\
+Inheriting elite type can double OnDeath effects of the enemy which is cool.
+
+Makes the Simulacrum Augment more interesting.
 
 ![Image of Greater Soul](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsSoul.png)
 ##
  
-![Image of Honor Enemies](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsHonor.png) 
+![Image of Honor monsters](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsHonor.png) 
 
  
 

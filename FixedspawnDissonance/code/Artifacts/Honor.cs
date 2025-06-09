@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 
-namespace FixedspawnDissonance
+namespace VanillaArtifactsPlus
 {
     public class Honor
     {
@@ -21,7 +21,40 @@ namespace FixedspawnDissonance
             Addressables.LoadAssetAsync<EliteDef>(key: "RoR2/DLC1/EliteEarth/edEarthHonor.asset").WaitForCompletion().healthBoostCoefficient = 2;
         }
 
-     
+        public static void OnArtifactEnable()
+        {
+            if (NetworkServer.active)
+            {
+                WConfig.cfgEliteWorms_Changed(null, null);
+                Honor.Honor_EliteTiers(true);
+                if (WConfig.Honor_PerfectMithrix.Value == true)
+                {
+                    On.RoR2.CharacterBody.OnOutOfDangerChanged += Honor.PreventPerfectedMithrixFromRegenningShield;
+                }
+                if (WConfig.Honor_EliteMinions.Value)
+                {
+                    On.RoR2.MinionOwnership.MinionGroup.AddMinion += Honor.MinionsInheritHonor;
+                }
+            }
+        }
+
+        public static void OnArtifactDisable()
+        {
+            WConfig.cfgEliteWorms_Changed(null, null);
+            Honor.Honor_EliteTiers(false);
+            if (WConfig.Honor_PerfectMithrix.Value == true)
+            {
+                On.RoR2.CharacterBody.OnOutOfDangerChanged -= Honor.PreventPerfectedMithrixFromRegenningShield;
+            }
+            if (WConfig.Honor_EliteMinions.Value)
+            {
+                On.RoR2.MinionOwnership.MinionGroup.AddMinion -= Honor.MinionsInheritHonor;
+            }
+        }
+
+   
+
+
         public static void Honor_EliteTiers(bool activate)
         {
             if (activate)

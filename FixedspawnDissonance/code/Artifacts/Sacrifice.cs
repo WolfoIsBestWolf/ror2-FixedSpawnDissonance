@@ -2,7 +2,7 @@ using RoR2;
 using UnityEngine;
 
 
-namespace FixedspawnDissonance
+namespace VanillaArtifactsPlus
 {
     public class Sacrifice
     {

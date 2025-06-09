@@ -3,7 +3,7 @@ using MonoMod.Cil;
 using RoR2;
 using UnityEngine;
 
-namespace FixedspawnDissonance
+namespace VanillaArtifactsPlus
 {
     public class Kin
     {

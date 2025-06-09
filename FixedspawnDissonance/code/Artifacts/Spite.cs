@@ -3,8 +3,9 @@ using RoR2;
 using RoR2.Artifacts;
 using System;
 using UnityEngine;
+using Mono.Cecil.Cil;
 
-namespace FixedspawnDissonance
+namespace VanillaArtifactsPlus
 {
     public class Spite
     {
@@ -50,23 +51,26 @@ namespace FixedspawnDissonance
 
 
             IL.RoR2.Artifacts.BombArtifactManager.OnServerCharacterDeath += BombArtifactManager_OnServerCharacterDeath;
+         
         }
 
         private static void BombArtifactManager_OnServerCharacterDeath(ILContext il)
         {
             ILCursor c = new ILCursor(il);
             c.TryGotoNext(MoveType.After,
-            x => x.MatchLdfld("RoR2.DamageReport", "victimTeamIndex"));
+            x => x.MatchLdfld("RoR2.DamageReport", "victimTeamIndex"),
+            x => x.MatchLdcI4(2));
 
+            c.Prev.OpCode = OpCodes.Ldc_I4_1;
+            c.Next.OpCode = OpCodes.Bne_Un_S;
 
             if (c.TryGotoNext(MoveType.After,
                 x => x.MatchLdfld("RoR2.DamageReport", "victimTeamIndex")))
             {
                 c.EmitDelegate<Func<TeamIndex, TeamIndex>>((teamIndex) =>
                 {
-                    return TeamIndex.Void;
+                    return TeamIndex.Lunar;
                 });
-                //Debug.Log("IL Found: IL.RoR2.BombArtifactManager_OnServerCharacterDeath");
             }
             else
             {

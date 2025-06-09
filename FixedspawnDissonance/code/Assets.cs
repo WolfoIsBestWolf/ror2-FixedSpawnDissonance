@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-namespace FixedspawnDissonance
+namespace VanillaArtifactsPlus
 {
     //Taken from EnFucker, Thank you EnFucker
     internal static class Assets

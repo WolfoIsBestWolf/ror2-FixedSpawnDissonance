@@ -1,26 +1,31 @@
 ManifestFileVersion: 0
-CRC: 3081489630
+CRC: 342032651
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5ee0be84e0b70b4ccadf7311282191ea
+    Hash: b8ef807a30d6197bc2634c9250a6145b
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b0363f7088f9761414f730641bf9a24b
+    Hash: c21d61fe394c58399df3c6fb5c7c99b3
 HashAppended: 0
 ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/ArtifactsVanilla/texItemEnigmaOrange.png
+- Assets/ArtifactsVanilla/enigmaFragmentElite.png
 - Assets/ArtifactsVanilla/icon_old.png
 - Assets/ArtifactsVanilla/texRampWispSoulAlt.png
-- Assets/ArtifactsVanilla/texItemEnigmaP.png
-- Assets/ArtifactsVanilla/texBodyGreaterWispSoul.png
+- Assets/ArtifactsVanilla/soulGreater.png
+- Assets/ArtifactsVanilla/soulLunar.png
+- Assets/ArtifactsVanilla/enigmaFragment.png
 - Assets/ArtifactsVanilla/texRampWispSoulAlt2.png
-- Assets/ArtifactsVanilla/texBodyArchSoul.png
+- Assets/ArtifactsVanilla/soulArch.png
 - Assets/ArtifactsVanilla/icon.png
-- Assets/ArtifactsVanilla/texBodyWispSoul.png
-- Assets/ArtifactsVanilla/texItemEnigma.png
+- Assets/ArtifactsVanilla/soulLesser.png
+- Assets/ArtifactsVanilla/enigmaEquipment.png
+- Assets/ArtifactsVanilla/enigmaOld.png
+- Assets/ArtifactsVanilla/artifactBg.png
 Dependencies: []

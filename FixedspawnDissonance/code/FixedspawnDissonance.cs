@@ -7,7 +7,8 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 
-namespace FixedspawnDissonance
+namespace VanillaArtifactsPlus
+
 {
     [BepInDependency("com.bepis.r2api")]
     [BepInPlugin("Wolfo.VanillaArtifactsPlus", "VanillaArtifactsPlus", "3.3.0")]
@@ -69,12 +70,8 @@ namespace FixedspawnDissonance
             {
                 Vengence.Start();
             }
-            Swarms.Start();
-            Glass.Start();
             Rebirth.Start();
-
-          
-
+ 
         }
 
         private void Start() //Called at the first frame of the game.
@@ -88,10 +85,10 @@ namespace FixedspawnDissonance
             Debug.Log("VanillaArtifactTweaks | Content? " + EnableNewContent);
             if (EnableNewContent)
             {
-                string mod = Info.Metadata.GUID + ";" + Info.Metadata.GUID;
+                string mod = Info.Metadata.GUID + ";" + Info.Metadata.Version;
                 NetworkModCompatibilityHelper.networkModList = NetworkModCompatibilityHelper.networkModList.Append(mod);
 
-                Soul.MakeGreaterSoulWisp();
+                Soul.MakeNewSoulWisp();
                 Enigma.MakeEnigmaFragment();
             }
             //Needs to be called late for reasons
@@ -109,12 +106,9 @@ namespace FixedspawnDissonance
 
         internal static void CallLate_ModSupport()
         {
-            WConfig.RiskConfig();
+            
             Soul.CallLate();        
-            if (WConfig.EvolutionChanges.Value == true && WConfig.EvoBetterBlacklist.Value == true)
-            {
-                Evolution.Tagchanger();
-            }
+   
             if (WConfig.EnigmaChanges.Value == true)
             {
                 Enigma.CallLate();
@@ -131,6 +125,10 @@ namespace FixedspawnDissonance
             {
                 Vengence.EnableEquipmentForVengence();
             }
+
+            DLC2Content.Items.KnockBackHitEnemies.tags = DLC2Content.Items.KnockBackHitEnemies.tags.Remove(ItemTag.DevotionBlacklist);
+            DLC2Content.Items.IncreasePrimaryDamage.tags = DLC2Content.Items.IncreasePrimaryDamage.tags.Remove(ItemTag.DevotionBlacklist);
+            WConfig.RiskConfig();
         }
 
 
@@ -142,6 +140,10 @@ namespace FixedspawnDissonance
             {
                 if (artifactDef == RoR2Content.Artifacts.WispOnDeath && WConfig.SoulChanges.Value == true)
                 {
+                    if (Soul.unlockable)
+                    {
+                        Run.instance.unlockablesAlreadyFullyObtained.Add(Soul.unlockable);
+                    }
                     On.RoR2.MasterSummon.Perform += Soul.SoulSpawnGreaterUniversal;
                 }
                 else if (artifactDef == RoR2Content.Artifacts.Enigma && WConfig.EnigmaChanges.Value == true)
@@ -152,19 +154,7 @@ namespace FixedspawnDissonance
             }
             if (artifactDef == RoR2Content.Artifacts.EliteOnly && WConfig.HonorChanges.Value == true)
             {
-                if (NetworkServer.active)
-                {
-                    WConfig.cfgEliteWorms_Changed(null, null);
-                    Honor.Honor_EliteTiers(true);
-                    if (WConfig.Honor_PerfectMithrix.Value == true)
-                    {
-                        On.RoR2.CharacterBody.OnOutOfDangerChanged += Honor.PreventPerfectedMithrixFromRegenningShield;
-                    }
-                    if (WConfig.Honor_EliteMinions.Value)
-                    {
-                        On.RoR2.MinionOwnership.MinionGroup.AddMinion += Honor.MinionsInheritHonor;
-                    }
-                }
+                Honor.OnArtifactEnable();
             }
             else if (artifactDef == RoR2Content.Artifacts.SingleMonsterType)
             {
@@ -179,7 +169,7 @@ namespace FixedspawnDissonance
             }
             else if (artifactDef == RoR2Content.Artifacts.Swarms)
             {
-                On.RoR2.CharacterMaster.GetDeployableSameSlotLimit += Swarms.SwarmsDeployableLimitChanger;
+                //On.RoR2.CharacterMaster.GetDeployableSameSlotLimit += Swarms.SwarmsDeployableLimitChanger;
             }
             else if (artifactDef == RoR2Content.Artifacts.Sacrifice && WConfig.SacrificeChanges.Value == true)
             {
@@ -216,16 +206,7 @@ namespace FixedspawnDissonance
             }      
             if (artifactDef == RoR2Content.Artifacts.EliteOnly && WConfig.HonorChanges.Value == true)
             {
-                WConfig.cfgEliteWorms_Changed(null, null);
-                Honor.Honor_EliteTiers(false);
-                if (WConfig.Honor_PerfectMithrix.Value == true)
-                {
-                    On.RoR2.CharacterBody.OnOutOfDangerChanged -= Honor.PreventPerfectedMithrixFromRegenningShield;
-                }
-                if (WConfig.Honor_EliteMinions.Value)
-                {
-                    On.RoR2.MinionOwnership.MinionGroup.AddMinion -= Honor.MinionsInheritHonor;
-                }
+                Honor.OnArtifactDisable();
             }
             else if (artifactDef == RoR2Content.Artifacts.SingleMonsterType)
             {
@@ -244,7 +225,7 @@ namespace FixedspawnDissonance
             }
             else if (artifactDef == RoR2Content.Artifacts.Swarms)
             {
-                On.RoR2.CharacterMaster.GetDeployableSameSlotLimit -= Swarms.SwarmsDeployableLimitChanger;
+                //On.RoR2.CharacterMaster.GetDeployableSameSlotLimit -= Swarms.SwarmsDeployableLimitChanger;
             }
             else if (artifactDef == RoR2Content.Artifacts.Sacrifice && WConfig.SacrificeChanges.Value == true)
             {

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections.Generic;
 
-namespace FixedspawnDissonance
+namespace VanillaArtifactsPlus
 {
     public class Rebirth
     {

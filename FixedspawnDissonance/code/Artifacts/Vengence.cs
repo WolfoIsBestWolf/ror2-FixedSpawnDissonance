@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 
-namespace FixedspawnDissonance
+namespace VanillaArtifactsPlus
 {
     public class Vengence
     {
@@ -83,6 +83,9 @@ namespace FixedspawnDissonance
         public static void OnArtifactDisable()
         {
             On.RoR2.HealthComponent.Heal -= Vengence.Umbra_HalfHealing;
+            removeAllItems = null;
+            limitTheseItemsDmg = null;
+            limitTheseItemsHpSpeed = null;
         }
 
         public static void Start()
@@ -137,11 +140,8 @@ namespace FixedspawnDissonance
         public static void OnPreSpawnSetup(CharacterMaster master)
         {
             Debug.Log("Umbra of " + master.name);
-            if (WConfig.VengenceBlacklist.Value == true)
-            {
-                VenganceItemFilter(master.inventory);
-                master.inventory.GiveItem(RoR2Content.Items.UseAmbientLevel);
-            }
+            VenganceItemFilter(master.inventory);
+         
 
             if (WConfig.VenganceHealthRebalance.Value == true)
             {
@@ -207,7 +207,7 @@ namespace FixedspawnDissonance
         private static DoppelgangerSpawnCard VengenceMetamorphosisSynergy(On.RoR2.Artifacts.DoppelgangerSpawnCard.orig_FromMaster orig, CharacterMaster srcCharacterMaster)
         {
             DoppelgangerSpawnCard tempspawncard = orig(srcCharacterMaster);
-            if (RunArtifactManager.instance && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.RandomSurvivorOnRespawn))
+            if (WConfig.VengenceAlwaysRandom.Value || RunArtifactManager.instance && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.RandomSurvivorOnRespawn))
             {
                 BodyIndex bodyIndex = BodyIndex.None;
                 SurvivorDef survivorDef = null;
@@ -234,6 +234,18 @@ namespace FixedspawnDissonance
 
         private static void VenganceItemFilter(Inventory inventory)
         {
+            for (int i = 0; i < inventory.itemAcquisitionOrder.Count; i++)
+            {
+                ItemDef tempDef = ItemCatalog.GetItemDef(inventory.itemAcquisitionOrder[i]);
+                if (tempDef.ContainsTag(ItemTag.CannotCopy) || tempDef.ContainsTag(ItemTag.OnKillEffect) || tempDef.ContainsTag(ItemTag.AIBlacklist) || tempDef.ContainsTag(ItemTag.BrotherBlacklist))
+                {
+                    inventory.RemoveItem(tempDef, inventory.GetItemCount(tempDef));
+                }
+            }
+            if (WConfig.VengenceBlacklist.Value == false)
+            {
+                return;
+            }
             int itemLimitDefense = (1+Run.instance.loopClearCount)*2;
             foreach (ItemDef itemDef in removeAllItems)
             {
@@ -256,14 +268,7 @@ namespace FixedspawnDissonance
                 }
             }
 
-            for (int i = 0; i < inventory.itemAcquisitionOrder.Count; i++)
-            {
-                ItemDef tempDef = ItemCatalog.GetItemDef(inventory.itemAcquisitionOrder[i]);
-                if (tempDef.ContainsTag(ItemTag.CannotCopy) || tempDef.ContainsTag(ItemTag.OnKillEffect) || tempDef.ContainsTag(ItemTag.AIBlacklist) || tempDef.ContainsTag(ItemTag.BrotherBlacklist))
-                {
-                    inventory.RemoveItem(tempDef, inventory.GetItemCount(tempDef));
-                }
-            }
+        
 
 
             if (inventory.currentEquipmentIndex == RoR2Content.Equipment.BurnNearby.equipmentIndex)
