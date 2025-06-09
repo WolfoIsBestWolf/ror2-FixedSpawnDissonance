@@ -1,5 +1,8 @@
 ## Changelog:
 ```
+v3.4.1
+Fixed latest patch breaking multiplayer with non mod owners due to Command choice of Elite Aspect.
+
 v3.4.0 - Fixed for DLC2.4
 __Soul__
 Removed Arch Soul.

@@ -57,7 +57,7 @@ namespace VanillaArtifactsPlus
             orig();
             for (var i = 0; i < list.Count; i++)
             {
-                list[0].canDrop = false;
+                list[i].canDrop = false;
             }
        
         }
