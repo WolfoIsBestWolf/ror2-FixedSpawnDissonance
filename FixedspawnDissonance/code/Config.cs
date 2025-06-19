@@ -338,10 +338,11 @@ namespace VanillaArtifactsPlus
         public static void cfgEliteWorms_Changed(object sender, System.EventArgs e)
         {
             bool SetTo = Honor_EliteWorms.Value == HonorWorms.Always;
-            if (!SetTo)
+            if (SetTo == false)
             {
-                SetTo = Honor_EliteWorms.Value == HonorWorms.Off && RunArtifactManager.instance && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.EliteOnly);
+                SetTo = Honor_EliteWorms.Value == HonorWorms.Honor && RunArtifactManager.instance && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.EliteOnly);
             }
+            SetTo = !SetTo;
             CharacterSpawnCard cscMagmaWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscMagmaWorm");
             cscMagmaWorm.noElites = SetTo;
             CharacterSpawnCard cscElectricWorm = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscElectricWorm");

@@ -1,5 +1,8 @@
 ## Changelog:
 ```
+v3.4.2
+Fixed Worm Elite config being applied inverted.
+
 v3.4.1
 Fixed latest patch breaking multiplayer with non mod owners due to Command choice of Elite Aspect.
 
