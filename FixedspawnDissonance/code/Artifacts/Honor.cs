@@ -255,7 +255,7 @@ namespace VanillaArtifactsPlus
                 {
                     if (minionEliteDefs.Count > 0)
                     {
-                        int index = Main.Random.Next(minionEliteDefs.Count);
+                        int index = VanillaArtifactsMain.Random.Next(minionEliteDefs.Count);
                         inventory.SetEquipmentIndex(minionEliteDefs[index].eliteEquipmentDef.equipmentIndex);
                         //inventory.GiveItem(RoR2Content.Items.BoostHp, (int)(minionEliteDefs[index].healthBoostCoefficient - 1) * 10);
                         //inventory.GiveItem(RoR2Content.Items.BoostDamage, (int)(minionEliteDefs[index].damageBoostCoefficient - 1) * 10);

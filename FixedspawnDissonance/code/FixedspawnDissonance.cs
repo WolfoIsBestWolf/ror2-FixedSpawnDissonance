@@ -15,7 +15,7 @@ namespace VanillaArtifactsPlus
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
 
 
-    public class Main : BaseUnityPlugin
+    public class VanillaArtifactsMain : BaseUnityPlugin
     {
         public static readonly System.Random Random = new System.Random();
         public static bool EnableNewContent = false;
@@ -126,9 +126,14 @@ namespace VanillaArtifactsPlus
                 Vengence.EnableEquipmentForVengence();
             }
 
+
+            WConfig.RiskConfig();
+
             DLC2Content.Items.KnockBackHitEnemies.tags = DLC2Content.Items.KnockBackHitEnemies.tags.Remove(ItemTag.DevotionBlacklist);
             DLC2Content.Items.IncreasePrimaryDamage.tags = DLC2Content.Items.IncreasePrimaryDamage.tags.Remove(ItemTag.DevotionBlacklist);
-            WConfig.RiskConfig();
+           HG.ArrayUtils.ArrayAppend(ref DLC1Content.Items.CloverVoid.tags, ItemTag.DevotionBlacklist);
+            HG.ArrayUtils.ArrayAppend(ref DLC2Content.Items.SpeedBoostPickup.tags, ItemTag.DevotionBlacklist);
+
         }
 
 

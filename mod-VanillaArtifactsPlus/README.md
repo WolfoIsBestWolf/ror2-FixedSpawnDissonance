@@ -34,18 +34,13 @@ Settings can be changed ingame via RiskOfOptions.
 				<br>
 				Void items can now be given to Eggs.<br>
 				<I>Config to also allow Lunar.</I><br>
-				Unblacklisted Breaching Fin and Luminious Shot & made them function on Lemurians.<br>
+				Unblacklisted Breaching Fin & Luminious Shot & made them function on Lemurians.<br>
+				Blacklisted some items that you may expect to work but don't. (Elusive Antler)<br>
 				<br>
 				Lemurians Teleport more often to get stuck less.<br>
-				Lemurians are now immune to fall, lava and void fog damage.<br>
+				Lemurians are now immune to fall, lava & void fog damage.<br>
+				Lemurians now expell Void Infestors at low health instead of dying to them.<br>
 				<br>
-				Fixes Twisted elites breaking when near ally players<br>
-				Fixes evolutions often giving 1 less item than intended until Lemurians are resynced.<br>
-				Fixes various item effects randomly disappearing. (Opal)<br>
-				Fixes Lemurians being unable to evolve when the artifact gets disabled. (ie leaving Ambry)<br>
-				Lemurians shouldn't randomly fail to evolve anymore due to better checks.<br>
-				<br>
-			</td>
 		</tr>
 		<tr>
 			<td align="center">
@@ -56,9 +51,12 @@ Settings can be changed ingame via RiskOfOptions.
 				<br>
 				Adds Hermit Crabs to the spawn pool.<br>
 				<br>
-				On Commencement, all monsters can spawn as Perfected.<br>
+				On Commencement, monsters can spawn as Perfected instead of regular elites.<br>
+				On Void Locust, monsters can spawn as Voidtouched.<br>
+				-Both have a small chance to happen on any stage.<br>
+				Halcyon Shrines will spawn a random monster instead of Golems.<br>
 				<br>
-				monsters with skins will have a random skin per stage. (Titan, Golem, etc.)<br>
+				Monsters with skins will have a random skin per stage. (Titan, Golem, etc.)<br>
 				Evens out the enemy categories for better balance.<br>
 				<br>
 			</td>

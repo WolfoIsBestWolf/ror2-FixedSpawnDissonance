@@ -62,6 +62,9 @@ namespace VanillaArtifactsPlus
         public static ConfigEntry<bool> DevotionAllowVoids;
         public static ConfigEntry<bool> DevotionAllowLunars;
 
+        public static ConfigEntry<bool> DevotionFlags;
+        public static ConfigEntry<bool> DevotionVoidInfestor;
+
         public static ConfigEntry<Content> cfgContent;
 
         public enum HonorWorms
@@ -318,6 +321,24 @@ namespace VanillaArtifactsPlus
                  "Devotion Void Items",
                  true,
                  "Allow Void Items to be given to Lemurians"
+             );
+            DevotionAllowLunars = ConfigFile.Bind(
+                 "Devotion",
+                 "Devotion Lunar Items",
+                 false,
+                 "Allow Lunar Items to be given to Lemurians"
+             );
+            DevotionFlags = ConfigFile.Bind(
+                 "Devotion",
+                 "No Environment Damage",
+                 true,
+                 "Makes Devoted Lemurians immune to Lava, Fall Damage and Void Fog, because the AI does not know they are getting hurt."
+             );
+            DevotionVoidInfestor = ConfigFile.Bind(
+                 "Devotion",
+                 "Expell Void Infestors",
+                 true,
+                 "Expell Void Infestors at low health. So that they dont instantly die to them but remain a threat."
              );
             DevotionAllowLunars = ConfigFile.Bind(
                  "Devotion",

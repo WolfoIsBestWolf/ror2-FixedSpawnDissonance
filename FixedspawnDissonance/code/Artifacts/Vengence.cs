@@ -124,7 +124,7 @@ namespace VanillaArtifactsPlus
                 SurvivorDef survivorDef = null;
                 do
                 {
-                    int randomint = Main.Random.Next(SurvivorCatalog.survivorCount);
+                    int randomint = VanillaArtifactsMain.Random.Next(SurvivorCatalog.survivorCount);
                     bodyIndex = SurvivorCatalog.GetBodyIndexFromSurvivorIndex((SurvivorIndex)randomint);
                     survivorDef = SurvivorCatalog.GetSurvivorDef((SurvivorIndex)randomint);
                 }
@@ -213,7 +213,7 @@ namespace VanillaArtifactsPlus
                 SurvivorDef survivorDef = null;
                 do
                 {
-                    int randomint = Main.Random.Next(SurvivorCatalog.survivorCount);
+                    int randomint = VanillaArtifactsMain.Random.Next(SurvivorCatalog.survivorCount);
                     bodyIndex = SurvivorCatalog.GetBodyIndexFromSurvivorIndex((SurvivorIndex)randomint);
                     survivorDef = SurvivorCatalog.GetSurvivorDef((SurvivorIndex)randomint);
                 }
@@ -227,7 +227,7 @@ namespace VanillaArtifactsPlus
         {
             if (self.itemCounts.invadingDoppelganger > 0)
             {
-                amount /= 2;
+                amount /= 3;
             }
             return orig(self, amount, procChainMask, nonRegen);
         }

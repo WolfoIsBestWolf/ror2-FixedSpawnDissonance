@@ -1,5 +1,22 @@
 ## Changelog:
 ```
+v3.4.3
+Dissonance:
+-Now affects Halcyon Shrines:
+-->Just 1 random mob, limited cost to spawn at least 5 monsters per shrine.
+-Void Locust now has a chance to spawn Voidtouched creatures.
+ 
+Fixed Dissonance Beetle Queen & Beetle Guard not spawning. (Mod issue)
+
+Devotion:
+-Added AlliesAvoidVoidImplosions as dependency so they can avoid Void Implosions.
+-Devoted Lemurians now expell Void Infestors at low health.
+--Leaves them as a big threat
+--They may juggle between lemurians
+--But no longer an instant kill to something that is sometimes impossible to prevent.
+ 
+ 
+
 v3.4.2
 Fixed Worm Elite config being applied inverted.
 
