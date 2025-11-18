@@ -15,10 +15,10 @@ using UnityEngine.Networking;
 
 namespace VanillaArtifactsPlus
 {
-   /* public class DevotionEquipmentHolder
+    public class DevotionEquipmentHolder
     {
         public EquipmentIndex equipmentIndex = EquipmentIndex.None;
-    }*/
+    }
     public class Devotion
     {
 
@@ -49,13 +49,12 @@ namespace VanillaArtifactsPlus
                 bodyE.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
                 bodyL.bodyFlags |= CharacterBody.BodyFlags.ImmuneToLava;
                 bodyE.bodyFlags |= CharacterBody.BodyFlags.ImmuneToLava;
-                /*
                 bodyL.bodyFlags |= CharacterBody.BodyFlags.ImmuneToVoidDeath;
                 bodyE.bodyFlags |= CharacterBody.BodyFlags.ImmuneToVoidDeath;
-                bodyL.bodyFlags |= CharacterBody.BodyFlags.ImmuneToExecutes;
+                /*bodyL.bodyFlags |= CharacterBody.BodyFlags.ImmuneToExecutes;
                 bodyE.bodyFlags |= CharacterBody.BodyFlags.ImmuneToExecutes;
-                */
-                IL.RoR2.FogDamageController.MyFixedUpdate += NoFogLemurianDamage;
+               */
+        
             }
           
             bodyL.lavaCooldown = 2;
@@ -120,8 +119,36 @@ namespace VanillaArtifactsPlus
             {
                 IL.RoR2.HealthComponent.UpdateLastHitTime += ExpellVoidInfestorsAtLow;
             }
-            
+            RunArtifactManager.onArtifactEnabledGlobal += DevotionInventoryController.OnDevotionArtifactEnabled;
+            RunArtifactManager.onArtifactDisabledGlobal += DevotionInventoryController.OnDevotionArtifactDisabled;
         }
+
+        private static void OnDevotionArtifactEnabled(RunArtifactManager runArtifactManager, ArtifactDef artifactDef)
+        {
+            //Add and remove based on context because also would remove drone fog damage now.
+            if (artifactDef != CU8Content.Artifacts.Devotion)
+            {
+                return;
+            }
+            if (WConfig.DevotionFlags.Value)
+            {
+                IL.RoR2.FogDamageController.MyFixedUpdate += NoFogLemurianDamage;
+            }
+        }
+
+        private static void OnDevotionArtifactDisabled(RunArtifactManager runArtifactManager, ArtifactDef artifactDef)
+        {
+            if (artifactDef != CU8Content.Artifacts.Devotion)
+            {
+                return;
+            }
+            if (WConfig.DevotionFlags.Value)
+            {
+                IL.RoR2.FogDamageController.MyFixedUpdate -= NoFogLemurianDamage;
+            }
+        }
+
+
 
         private static void ExpellVoidInfestorsAtLow(ILContext il)
         {
@@ -150,7 +177,7 @@ namespace VanillaArtifactsPlus
                                 }
                                 else
                                 {
-                                    self.body.inventory.SetEquipmentIndex(EquipmentIndex.None);
+                                    self.body.inventory.SetEquipmentIndex(EquipmentIndex.None, true);
                                 }
                                 BaseAI component = self.body.master.GetComponent<BaseAI>();
                                 if (component)

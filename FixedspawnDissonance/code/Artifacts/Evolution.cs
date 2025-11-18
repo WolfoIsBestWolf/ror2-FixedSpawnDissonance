@@ -66,7 +66,7 @@ namespace VanillaArtifactsPlus
             ILCursor c = new ILCursor(il);
             if (c.TryGotoNext(MoveType.Before,
                 x => x.MatchLdcI4(1),
-                x => x.MatchCallvirt("RoR2.Inventory", "GiveItem")))
+                x => x.MatchCallvirt("RoR2.Inventory", "GiveItemPermanent")))
             {
                 c.EmitDelegate<System.Func<ItemIndex, ItemIndex>>((item) =>
                 {

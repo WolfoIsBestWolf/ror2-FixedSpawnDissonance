@@ -6,9 +6,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
 using UnityEngine.Networking;
-using WolfoFixes;
-using static RoR2.Skills.ComboSkillDef;
-
+ 
 namespace VanillaArtifactsPlus
 {
     public class Dissonance
@@ -198,14 +196,7 @@ namespace VanillaArtifactsPlus
                 minimumStageCompletions = 0,
                 spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
             };
-            DirectorCard DSHermitCrab = new DirectorCard
-            {
-                spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscHermitCrab"),
-                selectionWeight = 1,
-                preventOverhead = false,
-                minimumStageCompletions = 0,
-                spawnDistance = DirectorCore.MonsterSpawnDistance.Far
-            };
+ 
 
             dccsMixEnemy.categories[0].selectionWeight = 3;
             dccsMixEnemy.categories[1].selectionWeight = 3;
@@ -228,24 +219,24 @@ namespace VanillaArtifactsPlus
 
             DissoGolem = dccsMixEnemy.categories[1].cards[5];
             DissoTitan = dccsMixEnemy.categories[0].cards[9];
+ 
+            dccsMixEnemy.AddCard(0, dccsMixEnemy.categories[1].cards[10]); //Move Lunar Wisp to Boss
+            dccsMixEnemy.AddCard(0, dccsMixEnemy.categories[1].cards[14]); //Move Halcyonite to Boss
+         
+            HG.ArrayUtils.ArrayRemoveAtAndResize(ref dccsMixEnemy.categories[1].cards, 10);
+            HG.ArrayUtils.ArrayRemoveAtAndResize(ref dccsMixEnemy.categories[1].cards, 14);
 
-            DirectorCard SolusProbeTemp = null;
-            DirectorCard LunarWispTemp = null;
-
-            SolusProbeTemp = dccsMixEnemy.categories[2].cards[10];
-            dccsMixEnemy.categories[2].cards[10] = DSHermitCrab;
-
-            LunarWispTemp = dccsMixEnemy.categories[1].cards[10];
-            dccsMixEnemy.categories[1].cards[10] = SolusProbeTemp;
-
-            dccsMixEnemy.AddCard(0, LunarWispTemp); //Lunar Wisp Boss
 
             dccsMixEnemy.categories[2].cards[9].spawnDistance = DirectorCore.MonsterSpawnDistance.Close;
             dccsMixEnemy.categories[2].cards[12].spawnDistance = DirectorCore.MonsterSpawnDistance.Close;
 
-
-            return;
-
+            dccsMixEnemy.AddCard(2, new DirectorCard
+            {
+                spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscHermitCrab"),
+                selectionWeight = 1,
+                spawnDistance = DirectorCore.MonsterSpawnDistance.Far
+            });
+         
         }
 
         public static List<SpawnCard> LunarifiedList;

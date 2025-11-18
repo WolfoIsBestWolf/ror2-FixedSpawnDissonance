@@ -131,9 +131,7 @@ namespace VanillaArtifactsPlus
 
             DLC2Content.Items.KnockBackHitEnemies.tags = DLC2Content.Items.KnockBackHitEnemies.tags.Remove(ItemTag.DevotionBlacklist);
             DLC2Content.Items.IncreasePrimaryDamage.tags = DLC2Content.Items.IncreasePrimaryDamage.tags.Remove(ItemTag.DevotionBlacklist);
-           HG.ArrayUtils.ArrayAppend(ref DLC1Content.Items.CloverVoid.tags, ItemTag.DevotionBlacklist);
-            HG.ArrayUtils.ArrayAppend(ref DLC2Content.Items.SpeedBoostPickup.tags, ItemTag.DevotionBlacklist);
-
+       
         }
 
 

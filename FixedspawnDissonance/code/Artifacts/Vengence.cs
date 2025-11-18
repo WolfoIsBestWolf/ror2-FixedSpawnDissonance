@@ -10,14 +10,14 @@ namespace VanillaArtifactsPlus
 {
     public class Vengence
     {
-        public static List<ItemDef> removeAllItems;
-        public static List<ItemDef> limitTheseItemsDmg;
-        public static List<ItemDef> limitTheseItemsHpSpeed;
+        public static List<ItemDef> vengenceBlacklist;
+        //public static List<ItemDef> limitTheseItemsDmg;
+        //public static List<ItemDef> limitTheseItemsHpSpeed;
 
         public static void OnArtifactEnable()
         {
             On.RoR2.HealthComponent.Heal += Vengence.Umbra_HalfHealing;
-            removeAllItems = new List<ItemDef> 
+            vengenceBlacklist = new List<ItemDef> 
             {
                 RoR2Content.Items.BoostDamage,
                 RoR2Content.Items.BoostHp,
@@ -28,7 +28,7 @@ namespace VanillaArtifactsPlus
                 DLC1Content.Items.ExtraLifeVoid,
                 DLC1Content.Items.HealingPotion,
             };
-            limitTheseItemsDmg = new List<ItemDef>
+            /*limitTheseItemsDmg = new List<ItemDef>
             {
                 RoR2Content.Items.CritGlasses,
                 RoR2Content.Items.BleedOnHit,
@@ -77,15 +77,15 @@ namespace VanillaArtifactsPlus
                 DLC1Content.Items.ImmuneToDebuff,
                 DLC1Content.Items.MushroomVoid,
                 DLC1Content.Items.LunarSun,
-            };
+            };*/
             
         }
         public static void OnArtifactDisable()
         {
             On.RoR2.HealthComponent.Heal -= Vengence.Umbra_HalfHealing;
-            removeAllItems = null;
-            limitTheseItemsDmg = null;
-            limitTheseItemsHpSpeed = null;
+            vengenceBlacklist = null;
+            //limitTheseItemsDmg = null;
+            //limitTheseItemsHpSpeed = null;
         }
 
         public static void Start()
@@ -100,14 +100,14 @@ namespace VanillaArtifactsPlus
 
                 dtShadowClone.canDropBeReplaced = false;
                 dtShadowClone.tier1Weight = 0.1f;
-                dtShadowClone.tier2Weight = 60;
-                dtShadowClone.tier3Weight = 30;
-                dtShadowClone.bossWeight = 30;
+                dtShadowClone.tier2Weight = 80;
+                dtShadowClone.tier3Weight = 20;
+                dtShadowClone.bossWeight = 20;
                 dtShadowClone.lunarItemWeight = 0.1f;
-                dtShadowClone.voidTier1Weight = 0.1f;
-                dtShadowClone.voidTier2Weight = 40;
-                dtShadowClone.voidTier3Weight = 20;
-                dtShadowClone.voidBossWeight = 30;
+                dtShadowClone.voidTier1Weight = 10f;
+                dtShadowClone.voidTier2Weight = 30;
+                dtShadowClone.voidTier3Weight = 10;
+                dtShadowClone.voidBossWeight = 10;
 
                 //Allows Dios to drop, I suppose same could maybe done for Elixirs 
                 On.RoR2.DoppelgangerDropTable.GenerateWeightedSelection += DoppelGanger_AllowDiosDrop;
@@ -190,7 +190,7 @@ namespace VanillaArtifactsPlus
                         foruseItemindex = RoR2Content.Items.ExtraLife.itemIndex;
 
                         PickupIndex pickupIndex = PickupCatalog.FindPickupIndex(foruseItemindex);
-                        self.selector.AddChoice(pickupIndex, self.tier3Weight);
+                        self.selector.AddChoice(new UniquePickup(pickupIndex), self.tier3Weight);
                     }
                     else if (itemDef == DLC1Content.Items.ExtraLifeVoidConsumed)
                     {
@@ -198,7 +198,7 @@ namespace VanillaArtifactsPlus
                         foruseItemindex = DLC1Content.Items.ExtraLifeVoid.itemIndex;
 
                         PickupIndex pickupIndex = PickupCatalog.FindPickupIndex(foruseItemindex);
-                        self.selector.AddChoice(pickupIndex, self.voidTier3Weight);
+                        self.selector.AddChoice(new UniquePickup(pickupIndex), self.voidTier3Weight);
                     }
                 }
             }
@@ -239,7 +239,7 @@ namespace VanillaArtifactsPlus
                 ItemDef tempDef = ItemCatalog.GetItemDef(inventory.itemAcquisitionOrder[i]);
                 if (tempDef.ContainsTag(ItemTag.CannotCopy) || tempDef.ContainsTag(ItemTag.OnKillEffect) || tempDef.ContainsTag(ItemTag.AIBlacklist) || tempDef.ContainsTag(ItemTag.BrotherBlacklist))
                 {
-                    inventory.RemoveItem(tempDef, inventory.GetItemCount(tempDef));
+                    inventory.RemoveItemPermanent(tempDef, inventory.GetItemCountPermanent(tempDef));
                 }
             }
             if (WConfig.VengenceBlacklist.Value == false)
@@ -247,37 +247,30 @@ namespace VanillaArtifactsPlus
                 return;
             }
             int itemLimitDefense = (1+Run.instance.loopClearCount)*2;
-            foreach (ItemDef itemDef in removeAllItems)
+            foreach (ItemDef itemDef in vengenceBlacklist)
             {
-                inventory.RemoveItem(itemDef, inventory.GetItemCount(itemDef));
+                inventory.RemoveItemPermanent(itemDef, inventory.GetItemCountPermanent(itemDef));
             }
-            foreach (ItemDef itemDef in limitTheseItemsDmg)
+            for (int i = 0; i < inventory.itemAcquisitionOrder.Count; i++)
             {
-                int itemCount = inventory.GetItemCount(itemDef);
+                int itemCount = inventory.GetItemCountPermanent(inventory.itemAcquisitionOrder[i]);
                 if (itemCount > 1)
                 {
-                    inventory.RemoveItem(itemDef, itemCount / 2);
+                    inventory.RemoveItemPermanent(inventory.itemAcquisitionOrder[i], itemCount / 2);
                 }
             }
-            foreach (ItemDef itemDef in limitTheseItemsHpSpeed)
-            {
-                int itemCount = inventory.GetItemCount(itemDef);
-                if (itemCount > itemLimitDefense)
-                {
-                    inventory.RemoveItem(itemDef, itemCount - itemLimitDefense);
-                }
-            }
+ 
 
         
 
 
             if (inventory.currentEquipmentIndex == RoR2Content.Equipment.BurnNearby.equipmentIndex)
             {
-                inventory.SetEquipmentIndex(EquipmentIndex.None);
+                inventory.SetEquipmentIndex(EquipmentIndex.None, true);
             }
             else if (inventory.currentEquipmentIndex == DLC2Content.Equipment.HealAndRevive.equipmentIndex)
             {
-                inventory.SetEquipmentIndex(EquipmentIndex.None);
+                inventory.SetEquipmentIndex(EquipmentIndex.None, true);
             }
         }
  

@@ -31,10 +31,10 @@ namespace VanillaArtifactsPlus
                 {
                     On.RoR2.CharacterBody.OnOutOfDangerChanged += Honor.PreventPerfectedMithrixFromRegenningShield;
                 }
-                if (WConfig.Honor_EliteMinions.Value)
+                /*if (WConfig.Honor_EliteMinions.Value)
                 {
                     On.RoR2.MinionOwnership.MinionGroup.AddMinion += Honor.MinionsInheritHonor;
-                }
+                }*/
             }
         }
 
@@ -46,10 +46,10 @@ namespace VanillaArtifactsPlus
             {
                 On.RoR2.CharacterBody.OnOutOfDangerChanged -= Honor.PreventPerfectedMithrixFromRegenningShield;
             }
-            if (WConfig.Honor_EliteMinions.Value)
+           /* if (WConfig.Honor_EliteMinions.Value)
             {
                 On.RoR2.MinionOwnership.MinionGroup.AddMinion -= Honor.MinionsInheritHonor;
-            }
+            }*/
         }
 
    
@@ -70,10 +70,10 @@ namespace VanillaArtifactsPlus
                         }
                     }
                 }
-                if (WConfig.Honor_EliteMinionsNoGilded.Value)
+                /*if (WConfig.Honor_EliteMinionsNoGilded.Value)
                 {
                     minionEliteDefs.Remove(DLC2Content.Elites.AurelioniteHonor);
-                }
+                }*/
             }
             else
             {
@@ -190,6 +190,11 @@ namespace VanillaArtifactsPlus
             orig(self);
             if (RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.EliteOnly))
             {
+                if (self.rng.nextNormalizedFloat < 0.70f)
+                {
+                    return;
+                }
+
                 if (!WConfig.Honor_PerfectMithrix.Value)
                 {
                     return;

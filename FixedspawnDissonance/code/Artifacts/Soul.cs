@@ -216,7 +216,7 @@ namespace VanillaArtifactsPlus
 
             LunarSoulBody.portraitIcon = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/soulLunar.png");
             LunarSoulBody.baseNameToken = "SOULBOSSWISP_BODY_NAME";
-
+            LunarSoulBody.subtitleNameToken = "";
             SoulLunarWispMaster.AddComponent<MasterSuicideOnTimer>().lifeTimer = 32f;
             SoulLunarWispMaster.GetComponent<BaseAI>().fullVision = true;
             SoulLunarWispBody.transform.GetChild(0).GetChild(0).GetComponent<ModelSkinController>().skins[0] = skinLunarSoul;

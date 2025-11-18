@@ -1,5 +1,16 @@
 ## Changelog:
 ```
+v3.5.0
+Fixed for DLC3.
+Made Devoted Lemurians immune to Void Implosions
+Honor Perfected Mithrix now a 30% chance instead of guaranteed, to more match vanilla.
+
+Removed AlliesAvoidVoidImplosions as dependency
+Removed Honor making minions & drones elite.
+Removed Soul Wisps & Enigma Fragments from log.
+Fixed Void Reavers Horde being able to drop Newly Hatched Zoea without DLC1.
+
+
 v3.4.3
 Dissonance:
 -Now affects Halcyon Shrines:

@@ -39,8 +39,8 @@ namespace VanillaArtifactsPlus
         public static ConfigEntry<HonorWorms> Honor_EliteWorms;
  
         public static ConfigEntry<bool> Honor_PerfectMithrix;
-        public static ConfigEntry<bool> Honor_EliteMinions;
-        public static ConfigEntry<bool> Honor_EliteMinionsNoGilded;
+        //public static ConfigEntry<bool> Honor_EliteMinions;
+        //public static ConfigEntry<bool> Honor_EliteMinionsNoGilded;
         public static ConfigEntry<bool> Honor_RedoneElites;
 
         public static ConfigEntry<bool> VengenceEquipment;
@@ -97,14 +97,14 @@ namespace VanillaArtifactsPlus
 
             DisplayEnigmaInLog = ConfigFile.Bind(
                  ": Main :",
-                 "Enigma Fragment in Logbook",
-                 true,
+                 "Enigma Fragment in Log",
+                 false,
                  "Show the 2 Enigma Fragments in the logbook."
              );
             DisplaySoulInLog = ConfigFile.Bind(
                 ": Main :",
-                "Soul Wisps in Logbook",
-                true,
+                "Soul Wisps in Log",
+                false,
                 "Show the 3 Soul Wisps in the logbook."
             );
 
@@ -204,9 +204,9 @@ namespace VanillaArtifactsPlus
                 "Honor",
                 "Final Bosses specific elite type",
                 true,
-                "Perfected Mithrix, Voidtouched Voidling, Gilded False Son."
+                "Makes final bosses have a 30% chance to spawn as specific elite type. Perfected Mithrix, Voidtouched Voidling, Gilded False Son."
             );
-            Honor_EliteMinions = ConfigFile.Bind(
+            /*Honor_EliteMinions = ConfigFile.Bind(
                 "Honor",
                 "Force Minions to be Elite",
                 true,
@@ -217,7 +217,7 @@ namespace VanillaArtifactsPlus
                 "Minions no Gilded",
                 true,
                 "Remove Gilded from the allowed pool of Minion elites. For the previous config."
-            );
+            );*/
             Honor_RedoneElites = ConfigFile.Bind(
                 "Honor",
                 "Honor affect all elite types",
@@ -416,8 +416,8 @@ namespace VanillaArtifactsPlus
 
 
             ModSettingsManager.AddOption(new CheckBoxOption(Honor_PerfectMithrix, false));
-            ModSettingsManager.AddOption(new CheckBoxOption(Honor_EliteMinions, false));
-            ModSettingsManager.AddOption(new CheckBoxOption(Honor_EliteMinionsNoGilded, false));
+            //ModSettingsManager.AddOption(new CheckBoxOption(Honor_EliteMinions, false));
+            //ModSettingsManager.AddOption(new CheckBoxOption(Honor_EliteMinionsNoGilded, false));
             ModSettingsManager.AddOption(new CheckBoxOption(Honor_RedoneElites, false));
 
 

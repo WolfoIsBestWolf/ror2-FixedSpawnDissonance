@@ -53,7 +53,6 @@ Settings can be changed ingame via RiskOfOptions.
 				<br>
 				On Commencement, monsters can spawn as Perfected instead of regular elites.<br>
 				On Void Locust, monsters can spawn as Voidtouched.<br>
-				-Both have a small chance to happen on any stage.<br>
 				Halcyon Shrines will spawn a random monster instead of Golems.<br>
 				<br>
 				Monsters with skins will have a random skin per stage. (Titan, Golem, etc.)<br>
@@ -86,13 +85,10 @@ Settings can be changed ingame via RiskOfOptions.
 				Makes all elite types cheaper and weaker not just Tier 1.<br>
 				Allows for more modded elite types to spawn.<br>
 				<br>
-				Final bosses will be asigned a specific elite type. (Perfected Mithrix, Voidtouched Voidling)<br>
+				Final bosses have a 30% chance to spawn as a specific elite type. (Perfected Mithrix, Voidtouched Voidling)<br>
 				<br>
 				Worms now spawn as Elite instead of not at all.<br>
 				<i>Config to also allow Elite Worms in regular gameplay</i><br>
-				<br>
-				Minions will be given a elite aspect but without stat boosts.<br>
-				<br>
 			</td>
 		</tr>
 		<tr>
