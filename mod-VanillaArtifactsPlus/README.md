@@ -32,14 +32,14 @@ Settings can be changed ingame via RiskOfOptions.
 				<br>
 				Adds a inventory display for the Lemurians to the scoreboard screen. (Tab)<br>
 				<br>
+				Meal items can now be given to Eggs.<br>
 				Void items can now be given to Eggs.<br>
 				<I>Config to also allow Lunar.</I><br>
 				Unblacklisted Breaching Fin & Luminious Shot & made them function on Lemurians.<br>
 				Blacklisted some items that you may expect to work but don't. (Elusive Antler)<br>
 				<br>
 				Lemurians Teleport more often to get stuck less.<br>
-				Lemurians are now immune to fall, lava & void fog damage.<br>
-				Lemurians now expell Void Infestors at low health instead of dying to them.<br>
+				Lemurians are now immune to fall, lava & void fog, void implosions damage.<br>
 				<br>
 		</tr>
 		<tr>
@@ -111,11 +111,7 @@ Settings can be changed ingame via RiskOfOptions.
 				<img src="https://riskofrain2.wiki.gg/images/thumb/5/54/Artifact_of_Rebirth.png/64px-Artifact_of_Rebirth.png" width=64>
 			</td>
 			<td>
-				Endlessly cycle Rebirth.<br>
-				If a run ends with Rebirth on, death or victory, a random item from that run will be the new Rebirth item.<br>
-				(if it isn't the Rebirth ending)<br>
-				<br>
-				Can now be given Void and Lunar items.<br>
+				Can now be given Lunar, Void & Meal items.<br>
 			</td>
 		</tr>
 		<tr>
@@ -165,7 +161,7 @@ Settings can be changed ingame via RiskOfOptions.
 				Umbras scale with Player Level instead of Monster level.<br>
 				Umbras recieve less healing.<br>
 				<br>
-				Umbras always drop a high tier item.<br>
+				Umbras likelier to drop Uncommon item.<br>
 				<br>
 				Umbra + Metamorphosis will result in a random Umbra.<br>
 				<i>Config for this to always happen</i>

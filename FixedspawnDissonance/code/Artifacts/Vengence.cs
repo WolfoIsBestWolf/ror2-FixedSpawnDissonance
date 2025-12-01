@@ -90,8 +90,7 @@ namespace VanillaArtifactsPlus
 
         public static void Start()
         {
-      
-            On.RoR2.Artifacts.DoppelgangerSpawnCard.FromMaster += DoppelgangerSpawnCard_FromMaster;
+    
             On.RoR2.Artifacts.DoppelgangerSpawnCard.FromMaster += VengenceMetamorphosisSynergy;
 
             if (WConfig.VengenceGoodDrop.Value == true)
@@ -114,28 +113,8 @@ namespace VanillaArtifactsPlus
             }
 
         }
-
-        private static DoppelgangerSpawnCard DoppelgangerSpawnCard_FromMaster(On.RoR2.Artifacts.DoppelgangerSpawnCard.orig_FromMaster orig, CharacterMaster srcCharacterMaster)
-        {
-            DoppelgangerSpawnCard tempCSC = orig(srcCharacterMaster);
-            if (RunArtifactManager.instance && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.RandomSurvivorOnRespawn))
-            {
-                BodyIndex bodyIndex = BodyIndex.None;
-                SurvivorDef survivorDef = null;
-                do
-                {
-                    int randomint = VanillaArtifactsMain.Random.Next(SurvivorCatalog.survivorCount);
-                    bodyIndex = SurvivorCatalog.GetBodyIndexFromSurvivorIndex((SurvivorIndex)randomint);
-                    survivorDef = SurvivorCatalog.GetSurvivorDef((SurvivorIndex)randomint);
-                }
-                while (survivorDef.hidden == true);
-                tempCSC.prefab = MasterCatalog.GetMasterPrefab(MasterCatalog.FindAiMasterIndexForBody(bodyIndex));
-            }
-            tempCSC.onPreSpawnSetup += OnPreSpawnSetup;
-            srcCharacterMasterTEMP = srcCharacterMaster;
-            return tempCSC;
-        }
-
+ 
+        //WHY DOES THIS NTO RUN??
         private static CharacterMaster srcCharacterMasterTEMP;
         public static void OnPreSpawnSetup(CharacterMaster master)
         {
@@ -146,9 +125,9 @@ namespace VanillaArtifactsPlus
             if (WConfig.VenganceHealthRebalance.Value == true)
             {
                 master.onBodyStart += OnDoppelgangerBody;
-                master.inventory.RemoveItem(RoR2Content.Items.UseAmbientLevel, master.inventory.GetItemCount(RoR2Content.Items.UseAmbientLevel));
-                master.inventory.GiveItem(RoR2Content.Items.LevelBonus, (int)TeamManager.instance.GetTeamLevel(TeamIndex.Player));
-                master.inventory.GiveItem(RoR2Content.Items.AdaptiveArmor);
+                master.inventory.RemoveItemPermanent(RoR2Content.Items.UseAmbientLevel, master.inventory.GetItemCountPermanent(RoR2Content.Items.UseAmbientLevel));
+                master.inventory.GiveItemPermanent(RoR2Content.Items.LevelBonus, (int)TeamManager.instance.GetTeamLevel(TeamIndex.Player));
+                master.inventory.GiveItemPermanent(RoR2Content.Items.AdaptiveArmor);
             }
 
             if (WConfig.VengenceGoodDrop.Value == true)
@@ -157,9 +136,9 @@ namespace VanillaArtifactsPlus
                 temporder.AddRange(srcCharacterMasterTEMP.inventory.itemAcquisitionOrder);
                 master.inventory.itemAcquisitionOrder = temporder;
                 temporder.Remove(RoR2Content.Items.ExtraLifeConsumed.itemIndex);
-                master.inventory.RemoveItem(RoR2Content.Items.ExtraLifeConsumed, 10000);
+                master.inventory.RemoveItemPermanent(RoR2Content.Items.ExtraLifeConsumed, 10000);
                 temporder.Remove(DLC1Content.Items.ExtraLifeVoidConsumed.itemIndex);
-                master.inventory.RemoveItem(DLC1Content.Items.ExtraLifeVoidConsumed, 10000);
+                master.inventory.RemoveItemPermanent(DLC1Content.Items.ExtraLifeVoidConsumed, 10000);
                 master.inventory.itemAcquisitionOrder = temporder;
             }
         }
@@ -181,25 +160,30 @@ namespace VanillaArtifactsPlus
             {
                 foreach (ItemIndex itemIndex in self.doppelgangerInventory.itemAcquisitionOrder)
                 {
-                    ItemIndex foruseItemindex = itemIndex;
                     ItemDef itemDef = ItemCatalog.GetItemDef(itemIndex);
-
-                    if (itemDef == RoR2Content.Items.ExtraLifeConsumed)
+                    if (itemDef)
                     {
-                        itemDef = RoR2Content.Items.ExtraLife;
-                        foruseItemindex = RoR2Content.Items.ExtraLife.itemIndex;
-
-                        PickupIndex pickupIndex = PickupCatalog.FindPickupIndex(foruseItemindex);
-                        self.selector.AddChoice(new UniquePickup(pickupIndex), self.tier3Weight);
-                    }
-                    else if (itemDef == DLC1Content.Items.ExtraLifeVoidConsumed)
-                    {
-                        itemDef = DLC1Content.Items.ExtraLifeVoid;
-                        foruseItemindex = DLC1Content.Items.ExtraLifeVoid.itemIndex;
-
-                        PickupIndex pickupIndex = PickupCatalog.FindPickupIndex(foruseItemindex);
-                        self.selector.AddChoice(new UniquePickup(pickupIndex), self.voidTier3Weight);
-                    }
+                        if (itemDef == RoR2Content.Items.ExtraLifeConsumed)
+                        {
+                            PickupIndex pickupIndex = PickupCatalog.FindPickupIndex(RoR2Content.Items.ExtraLife.itemIndex);
+                            self.selector.AddChoice(new UniquePickup(pickupIndex), self.tier3Weight);
+                        }
+                        else if (itemDef == DLC1Content.Items.ExtraLifeVoidConsumed)
+                        {
+                            PickupIndex pickupIndex = PickupCatalog.FindPickupIndex(DLC1Content.Items.ExtraLifeVoid.itemIndex);
+                            self.selector.AddChoice(new UniquePickup(pickupIndex), self.voidTier3Weight);
+                        }
+                        else if (itemDef == DLC2Content.Items.LowerPricedChestsConsumed)
+                        {
+                            PickupIndex pickupIndex = PickupCatalog.FindPickupIndex(DLC2Content.Items.LowerPricedChests.itemIndex);
+                            self.selector.AddChoice(new UniquePickup(pickupIndex), self.tier3Weight);
+                        }
+                        else if (itemDef == DLC2Content.Items.TeleportOnLowHealthConsumed)
+                        {
+                            PickupIndex pickupIndex = PickupCatalog.FindPickupIndex(DLC2Content.Items.TeleportOnLowHealth.itemIndex);
+                            self.selector.AddChoice(new UniquePickup(pickupIndex), self.voidTier3Weight);
+                        }
+                    }          
                 }
             }
         }
@@ -207,18 +191,28 @@ namespace VanillaArtifactsPlus
         private static DoppelgangerSpawnCard VengenceMetamorphosisSynergy(On.RoR2.Artifacts.DoppelgangerSpawnCard.orig_FromMaster orig, CharacterMaster srcCharacterMaster)
         {
             DoppelgangerSpawnCard tempspawncard = orig(srcCharacterMaster);
-            if (WConfig.VengenceAlwaysRandom.Value || RunArtifactManager.instance && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.RandomSurvivorOnRespawn))
+            try
             {
-                BodyIndex bodyIndex = BodyIndex.None;
-                SurvivorDef survivorDef = null;
-                do
+                if (WConfig.VengenceAlwaysRandom.Value || RunArtifactManager.instance && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.RandomSurvivorOnRespawn))
                 {
-                    int randomint = VanillaArtifactsMain.Random.Next(SurvivorCatalog.survivorCount);
-                    bodyIndex = SurvivorCatalog.GetBodyIndexFromSurvivorIndex((SurvivorIndex)randomint);
-                    survivorDef = SurvivorCatalog.GetSurvivorDef((SurvivorIndex)randomint);
+                    BodyIndex bodyIndex = BodyIndex.None;
+                    SurvivorDef survivorDef = null;
+                    do
+                    {
+                        int randomint = VanillaArtifactsMain.Random.Next(SurvivorCatalog.survivorCount);
+                        bodyIndex = SurvivorCatalog.GetBodyIndexFromSurvivorIndex((SurvivorIndex)randomint);
+                        survivorDef = SurvivorCatalog.GetSurvivorDef((SurvivorIndex)randomint);
+                    }
+                    while (survivorDef.hidden == true);
+                    tempspawncard.prefab = MasterCatalog.GetMasterPrefab(MasterCatalog.FindAiMasterIndexForBody(bodyIndex));
                 }
-                while (survivorDef.hidden == true);
-                tempspawncard.prefab = MasterCatalog.GetMasterPrefab(MasterCatalog.FindAiMasterIndexForBody(bodyIndex));
+                tempspawncard.onPreSpawnSetup += OnPreSpawnSetup;
+                srcCharacterMasterTEMP = srcCharacterMaster;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning(e); 
+                return tempspawncard;
             }
             return tempspawncard;
         }
@@ -234,44 +228,48 @@ namespace VanillaArtifactsPlus
 
         private static void VenganceItemFilter(Inventory inventory)
         {
-            for (int i = 0; i < inventory.itemAcquisitionOrder.Count; i++)
+            try
             {
-                ItemDef tempDef = ItemCatalog.GetItemDef(inventory.itemAcquisitionOrder[i]);
-                if (tempDef.ContainsTag(ItemTag.CannotCopy) || tempDef.ContainsTag(ItemTag.OnKillEffect) || tempDef.ContainsTag(ItemTag.AIBlacklist) || tempDef.ContainsTag(ItemTag.BrotherBlacklist))
+                for (int i = 0; i < inventory.itemAcquisitionOrder.Count; i++)
                 {
-                    inventory.RemoveItemPermanent(tempDef, inventory.GetItemCountPermanent(tempDef));
+                    ItemDef tempDef = ItemCatalog.GetItemDef(inventory.itemAcquisitionOrder[i]);
+                    if (tempDef.ContainsTag(ItemTag.CannotCopy) || tempDef.ContainsTag(ItemTag.OnKillEffect) || tempDef.ContainsTag(ItemTag.AIBlacklist) || tempDef.ContainsTag(ItemTag.BrotherBlacklist))
+                    {
+                        inventory.RemoveItemPermanent(tempDef, inventory.GetItemCountPermanent(tempDef));
+                    }
+                }
+                if (WConfig.VengenceBlacklist.Value == false)
+                {
+                    return;
+                }
+                //int itemLimitDefense = (1+Run.instance.loopClearCount)*2;
+                foreach (ItemDef itemDef in vengenceBlacklist)
+                {
+                    inventory.RemoveItemPermanent(itemDef, inventory.GetItemCountPermanent(itemDef));
+                }
+                for (int i = 0; i < inventory.itemAcquisitionOrder.Count; i++)
+                {
+                    int itemCount = inventory.GetItemCountPermanent(inventory.itemAcquisitionOrder[i]);
+                    if (itemCount > 1)
+                    {
+                        inventory.RemoveItemPermanent(inventory.itemAcquisitionOrder[i], itemCount / 2);
+                    }
+                }
+
+                if (inventory.currentEquipmentIndex == RoR2Content.Equipment.BurnNearby.equipmentIndex)
+                {
+                    inventory.SetEquipmentIndex(EquipmentIndex.None, true);
+                }
+                else if (inventory.currentEquipmentIndex == DLC2Content.Equipment.HealAndRevive.equipmentIndex)
+                {
+                    inventory.SetEquipmentIndex(EquipmentIndex.None, true);
                 }
             }
-            if (WConfig.VengenceBlacklist.Value == false)
+            catch (System.Exception e)
             {
-                return;
+                Debug.LogWarning(e);
             }
-            int itemLimitDefense = (1+Run.instance.loopClearCount)*2;
-            foreach (ItemDef itemDef in vengenceBlacklist)
-            {
-                inventory.RemoveItemPermanent(itemDef, inventory.GetItemCountPermanent(itemDef));
-            }
-            for (int i = 0; i < inventory.itemAcquisitionOrder.Count; i++)
-            {
-                int itemCount = inventory.GetItemCountPermanent(inventory.itemAcquisitionOrder[i]);
-                if (itemCount > 1)
-                {
-                    inventory.RemoveItemPermanent(inventory.itemAcquisitionOrder[i], itemCount / 2);
-                }
-            }
- 
 
-        
-
-
-            if (inventory.currentEquipmentIndex == RoR2Content.Equipment.BurnNearby.equipmentIndex)
-            {
-                inventory.SetEquipmentIndex(EquipmentIndex.None, true);
-            }
-            else if (inventory.currentEquipmentIndex == DLC2Content.Equipment.HealAndRevive.equipmentIndex)
-            {
-                inventory.SetEquipmentIndex(EquipmentIndex.None, true);
-            }
         }
  
         public static void EnableEquipmentForVengence()

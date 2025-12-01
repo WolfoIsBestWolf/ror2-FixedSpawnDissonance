@@ -12,7 +12,7 @@ namespace VanillaArtifactsPlus
             if (WConfig.RebirthChanges.Value)
             {
                 //Rebirth should work in more ways, just How?
-                On.RoR2.Run.BeginGameOver += StoreRebirthAlways;
+                //On.RoR2.Run.BeginGameOver += StoreRebirthAlways;
                 On.RoR2.PickupPickerController.SetOptionsFromInteractor += MoreRebirth;
             }
            
@@ -66,6 +66,7 @@ namespace VanillaArtifactsPlus
                 ItemTierCatalog.GetItemTierDef(ItemTier.VoidTier2).canScrap = true;
                 ItemTierCatalog.GetItemTierDef(ItemTier.VoidTier3).canScrap = true;
                 ItemTierCatalog.GetItemTierDef(ItemTier.VoidBoss).canScrap = true;
+                ItemTierCatalog.GetItemTierDef(ItemTier.FoodTier).canScrap = true;
             }
             orig(self, activator);
             if (self.isRebirthChoice)
@@ -75,6 +76,7 @@ namespace VanillaArtifactsPlus
                 ItemTierCatalog.GetItemTierDef(ItemTier.VoidTier2).canScrap = false;
                 ItemTierCatalog.GetItemTierDef(ItemTier.VoidTier3).canScrap = false;
                 ItemTierCatalog.GetItemTierDef(ItemTier.VoidBoss).canScrap = false;
+                ItemTierCatalog.GetItemTierDef(ItemTier.FoodTier).canScrap = false;
             }
         }
     }

@@ -31,7 +31,7 @@ namespace VanillaArtifactsPlus
             On.RoR2.ClassicStageInfo.HandleMixEnemyArtifact += FindSkinForSkinnedEnemies;
 
             On.RoR2.ClassicStageInfo.RebuildCards += DissoanceLunerEliteAll;
-            On.RoR2.DirectorCore.OnEnable += PerfectedVoidForRelevantStage;
+            //On.RoR2.DirectorCore.OnEnable += PerfectedVoidForRelevantStage;
             On.RoR2.HalcyoniteShrineInteractable.Start += HalcyoniteShrineInteractable_Start;
             dccsShrineHalcyoniteDissonance.AddCategory("Golem", 10);
             dccsShrineHalcyoniteDissonance.AddCard(0, new DirectorCard()
@@ -65,14 +65,14 @@ namespace VanillaArtifactsPlus
                         phase2.onSpawnedServer.AddListener(new UnityAction<GameObject>(PerfectedDissonanceOnMoon));
                         phase3.onSpawnedServer.AddListener(new UnityAction<GameObject>(PerfectedDissonanceOnMoon));
                     }
-                    else if (stage == "voidstage")
+                    /*else if (stage == "voidstage")
                     {
                         CombatDirector[] combatDirectors = self.GetComponents<CombatDirector>();
                         foreach (CombatDirector comb in combatDirectors)
                         {
                             comb.onSpawnedServer.AddListener(new UnityAction<GameObject>(VoidElitesVoidStage));
                         }
-                    }
+                    }*/
                 }
                
             }

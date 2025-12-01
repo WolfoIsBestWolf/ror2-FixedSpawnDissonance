@@ -276,8 +276,8 @@ namespace VanillaArtifactsPlus
             );
             VengenceAlwaysRandom= ConfigFile.Bind(
                 "Vengence",
-                "Vengence | Random Umbra",
-                true,
+                "Vengence | Random Umbra always",
+                false,
                 "Umbra will always be of a random character, instead of just when playing with Metamorphosis."
             );
             SacrificeMoreEnemySpawns = ConfigFile.Bind(
@@ -336,8 +336,8 @@ namespace VanillaArtifactsPlus
              );
             DevotionVoidInfestor = ConfigFile.Bind(
                  "Devotion",
-                 "Expell Void Infestors",
-                 true,
+                 "Expell Void Infestors at low health",
+                 false,
                  "Expell Void Infestors at low health. So that they dont instantly die to them but remain a threat."
              );
             DevotionAllowLunars = ConfigFile.Bind(

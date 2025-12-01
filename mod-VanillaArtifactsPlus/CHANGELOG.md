@@ -1,16 +1,30 @@
-## Changelog:
+```
+v3.5.1
+Fixed Random Umbras being on by default
+Fixed rare issue with Umbras not spawning.
+Removed Dissonance making Voidtoucheds in Void Locust.
+```
 ```
 v3.5.0
 Fixed for DLC3.
-Made Devoted Lemurians immune to Void Implosions
+
+Allowed Meal items in Rebirth
+Allowed Meal items in Devotion Egg.
+
+Made Devoted Lemurians immune to Void Implosions*
 Honor Perfected Mithrix now a 30% chance instead of guaranteed, to more match vanilla.
 
-Removed AlliesAvoidVoidImplosions as dependency
+
+Disabled Devoted Lem expelling Infestors by default.
+-This weakness is at least a lil funny.
+Devoted Lems expelling Infestors should now get their previous elite aspect back.
+Removed AlliesAvoidVoidImplosions as dependency*
 Removed Honor making minions & drones elite.
 Removed Soul Wisps & Enigma Fragments from log.
+Removed Rebirth Recycling. (Just get Permament Rebirth mod if you want that)
 Fixed Void Reavers Horde being able to drop Newly Hatched Zoea without DLC1.
-
-
+```
+```
 v3.4.3
 Dissonance:
 -Now affects Halcyon Shrines:

@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="code\old\**" />
+    <EmbeddedResource Remove="code\old\**" />
+    <None Remove="code\old\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MMHOOK.RoR2" Version="2025.6.3">
       <IncludeAssets></IncludeAssets>
       <NoWarn>NU1701</NoWarn>

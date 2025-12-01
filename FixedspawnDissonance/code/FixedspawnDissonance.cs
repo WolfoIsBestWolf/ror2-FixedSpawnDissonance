@@ -11,7 +11,7 @@ namespace VanillaArtifactsPlus
 
 {
     [BepInDependency("com.bepis.r2api")]
-    [BepInPlugin("Wolfo.VanillaArtifactsPlus", "VanillaArtifactsPlus", "3.3.0")]
+    [BepInPlugin("Wolfo.VanillaArtifactsPlus", "VanillaArtifactsPlus", "3.5.1")]
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
 
 

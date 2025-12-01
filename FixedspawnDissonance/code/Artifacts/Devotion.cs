@@ -15,8 +15,17 @@ using UnityEngine.Networking;
 
 namespace VanillaArtifactsPlus
 {
-    public class DevotionEquipmentHolder
+    public class DevotionEquipmentHolder : MonoBehaviour
     {
+        public void OnEnable()
+        {
+            //Not accurate but whatever good  enough
+            var body = this.GetComponent<CharacterBody>();
+            if (body && body.inventory)
+            {
+                equipmentIndex = body.inventory.currentEquipmentIndex;
+            }
+        }
         public EquipmentIndex equipmentIndex = EquipmentIndex.None;
     }
     public class Devotion
@@ -43,6 +52,8 @@ namespace VanillaArtifactsPlus
             GameObject DevotedLemurianElder = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/CU8/DevotedLemurianBruiserBody.prefab").WaitForCompletion();
             CharacterBody bodyL = DevotedLemurian.GetComponent<CharacterBody>();
             CharacterBody bodyE = DevotedLemurianElder.GetComponent<CharacterBody>();
+            DevotedLemurian.AddComponent<DevotionEquipmentHolder>();
+            DevotedLemurianElder.AddComponent<DevotionEquipmentHolder>();
             if (WConfig.DevotionFlags.Value)
             {
                 bodyL.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
@@ -119,8 +130,8 @@ namespace VanillaArtifactsPlus
             {
                 IL.RoR2.HealthComponent.UpdateLastHitTime += ExpellVoidInfestorsAtLow;
             }
-            RunArtifactManager.onArtifactEnabledGlobal += DevotionInventoryController.OnDevotionArtifactEnabled;
-            RunArtifactManager.onArtifactDisabledGlobal += DevotionInventoryController.OnDevotionArtifactDisabled;
+            RunArtifactManager.onArtifactEnabledGlobal += OnDevotionArtifactEnabled;
+            RunArtifactManager.onArtifactDisabledGlobal += OnDevotionArtifactDisabled;
         }
 
         private static void OnDevotionArtifactEnabled(RunArtifactManager runArtifactManager, ArtifactDef artifactDef)
@@ -167,6 +178,10 @@ namespace VanillaArtifactsPlus
                         {   
                             if (self.body.master && self.body.master.TryGetComponent<DevotedLemurianController>(out var a))
                             {
+                                if (self.body.TryGetComponent<DevotionEquipmentHolder>(out var equip))
+                                {
+                                    self.body.inventory.SetEquipmentIndex(equip.equipmentIndex, true);
+                                }
                                 if (a.DevotedEvolutionLevel == 1)
                                 {
                                     a._devotionInventoryController.GenerateEliteBuff(self.body, a, true);
@@ -274,6 +289,9 @@ namespace VanillaArtifactsPlus
                     case ItemTier.VoidBoss:
                         pickupIndex = PickupCatalog.FindPickupIndex("ItemIndex.ScrapYellow");
                         break;
+                    case ItemTier.FoodTier:
+                        pickupIndex = PickupCatalog.FindPickupIndex("ItemIndex.ScrapWhite");
+                        break;
                 }
             }
             if (pickupIndex != PickupIndex.none)
@@ -293,6 +311,7 @@ namespace VanillaArtifactsPlus
             bool egg = self.GetComponent<RoR2.CharacterAI.LemurianEggController>();
             if (egg)
             {
+                ItemTierCatalog.GetItemTierDef(ItemTier.FoodTier).canScrap = true;
                 if (WConfig.DevotionAllowVoids.Value)
                 {
                     ItemTierCatalog.GetItemTierDef(ItemTier.VoidTier1).canScrap = true;
@@ -307,6 +326,7 @@ namespace VanillaArtifactsPlus
             orig(self,activator);
             if (egg)
             {
+                ItemTierCatalog.GetItemTierDef(ItemTier.FoodTier).canScrap = false;
                 if (WConfig.DevotionAllowVoids.Value)
                 {
                     ItemTierCatalog.GetItemTierDef(ItemTier.VoidTier1).canScrap = false;
