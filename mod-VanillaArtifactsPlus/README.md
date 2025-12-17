@@ -52,7 +52,6 @@ Settings can be changed ingame via RiskOfOptions.
 				Adds Hermit Crabs to the spawn pool.<br>
 				<br>
 				On Commencement, monsters can spawn as Perfected instead of regular elites.<br>
-				On Void Locust, monsters can spawn as Voidtouched.<br>
 				Halcyon Shrines will spawn a random monster instead of Golems.<br>
 				<br>
 				Monsters with skins will have a random skin per stage. (Titan, Golem, etc.)<br>
@@ -82,12 +81,13 @@ Settings can be changed ingame via RiskOfOptions.
 				<img src="https://riskofrain2.wiki.gg/images/c/c1/Artifact_of_Honor.png" width=64>
 			</td>
 			<td>
-				Makes all elite types cheaper and weaker not just Tier 1.<br>
-				Allows for more modded elite types to spawn.<br>
+				Special bosses can spawn as Gilded, and Tier 2 during loops.<br>
+				Mithrix & Voidling can spawn as their respective factions elite type.<br>
+				Mithrix & False Son no longer regenerate shield when in hiding, to avoid Overloading & Perfected from taking forever.<br>
 				<br>
-				Final bosses have a 30% chance to spawn as a specific elite type. (Perfected Mithrix, Voidtouched Voidling)<br>
+				Tier 2 and Perfected elites are also weaker but spawn frequently when available, like Tier 1.<br>
 				<br>
-				Worms now spawn as Elite instead of not at all.<br>
+				Worm Bosses now spawn as Elite instead of not at all.<br>
 				<i>Config to also allow Elite Worms in regular gameplay</i><br>
 			</td>
 		</tr>

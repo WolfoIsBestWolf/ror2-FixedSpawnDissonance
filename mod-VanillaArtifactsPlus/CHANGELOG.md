@@ -1,8 +1,16 @@
 ```
+v3.5.2
+Special bosses can now spawn as Tier2 elites and Gilded with Honor.
+ 
+Fixed Substandard Duplicator granting infinite Enigma Fragments.
+Fixed an error with Eulogy and Evolution
+Fixed an error with other mods that change elite types.
+```
+```
 v3.5.1
 Fixed Random Umbras being on by default
 Fixed rare issue with Umbras not spawning.
-Removed Dissonance making Voidtoucheds in Void Locust.
+Removed Dissonance making Voidtoucheds in Void Locust or extra amounts of Perfect elites.
 ```
 ```
 v3.5.0

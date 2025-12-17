@@ -1,5 +1,7 @@
 using RoR2;
+using RoR2.Artifacts;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
@@ -12,13 +14,60 @@ namespace VanillaArtifactsPlus
 
         public static void Start()
         {
-            On.RoR2.ScriptedCombatEncounter.BeginEncounter += Honor_ForceSpecialEliteType;
-            On.RoR2.InfiniteTowerExplicitSpawnWaveController.Initialize += Honor_SimuForceSpecialEliteType;
+            //Does Simu not have PromoteHonor normally??
+ 
+            //On.RoR2.InfiniteTowerExplicitSpawnWaveController.Initialize += Honor_SimuForceSpecialEliteType;
 
             //Probably don't remove this based on Honor
             On.RoR2.CharacterBody.UpdateItemAvailability += RemoveFireTrailFromWorm;
 
             Addressables.LoadAssetAsync<EliteDef>(key: "RoR2/DLC1/EliteEarth/edEarthHonor.asset").WaitForCompletion().healthBoostCoefficient = 2;
+
+            On.RoR2.Artifacts.EliteOnlyArtifactManager.PromoteIfHonor += EliteOnlyArtifactManager_PromoteIfHonor;
+
+            On.EntityStates.BrotherMonster.EnterSkyLeap.OnEnter += EnterSkyLeap_OnEnter;
+            On.EntityStates.FalseSonBoss.LunarGazeLeap.OnEnter += LunarGazeLeap_OnEnter;
+        }
+
+        private static void LunarGazeLeap_OnEnter(On.EntityStates.FalseSonBoss.LunarGazeLeap.orig_OnEnter orig, EntityStates.FalseSonBoss.LunarGazeLeap self)
+        {
+            orig(self);
+            self.characterBody.outOfDangerStopwatch = -99999f;
+        }
+
+        private static void EliteOnlyArtifactManager_PromoteIfHonor(On.RoR2.Artifacts.EliteOnlyArtifactManager.orig_PromoteIfHonor orig, CharacterMaster instanceMaster, Xoroshiro128Plus rng, EliteDef[] eliteDefs)
+        {
+            if (WConfig.Honor_PerfectMithrix.Value)
+            {
+                if (eliteDefs == null)
+                {
+                    var list = EliteOnlyArtifactManager.eliteDefs.ToList();
+                    list.Add(DLC2Content.Elites.Aurelionite);
+                    if (Run.instance.stageClearCount > 6)
+                    {
+                        foreach (EliteDef eliteDef in EliteCatalog.eliteDefs)
+                        {
+                            if (eliteDef.devotionLevel == EliteDef.DevotionEvolutionLevel.High)
+                            {
+                                list.Add(eliteDef);
+                            }
+                        }
+                        list.Remove(RoR2Content.Elites.Lunar);
+                    }
+                    if (MoonBatteryMissionController.instance)
+                    {
+                        list.Add(RoR2Content.Elites.Lunar); list.Add(RoR2Content.Elites.Lunar);
+                    }
+                    if (VoidRaidGauntletController.instance)
+                    {
+                        list.Add(DLC1Content.Elites.Void); list.Add(DLC1Content.Elites.Void);
+                    }
+                    orig(instanceMaster, Run.instance.bossRewardRng, list.ToArray());
+                    return;
+                }
+            }
+
+            orig(instanceMaster, Run.instance.bossRewardRng, eliteDefs);
         }
 
         public static void OnArtifactEnable()
@@ -29,7 +78,7 @@ namespace VanillaArtifactsPlus
                 Honor.Honor_EliteTiers(true);
                 if (WConfig.Honor_PerfectMithrix.Value == true)
                 {
-                    On.RoR2.CharacterBody.OnOutOfDangerChanged += Honor.PreventPerfectedMithrixFromRegenningShield;
+                   
                 }
                 /*if (WConfig.Honor_EliteMinions.Value)
                 {
@@ -38,14 +87,16 @@ namespace VanillaArtifactsPlus
             }
         }
 
+        private static void EnterSkyLeap_OnEnter(On.EntityStates.BrotherMonster.EnterSkyLeap.orig_OnEnter orig, EntityStates.BrotherMonster.EnterSkyLeap self)
+        {
+            orig(self);
+            self.characterBody.outOfDangerStopwatch = -99999f;
+        }
+
         public static void OnArtifactDisable()
         {
             WConfig.cfgEliteWorms_Changed(null, null);
             Honor.Honor_EliteTiers(false);
-            if (WConfig.Honor_PerfectMithrix.Value == true)
-            {
-                On.RoR2.CharacterBody.OnOutOfDangerChanged -= Honor.PreventPerfectedMithrixFromRegenningShield;
-            }
            /* if (WConfig.Honor_EliteMinions.Value)
             {
                 On.RoR2.MinionOwnership.MinionGroup.AddMinion -= Honor.MinionsInheritHonor;
@@ -89,65 +140,51 @@ namespace VanillaArtifactsPlus
             float value = 2f;
             if (activate)
             {
-                //On.RoR2.CombatDirector.IsEliteOnlyArtifactActive += DisableHonorEliteTier;
-                On.RoR2.CombatDirector.NotEliteOnlyArtifactActive += AllowNormalTiersHonor;
-                CombatDirector.eliteTiers[0].isAvailable = (SpawnCard.EliteRules rules) => false;
                 value = 0.5f;
             }
             else
             {
-                //On.RoR2.CombatDirector.IsEliteOnlyArtifactActive -= DisableHonorEliteTier;
-                On.RoR2.CombatDirector.NotEliteOnlyArtifactActive -= AllowNormalTiersHonor;
-                //CombatDirector.eliteTiers[0].isAvailable = (SpawnCard.EliteRules rules) => true;
-                CombatDirector.eliteTiers[0].isAvailable = ((SpawnCard.EliteRules rules) => CombatDirector.NotEliteOnlyArtifactActive());
             }
             //Ideally keep Lunars being allowed to spawn as Tier1, if anything add Tier2
             //How do we force ignore spawn card rules ig ig
 
             foreach (EliteDef eliteDef in EliteCatalog.eliteDefs)
             {
-                if (!eliteDef.name.EndsWith("Honor"))
+                if (eliteDef.devotionLevel == EliteDef.DevotionEvolutionLevel.High)
                 {
                     eliteDef.healthBoostCoefficient = Mathf.LerpUnclamped(1f, eliteDef.healthBoostCoefficient, value);
                     eliteDef.damageBoostCoefficient = Mathf.LerpUnclamped(1f, eliteDef.damageBoostCoefficient, value);
-                    //Debug.Log(eliteDef + " hp:" + eliteDef.healthBoostCoefficient+ " dmg:"+ eliteDef.damageBoostCoefficient); 
                 }
             }
 
-            /*for (int i = 0; i < CombatDirector.eliteTiers.Length; i++)
+            for (int i = 0; i < CombatDirector.eliteTiers.Length; i++)
             {
-                //Debug.Log("EliteTier " + i);
                 if (CombatDirector.eliteTiers[i].eliteTypes.Length > 0)
                 {
-                    if (CombatDirector.eliteTiers[i].eliteTypes[0] == RoR2Content.Elites.LightningHonor)
+                    if (CombatDirector.eliteTiers[i].eliteTypes[0] == RoR2Content.Elites.Poison)
                     {
-                        //Should help with Adaptive Elite spam, I think??
-                        var Temp = CombatDirector.eliteTiers[0];
-                        CombatDirector.eliteTiers[0] = CombatDirector.eliteTiers[i];
-                        CombatDirector.eliteTiers[i] = Temp;
-                        continue;
+                        CombatDirector.eliteTiers[i].costMultiplier = Mathf.LerpUnclamped(1f, CombatDirector.eliteTiers[i].costMultiplier, value);
+                    }
+                    else if (CombatDirector.eliteTiers[i].eliteTypes[0] == RoR2Content.Elites.Lunar)
+                    {
+                        CombatDirector.eliteTiers[i].costMultiplier = Mathf.LerpUnclamped(1f, CombatDirector.eliteTiers[i].costMultiplier, value);
                     }
                 }
-                CombatDirector.eliteTiers[i].costMultiplier = Mathf.LerpUnclamped(1f, CombatDirector.eliteTiers[i].costMultiplier, value);
-            }*/
+            } 
         }
 
-        private static bool AllowNormalTiersHonor(On.RoR2.CombatDirector.orig_NotEliteOnlyArtifactActive orig)
-        {
-            return true;
-        }
-        public static bool DisableHonorEliteTier(On.RoR2.CombatDirector.orig_IsEliteOnlyArtifactActive orig)
-        {
-            //Disable original Honor
-            return false;
-        }
-
+         
         private static void Honor_SimuForceSpecialEliteType(On.RoR2.InfiniteTowerExplicitSpawnWaveController.orig_Initialize orig, InfiniteTowerExplicitSpawnWaveController self, int waveIndex, Inventory enemyInventory, GameObject spawnTargetObject)
         {
             if (RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.EliteOnly))
             {
                 if (WConfig.Honor_PerfectMithrix.Value)
                 {
+                    if (self.rng.nextNormalizedFloat > 0.3f)
+                    {
+                        orig(self, waveIndex, enemyInventory, spawnTargetObject);
+                        return;
+                    }
                     string name = self.spawnList[0].spawnCard.name;
                     if (name.StartsWith("cscBrother"))
                     {
@@ -185,51 +222,7 @@ namespace VanillaArtifactsPlus
             orig(self, waveIndex, enemyInventory, spawnTargetObject);
         }
 
-        private static void Honor_ForceSpecialEliteType(On.RoR2.ScriptedCombatEncounter.orig_BeginEncounter orig, ScriptedCombatEncounter self)
-        {
-            orig(self);
-            if (RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.EliteOnly))
-            {
-                if (self.rng.nextNormalizedFloat < 0.70f)
-                {
-                    return;
-                }
-
-                if (!WConfig.Honor_PerfectMithrix.Value)
-                {
-                    return;
-                }
-                string name = self.spawns[0].spawnCard.name;
-                bool doIt = false;
-                EquipmentDef elite = null;
-
-                if (name.StartsWith("cscBrother") || name.StartsWith("cscScavLunar"))
-                {
-                    doIt = true;
-                    elite = RoR2Content.Equipment.AffixLunar;            
-                }
-                else if (name.StartsWith("cscMiniVoidR") || name.StartsWith("cscVoidInfe"))
-                {
-                    doIt = true;
-                    elite = DLC1Content.Equipment.EliteVoidEquipment;
-                }
-                else if (name.StartsWith("cscFalseSon") || name.StartsWith("cscTitanGold"))
-                {
-                    elite = DLC2Content.Equipment.EliteAurelioniteEquipment;
-                    if (Run.instance.IsExpansionEnabled(elite.requiredExpansion))
-                    {
-                        doIt = true;
-                    }                 
-                }
-                if (doIt)
-                {
-                    for (int i = 0; i < self.combatSquad.memberCount; i++)
-                    {
-                        self.combatSquad.membersList[i].inventory.SetEquipmentIndex(elite.equipmentIndex);
-                    }
-                }
-            }
-        }
+      
 
         private static void RemoveFireTrailFromWorm(On.RoR2.CharacterBody.orig_UpdateItemAvailability orig, CharacterBody self)
         {
@@ -239,16 +232,7 @@ namespace VanillaArtifactsPlus
                 self.itemAvailability.hasFireTrail = false;
             }
         }
-
-        public static void PreventPerfectedMithrixFromRegenningShield(On.RoR2.CharacterBody.orig_OnOutOfDangerChanged orig, CharacterBody self)
-        {
-            orig(self);
-            if (self.name.StartsWith("Bro"))
-            {
-                self.outOfDangerStopwatch = -1000;
-            }
-        }
-
+ 
 
         public static void MinionsInheritHonor(On.RoR2.MinionOwnership.MinionGroup.orig_AddMinion orig, NetworkInstanceId ownerId, global::RoR2.MinionOwnership minion)
         {

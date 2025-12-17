@@ -202,9 +202,9 @@ namespace VanillaArtifactsPlus
 
             Honor_PerfectMithrix = ConfigFile.Bind(
                 "Honor",
-                "Final Bosses specific elite type",
+                "Special Bosses more elite types",
                 true,
-                "Makes final bosses have a 30% chance to spawn as specific elite type. Perfected Mithrix, Voidtouched Voidling, Gilded False Son."
+                "Allows special bosses to spawn as Gilded, Tier 2 during Loops, Mithrix as Perfected and Voidling as Voidtouched."
             );
             /*Honor_EliteMinions = ConfigFile.Bind(
                 "Honor",

@@ -1,8 +1,8 @@
 {
     "name": "VanillaArtifactsPlus",
-    "version_number": "3.5.1",
+    "version_number": "3.5.2",
     "website_url": "https://github.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance",
-    "description": "[Server-Side*] Updates most vanilla Artifacts to expand them.  Includes Devotion Inventory Display.",
+    "description": "Updates most vanilla Artifacts to expand them.  Includes Devotion Inventory Display. Elite Worms with Honor, Enigma Fragments like in RoR1, Larger Soul Wisps",
     "dependencies": [
 		"kking117-AmbientSpite-1.0.0",
 		"Wolfo-WolfFixes-1.0.0",

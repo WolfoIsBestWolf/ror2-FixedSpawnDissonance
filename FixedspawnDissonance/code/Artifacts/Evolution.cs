@@ -73,10 +73,10 @@ namespace VanillaArtifactsPlus
                     ItemDef def = ItemCatalog.GetItemDef(item);
                     if (def.tier == ItemTier.Lunar)
                     {
-                        PickupIndex pickupIndex = dtMonsterTeamLunarItem.GenerateDrop(MonsterTeamGainsItemsArtifactManager.treasureRng);
-                        if (pickupIndex != PickupIndex.none)
+                        UniquePickup drop = dtMonsterTeamLunarItem.GeneratePickup(MonsterTeamGainsItemsArtifactManager.treasureRng);
+                        if (drop.pickupIndex != PickupIndex.none)
                         {
-                            PickupDef pickupDef = PickupCatalog.GetPickupDef(pickupIndex);
+                            PickupDef pickupDef = PickupCatalog.GetPickupDef(drop.pickupIndex);
                             if (pickupDef != null)
                             {
                                 return pickupDef.itemIndex;

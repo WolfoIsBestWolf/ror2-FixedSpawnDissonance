@@ -90,7 +90,12 @@ namespace VanillaArtifactsPlus
             enigmaFragmentDef.loreToken = "";
             enigmaFragmentDef.hidden = false;
             enigmaFragmentDef.canRemove = false;
-            
+            enigmaFragmentDef.tags = new ItemTag[]
+            {
+                ItemTag.WorldUnique,
+                ItemTag.CanBeTemporary,
+                ItemTag.EquipmentRelated,
+            };
             enigmaFragmentDef.deprecatedTier = ItemTier.NoTier;
             ItemAPI.Add(new CustomItem(enigmaFragmentDef, Array.Empty<ItemDisplayRule>()));
 
@@ -114,7 +119,12 @@ namespace VanillaArtifactsPlus
             eliteEnigmaFragmentDef.loreToken = "";
             eliteEnigmaFragmentDef.hidden = false;
             eliteEnigmaFragmentDef.canRemove = false;
-     
+            eliteEnigmaFragmentDef.tags = new ItemTag[]
+                   {
+                ItemTag.WorldUnique,
+                ItemTag.CanBeTemporary,
+                ItemTag.EquipmentRelated,
+                   };
             eliteEnigmaFragmentDef.deprecatedTier = ItemTier.NoTier;
             ItemAPI.Add(new CustomItem(eliteEnigmaFragmentDef, Array.Empty<ItemDisplayRule>()));
  
