@@ -4,8 +4,6 @@ using RoR2;
 using RoR2.Artifacts;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.Networking;
 
 namespace VanillaArtifactsPlus
 
@@ -71,7 +69,7 @@ namespace VanillaArtifactsPlus
                 Vengence.Start();
             }
             Rebirth.Start();
- 
+
         }
 
         private void Start() //Called at the first frame of the game.
@@ -106,9 +104,9 @@ namespace VanillaArtifactsPlus
 
         internal static void CallLate_ModSupport()
         {
-            
-            Soul.CallLate();        
-   
+
+            Soul.CallLate();
+
             if (WConfig.EnigmaChanges.Value == true)
             {
                 Enigma.CallLate();
@@ -131,7 +129,7 @@ namespace VanillaArtifactsPlus
 
             DLC2Content.Items.KnockBackHitEnemies.tags = DLC2Content.Items.KnockBackHitEnemies.tags.Remove(ItemTag.DevotionBlacklist);
             DLC2Content.Items.IncreasePrimaryDamage.tags = DLC2Content.Items.IncreasePrimaryDamage.tags.Remove(ItemTag.DevotionBlacklist);
-       
+
         }
 
 
@@ -206,7 +204,7 @@ namespace VanillaArtifactsPlus
                     On.RoR2.GenericPickupController.AttemptGrant -= Enigma.EnigmaEquipmentGranter;
                     On.RoR2.GenericPickupController.CreatePickup -= Enigma.EnigmaFragmentMaker;
                 }
-            }      
+            }
             if (artifactDef == RoR2Content.Artifacts.EliteOnly && WConfig.HonorChanges.Value == true)
             {
                 Honor.OnArtifactDisable();

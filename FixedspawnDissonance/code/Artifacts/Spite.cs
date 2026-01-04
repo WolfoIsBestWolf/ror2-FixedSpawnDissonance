@@ -1,9 +1,9 @@
+using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using RoR2;
 using RoR2.Artifacts;
 using System;
 using UnityEngine;
-using Mono.Cecil.Cil;
 
 namespace VanillaArtifactsPlus
 {
@@ -51,7 +51,7 @@ namespace VanillaArtifactsPlus
 
 
             IL.RoR2.Artifacts.BombArtifactManager.OnServerCharacterDeath += BombArtifactManager_OnServerCharacterDeath;
-         
+
         }
 
         private static void BombArtifactManager_OnServerCharacterDeath(ILContext il)

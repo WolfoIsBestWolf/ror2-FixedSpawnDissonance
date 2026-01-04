@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using RoR2;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
 using UnityEngine.Networking;
- 
+
 namespace VanillaArtifactsPlus
 {
     public class Dissonance
@@ -38,10 +36,10 @@ namespace VanillaArtifactsPlus
             {
                 preventOverhead = false,
                 selectionWeight = 10,
-            }); 
+            });
             dccsShrineHalcyoniteDissonance.name = "dccsShrineHalcyoniteDissonance";
 
-         
+
         }
 
         private static void PerfectedVoidForRelevantStage(On.RoR2.DirectorCore.orig_OnEnable orig, DirectorCore self)
@@ -74,7 +72,7 @@ namespace VanillaArtifactsPlus
                         }
                     }*/
                 }
-               
+
             }
         }
 
@@ -104,7 +102,7 @@ namespace VanillaArtifactsPlus
                 dccsShrineHalcyoniteDissonance.categories[0].cards[0].spawnDistance = card.spawnDistance;
                 self.activationDirector.eliteBias = 1.5f;
                 self.activationDirector.monsterCards = dccsShrineHalcyoniteDissonance;
- 
+
             }
 
         }
@@ -127,7 +125,7 @@ namespace VanillaArtifactsPlus
 
             }
         }
-       
+
         public static void PerfectedDissonanceOnMoon3(GameObject masterObject)
         {
             Inventory inventory = masterObject.GetComponent<Inventory>();
@@ -140,7 +138,7 @@ namespace VanillaArtifactsPlus
             {
                 inventory.SetEquipmentIndex(RoR2Content.Equipment.AffixLunar.equipmentIndex);
             }*/
- 
+
         }
         public static void PerfectedDissonanceOnMoon(GameObject masterObject)
         {
@@ -196,7 +194,7 @@ namespace VanillaArtifactsPlus
                 minimumStageCompletions = 0,
                 spawnDistance = DirectorCore.MonsterSpawnDistance.Standard
             };
- 
+
 
             dccsMixEnemy.categories[0].selectionWeight = 3;
             dccsMixEnemy.categories[1].selectionWeight = 3;
@@ -219,10 +217,10 @@ namespace VanillaArtifactsPlus
 
             DissoGolem = dccsMixEnemy.categories[1].cards[5];
             DissoTitan = dccsMixEnemy.categories[0].cards[9];
- 
+
             dccsMixEnemy.AddCard(0, dccsMixEnemy.categories[1].cards[10]); //Move Lunar Wisp to Boss
             dccsMixEnemy.AddCard(0, dccsMixEnemy.categories[1].cards[14]); //Move Halcyonite to Boss
-         
+
             HG.ArrayUtils.ArrayRemoveAtAndResize(ref dccsMixEnemy.categories[1].cards, 10);
             HG.ArrayUtils.ArrayRemoveAtAndResize(ref dccsMixEnemy.categories[1].cards, 14);
 
@@ -236,7 +234,7 @@ namespace VanillaArtifactsPlus
                 selectionWeight = 1,
                 spawnDistance = DirectorCore.MonsterSpawnDistance.Far
             });
-         
+
         }
 
         public static List<SpawnCard> LunarifiedList;

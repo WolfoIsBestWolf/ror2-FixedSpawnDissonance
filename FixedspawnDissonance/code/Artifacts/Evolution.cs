@@ -1,4 +1,3 @@
-using HG;
 using MonoMod.Cil;
 using RoR2;
 using RoR2.Artifacts;
@@ -87,7 +86,7 @@ namespace VanillaArtifactsPlus
                 });
                 c.TryGotoNext(MoveType.After,
                 x => x.MatchLdcI4(1));
-                
+
                 c.EmitDelegate<System.Func<int, int>>((amount) =>
                 {
                     if (WConfig.EvoMoreItems.Value == true)
@@ -103,7 +102,7 @@ namespace VanillaArtifactsPlus
                         }
                         if (GiveMoreEvoItems)
                         {
-                            int iterator = (MonsterTeamGainsItemsArtifactManager.currentItemIterator-1) % MonsterTeamGainsItemsArtifactManager.dropPattern.Length;
+                            int iterator = (MonsterTeamGainsItemsArtifactManager.currentItemIterator - 1) % MonsterTeamGainsItemsArtifactManager.dropPattern.Length;
                             switch (iterator)
                             {
                                 case 0:
@@ -127,9 +126,9 @@ namespace VanillaArtifactsPlus
         }
 
 
-       
-       
-         
+
+
+
 
     }
 }

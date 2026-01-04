@@ -1,16 +1,14 @@
 ﻿using RoR2;
-using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace VanillaArtifactsPlus
 {
     public class KinBossDropsForEnemies
     {
         public static CharacterMaster tempClayMan;
- 
+
         public static void Start()
         {
- 
+
             //Nah the Charged Perforator Lemurian thing is kinda dumb even if funny
             //On.RoR2.BossGroup.OnMemberDefeatedServer += BossDropChanger;
 
@@ -34,7 +32,7 @@ namespace VanillaArtifactsPlus
 
         public static void ChangeLate()
         {
- 
+
             //1
             RoR2Content.BodyPrefabs.GolemBody.GetComponent<DeathRewards>().bossPickup = new SerializablePickupIndex { pickupName = "ItemIndex.Knurl" };
             DLC2Content.BodyPrefabs.HalcyoniteBody.GetComponent<DeathRewards>().bossPickup = new SerializablePickupIndex { pickupName = "ItemIndex.Knurl" };
@@ -75,7 +73,7 @@ namespace VanillaArtifactsPlus
             RoR2Content.BodyPrefabs.NullifierBody.GetComponent<DeathRewards>().bossPickup = new SerializablePickupIndex { pickupName = "ItemIndex.VoidMegaCrabItem" };
             DLC1Content.BodyPrefabs.VoidJailerBody.GetComponent<DeathRewards>().bossPickup = new SerializablePickupIndex { pickupName = "ItemIndex.VoidMegaCrabItem" };
             DLC1Content.BodyPrefabs.VoidBarnacleBody.GetComponent<DeathRewards>().bossPickup = new SerializablePickupIndex { pickupName = "ItemIndex.VoidMegaCrabItem" };
-            
+
             #endregion
 
             #region DLC3 Items
@@ -98,7 +96,7 @@ namespace VanillaArtifactsPlus
             }
         }
 
-        
+
 
 
     }

@@ -30,8 +30,6 @@ Settings can be changed ingame via RiskOfOptions.
 			</td>
 			<td>
 				<br>
-				Adds a inventory display for the Lemurians to the scoreboard screen. (Tab)<br>
-				<br>
 				Meal items can now be given to Eggs.<br>
 				Void items can now be given to Eggs.<br>
 				<I>Config to also allow Lunar.</I><br>
@@ -251,7 +249,6 @@ Teleporting more often to avoid getting stuck but also to make them more around 
 Giving them Void items is quite a lot of fun.
 
 
-![Devotion Inventory](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-FixedSpawnDissonance/main/modPageImages/artifactsDevotion.png) 
 ##
 
 Vengence is weird to balance as depending on the character the fight would always just be a nightmare.\
@@ -287,6 +284,5 @@ Makes the Simulacrum Augment more interesting.
 Report bugs to @Wolfo.wolfo in the Risk of Rain 2 discord or RoR2 Modding discord.\
 If you're reporting a bug that isn't something obvious include the log file.
 
-Credits to Nuxlar for making Deovtion Inventory originally and allowing me to add it even if I didn't end up using most of his code.
 
 

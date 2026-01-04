@@ -1,11 +1,10 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
-using RiskOfOptions.Options;
 using RiskOfOptions;
-using UnityEngine;
-using UnityEngine.AddressableAssets;
 using RiskOfOptions.OptionConfigs;
+using RiskOfOptions.Options;
 using RoR2;
+using UnityEngine;
 
 namespace VanillaArtifactsPlus
 {
@@ -37,7 +36,7 @@ namespace VanillaArtifactsPlus
         public static ConfigEntry<bool> KinYellowsForEnemies;
 
         public static ConfigEntry<HonorWorms> Honor_EliteWorms;
- 
+
         public static ConfigEntry<bool> Honor_PerfectMithrix;
         //public static ConfigEntry<bool> Honor_EliteMinions;
         //public static ConfigEntry<bool> Honor_EliteMinionsNoGilded;
@@ -47,18 +46,17 @@ namespace VanillaArtifactsPlus
         public static ConfigEntry<bool> VenganceHealthRebalance;
         public static ConfigEntry<bool> VengenceBlacklist;
         public static ConfigEntry<bool> VengenceGoodDrop;
- public static ConfigEntry<bool> VengenceAlwaysRandom;
- 
+        public static ConfigEntry<bool> VengenceAlwaysRandom;
+
         public static ConfigEntry<bool> EnigmaInterrupt;
         public static ConfigEntry<bool> EnigmaMovement;
- 
+
         public static ConfigEntry<bool> SacrificeMoreEnemySpawns;
- 
+
         public static ConfigEntry<bool> EvoMoreAfterLoop;
         public static ConfigEntry<bool> EvoMoreItems;
- 
-        public static ConfigEntry<bool> DevotionInventory;
-        public static ConfigEntry<bool> DevotionShowAllInventory;
+
+
         public static ConfigEntry<bool> DevotionAllowVoids;
         public static ConfigEntry<bool> DevotionAllowLunars;
 
@@ -172,7 +170,7 @@ namespace VanillaArtifactsPlus
                 true,
                 "Big enemies spawn Greater Soul Wisps. Soul Wisps inherit elites. General Soul stat adjustments"
             );
- 
+
 
             VenganceChanges = ConfigFile.Bind(
                 ": Main :",
@@ -231,7 +229,7 @@ namespace VanillaArtifactsPlus
                 "Allow Elite Worms to spawn during Honor. Vanilla removes Worms entirely."
             );
             Honor_EliteWorms.SettingChanged += cfgEliteWorms_Changed;
-  
+
             EvoMoreItems = ConfigFile.Bind(
                 "Evolution",
                 "Evolution | More Items",
@@ -245,7 +243,7 @@ namespace VanillaArtifactsPlus
                 "Start giving more items after or before looping."
             );
 
- 
+
 
 
             VengenceEquipment = ConfigFile.Bind(
@@ -274,7 +272,7 @@ namespace VanillaArtifactsPlus
                 true,
                 "Make Umbras not spawn with items like Tougher Timers or Nkuhanas Opinion.\nThis is to prevent unfair situations or unavoidable autoplay on the Umbras part making them not fun to fight."
             );
-            VengenceAlwaysRandom= ConfigFile.Bind(
+            VengenceAlwaysRandom = ConfigFile.Bind(
                 "Vengence",
                 "Vengence | Random Umbra always",
                 false,
@@ -293,14 +291,14 @@ namespace VanillaArtifactsPlus
                false,
                "Should Recycler and Tricorn be an option for Enigma"
             );
- 
+
             EnigmaMovement = ConfigFile.Bind(
                            "Enigma",
                            "Enable Movement affecting Equipment",
                            true,
                            "Should Volcanic Egg and Milky Chrysalis be an option for Enigma"
                        );
- 
+
 
             KinYellowsForEnemies = ConfigFile.Bind(
                 "Kin",
@@ -309,13 +307,6 @@ namespace VanillaArtifactsPlus
                 "Enable/Disable Hordes of Many dropping Yellow items depending on the Enemy\nPrimarily intended with Kin but helps in general"
             );
 
-  
-            DevotionShowAllInventory = ConfigFile.Bind(
-                "Devotion",
-                "Show every players Devotion Inventory",
-                true,
-                "Should every players, lemurians, inventory be shown, or only your lemurians inventory."
-            );
             DevotionAllowVoids = ConfigFile.Bind(
                  "Devotion",
                  "Devotion Void Items",
@@ -346,13 +337,8 @@ namespace VanillaArtifactsPlus
                  false,
                  "Allow Lunar Items to be given to Lemurians"
              );
-            DevotionInventory = ConfigFile.Bind(
-                "Devotion",
-                "Show Devoted Lemurian Inventory",
-                true,
-                "Show the oldest Lemurians inventory on the scoreboard. Every players is shown alternating player, lem. See other config."
-            );
-           
+
+
 
         }
 
@@ -394,18 +380,17 @@ namespace VanillaArtifactsPlus
             ModSettingsManager.AddOption(new CheckBoxOption(DisplaySoulInLog, overwriteNameR));
             ModSettingsManager.AddOption(new CheckBoxOption(DisplayEnigmaInLog, overwriteNameR));
             ModSettingsManager.AddOption(new ChoiceOption(Honor_EliteWorms, checkName));
- 
+
             CheckBoxConfig overwriteName = new CheckBoxConfig
             {
                 category = "General",
                 restartRequired = false,
             };
-            ModSettingsManager.AddOption(new CheckBoxOption(DevotionInventory, false));
-            ModSettingsManager.AddOption(new CheckBoxOption(DevotionShowAllInventory, false));
+
             ModSettingsManager.AddOption(new CheckBoxOption(DevotionAllowVoids, false));
             ModSettingsManager.AddOption(new CheckBoxOption(DevotionAllowLunars, false));
-         
-            ModSettingsManager.AddOption(new CheckBoxOption(RebirthStoreAlways, overwriteName));   
+
+            ModSettingsManager.AddOption(new CheckBoxOption(RebirthStoreAlways, overwriteName));
 
             ModSettingsManager.AddOption(new CheckBoxOption(VengenceAlwaysRandom, overwriteName));
             ModSettingsManager.AddOption(new CheckBoxOption(VenganceHealthRebalance, overwriteName));

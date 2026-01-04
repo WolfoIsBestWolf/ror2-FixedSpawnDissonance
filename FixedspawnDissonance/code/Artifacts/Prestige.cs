@@ -1,14 +1,10 @@
-using MonoMod.Cil;
-using Mono.Cecil.Cil;
 using RoR2;
-using UnityEngine;
-using System;
- 
+
 namespace VanillaArtifactsPlus
 {
     public class Prestige
     {
-        
+
         public static void Start()
         {
             On.RoR2.ShrineBossBehavior.Start += ShrineBossBehavior_Start;

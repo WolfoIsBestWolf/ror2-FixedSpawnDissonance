@@ -1,7 +1,7 @@
 using RoR2;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections.Generic;
 
 namespace VanillaArtifactsPlus
 {
@@ -15,7 +15,7 @@ namespace VanillaArtifactsPlus
                 //On.RoR2.Run.BeginGameOver += StoreRebirthAlways;
                 On.RoR2.PickupPickerController.SetOptionsFromInteractor += MoreRebirth;
             }
-           
+
         }
 
         private static void StoreRebirthAlways(On.RoR2.Run.orig_BeginGameOver orig, Run self, GameEndingDef gameEndingDef)
@@ -34,12 +34,12 @@ namespace VanillaArtifactsPlus
                             for (int i = 0; i < items.Count; i++)
                             {
                                 ItemDef def = ItemCatalog.GetItemDef(items[i]);
-                                if (def.tier != ItemTier.NoTier && def.tier != ItemTier.Lunar) 
+                                if (def.tier != ItemTier.NoTier && def.tier != ItemTier.Lunar)
                                 {
                                     if (!def.ContainsTag(ItemTag.RebirthBlacklist) && !def.ContainsTag(ItemTag.Scrap))
                                     {
                                         itemsFiltered.Add(items[i]);
-                                    }              
+                                    }
                                 }
                             }
                             if (itemsFiltered.Count > 0)
@@ -52,9 +52,9 @@ namespace VanillaArtifactsPlus
                         }
                     }
                 }
-                
+
             }
-            
+
         }
 
         private static void MoreRebirth(On.RoR2.PickupPickerController.orig_SetOptionsFromInteractor orig, PickupPickerController self, Interactor activator)

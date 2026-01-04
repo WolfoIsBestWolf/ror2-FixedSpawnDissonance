@@ -4,7 +4,6 @@ using RoR2.Artifacts;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.Networking;
 
 namespace VanillaArtifactsPlus
 {
@@ -17,7 +16,7 @@ namespace VanillaArtifactsPlus
         public static void OnArtifactEnable()
         {
             On.RoR2.HealthComponent.Heal += Vengence.Umbra_HalfHealing;
-            vengenceBlacklist = new List<ItemDef> 
+            vengenceBlacklist = new List<ItemDef>
             {
                 RoR2Content.Items.BoostDamage,
                 RoR2Content.Items.BoostHp,
@@ -78,7 +77,7 @@ namespace VanillaArtifactsPlus
                 DLC1Content.Items.MushroomVoid,
                 DLC1Content.Items.LunarSun,
             };*/
-            
+
         }
         public static void OnArtifactDisable()
         {
@@ -90,7 +89,7 @@ namespace VanillaArtifactsPlus
 
         public static void Start()
         {
-    
+
             On.RoR2.Artifacts.DoppelgangerSpawnCard.FromMaster += VengenceMetamorphosisSynergy;
 
             if (WConfig.VengenceGoodDrop.Value == true)
@@ -113,14 +112,14 @@ namespace VanillaArtifactsPlus
             }
 
         }
- 
+
         //WHY DOES THIS NTO RUN??
         private static CharacterMaster srcCharacterMasterTEMP;
         public static void OnPreSpawnSetup(CharacterMaster master)
         {
             Debug.Log("Umbra of " + master.name);
             VenganceItemFilter(master.inventory);
-         
+
 
             if (WConfig.VenganceHealthRebalance.Value == true)
             {
@@ -183,7 +182,7 @@ namespace VanillaArtifactsPlus
                             PickupIndex pickupIndex = PickupCatalog.FindPickupIndex(DLC2Content.Items.TeleportOnLowHealth.itemIndex);
                             self.selector.AddChoice(new UniquePickup(pickupIndex), self.voidTier3Weight);
                         }
-                    }          
+                    }
                 }
             }
         }
@@ -211,7 +210,7 @@ namespace VanillaArtifactsPlus
             }
             catch (System.Exception e)
             {
-                Debug.LogWarning(e); 
+                Debug.LogWarning(e);
                 return tempspawncard;
             }
             return tempspawncard;
@@ -271,7 +270,7 @@ namespace VanillaArtifactsPlus
             }
 
         }
- 
+
         public static void EnableEquipmentForVengence()
         {
             for (int i = 0; i < SurvivorCatalog.survivorDefs.Length; i++)

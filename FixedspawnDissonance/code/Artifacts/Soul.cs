@@ -1,11 +1,11 @@
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
+using R2API;
 using RoR2;
+using RoR2.CharacterAI;
 using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using RoR2.CharacterAI;
-using R2API;
-using MonoMod.Cil;
-using Mono.Cecil.Cil;
 
 namespace VanillaArtifactsPlus
 {
@@ -26,7 +26,7 @@ namespace VanillaArtifactsPlus
         public static CharacterBody LunarSoulBody;
         public static GameObject SoulLunarWispBody;
         public static GameObject SoulLunarWispMaster;
- 
+
         public static UnlockableDef unlockable = Addressables.LoadAssetAsync<UnlockableDef>(key: "RoR2/Base/WispOnDeath/Artifacts.WispOnDeath.asset").WaitForCompletion();
 
         public static void Start()
@@ -42,10 +42,10 @@ namespace VanillaArtifactsPlus
         {
             ILCursor c = new ILCursor(il);
 
-            c.TryGotoNext(MoveType.Before,
-                x => x.MatchLdfld("RoR2.RoR2Content.Artifacts", "get_wispOnDeath"));
+            bool a = c.TryGotoNext(MoveType.Before,
+            x => x.MatchCall("RoR2.RoR2Content/Artifacts", "get_wispOnDeath"));
 
-            if (c.TryGotoNext(MoveType.After,
+            if (a && c.TryGotoNext(MoveType.After,
              x => x.MatchLdcI4(2)
             ))
             {
@@ -63,7 +63,7 @@ namespace VanillaArtifactsPlus
         {
             Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC1/EliteEarth/AffixEarthHealerBody.prefab").WaitForCompletion().AddComponent<BlockSoul>();
             Addressables.LoadAssetAsync<GameObject>(key: "1553966a1aafdb743bf87ff4d6602c22").WaitForCompletion().AddComponent<BlockSoul>();
-       
+
             SoulLesserWispMaster.AddComponent<GivePickupsOnStart>().itemDefInfos = new GivePickupsOnStart.ItemDefInfo[]
             {
                 new GivePickupsOnStart.ItemDefInfo
@@ -83,7 +83,7 @@ namespace VanillaArtifactsPlus
             {
                 return;
             }
-  
+
             SoulGreaterWispMaster.AddComponent<GivePickupsOnStart>().itemDefInfos = new GivePickupsOnStart.ItemDefInfo[]
             {
                 new GivePickupsOnStart.ItemDefInfo
@@ -129,7 +129,7 @@ namespace VanillaArtifactsPlus
 
             LesserSoulBody.portraitIcon = Assets.Bundle.LoadAsset<Texture2D>("Assets/ArtifactsVanilla/soulLesser.png");
             LesserSoulBody.baseNameToken = "SOULWISP_BODY_NAME";
- 
+
             SoulLesserWispMaster.AddComponent<MasterSuicideOnTimer>().lifeTimer = 16f;
             SoulLesserWispMaster.GetComponent<BaseAI>().fullVision = true;
 
@@ -151,12 +151,12 @@ namespace VanillaArtifactsPlus
                 unlockable = null;
             }
             LesserSoulBody.GetComponent<DeathRewards>().logUnlockableDef = unlockable;
-   
+
             MakeGreaterSoulWisp();
             MakeLunarSoulWisp();
         }
 
-        
+
 
         public static void MakeLunarSoulWisp()
         {
@@ -167,7 +167,7 @@ namespace VanillaArtifactsPlus
             ContentAddition.AddMaster(SoulLunarWispMaster);
             LunarSoulBody = SoulLunarWispBody.GetComponent<CharacterBody>();
 
- 
+
             SkinDef skinLunarWisp = Addressables.LoadAssetAsync<SkinDef>(key: "b897f511a7c359e49aaaeca7c3903488").WaitForCompletion();
             SkinDefParams paramsLunarWisp = Addressables.LoadAssetAsync<SkinDefParams>(key: "5959ddaa1bbb1034c9b537428423ad21").WaitForCompletion();
 
@@ -229,10 +229,10 @@ namespace VanillaArtifactsPlus
             ai[2].skillSlot = SkillSlot.Secondary; //Minigun
             ai[3].skillSlot = SkillSlot.Secondary; //Chase?
             ai[4].skillSlot = SkillSlot.Secondary; //Strafe
- 
+
 
         }
- 
+
         public static void MakeGreaterSoulWisp()
         {
             SoulGreaterWispBody = R2API.PrefabAPI.InstantiateClone(LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/GreaterWispBody"), "GreaterWispSoulBody", true);
@@ -274,9 +274,9 @@ namespace VanillaArtifactsPlus
 
             float lowestHealth = 320f;
             GreaterSoulBody.baseMaxHealth = lowestHealth;
-            GreaterSoulBody.levelMaxHealth = lowestHealth*0.3f; 
+            GreaterSoulBody.levelMaxHealth = lowestHealth * 0.3f;
             GreaterSoulBody.baseRegen = lowestHealth * 0.01f;
-            GreaterSoulBody.levelRegen = lowestHealth * 0.01f*0.2f;
+            GreaterSoulBody.levelRegen = lowestHealth * 0.01f * 0.2f;
             GreaterSoulBody.baseAcceleration *= 3f;
             GreaterSoulBody.baseAttackSpeed = 1.2f;
             GreaterSoulBody.baseDamage *= 0.5f;
@@ -338,6 +338,6 @@ namespace VanillaArtifactsPlus
 
 
     }
- 
+
 
 }

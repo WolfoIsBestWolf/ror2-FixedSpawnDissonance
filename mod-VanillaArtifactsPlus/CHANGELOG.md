@@ -1,4 +1,9 @@
 ```
+v3.5.3
+Moved Devoted Inventory to WQoL as that's more the hud mod.
+Fixed Souls For VoidTeam hook not searching properly, causing incompatibilities with some mods.
+```
+```
 v3.5.2
 Special bosses can now spawn as Tier2 elites and Gilded with Honor.
  

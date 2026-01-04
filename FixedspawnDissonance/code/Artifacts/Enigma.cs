@@ -48,7 +48,7 @@ namespace VanillaArtifactsPlus
 
         public static void MakeEnigmaFragment()
         {
-           
+
             #region Artifact Tier
             artifactItemTier = ScriptableObject.CreateInstance<ItemTierDef>();
             artifactItemTier.name = "ArtifactItemsItemTierDef";
@@ -127,14 +127,14 @@ namespace VanillaArtifactsPlus
                    };
             eliteEnigmaFragmentDef.deprecatedTier = ItemTier.NoTier;
             ItemAPI.Add(new CustomItem(eliteEnigmaFragmentDef, Array.Empty<ItemDisplayRule>()));
- 
+
             EquipmentSlot.onServerEquipmentActivated += EquipmentSlot_onServerEquipmentActivated;
             #endregion
 
-           
+
             ItemTierCatalog.availability.CallWhenAvailable(SetTier);
             ArtifactCatalog.availability.CallWhenAvailable(SetLang);
-           
+
 
         }
 
@@ -158,7 +158,7 @@ namespace VanillaArtifactsPlus
                 if (itemCount > 0)
                 {
                     EquipmentDef equipmentDef = EquipmentCatalog.GetEquipmentDef(eq);
-                    
+
                     BuffIndex def = BuffCatalog.eliteBuffIndices[self.rng.RangeInt(0, BuffCatalog.eliteBuffIndices.Length)];
                     if (def != BuffIndex.None)
                     {
@@ -167,7 +167,7 @@ namespace VanillaArtifactsPlus
                 }
             }
         }
- 
+
         private static float EnigmaCooldownReduction(On.RoR2.Inventory.orig_CalculateEquipmentCooldownScale orig, Inventory self)
         {
             int itemCount = self.GetItemCount(enigmaFragmentDef);
@@ -213,8 +213,8 @@ namespace VanillaArtifactsPlus
                 On.RoR2.UI.LogBook.LogBookController.BuildPickupEntries += LogBookController_BuildPickupEntries;
                 On.RoR2.UI.LogBook.LogBookController.GetPickupStatus += LogBookController_GetPickupStatus;
             }
-           
-            
+
+
         }
 
         private static RoR2.UI.LogBook.EntryStatus LogBookController_GetPickupStatus(On.RoR2.UI.LogBook.LogBookController.orig_GetPickupStatus orig, ref RoR2.UI.LogBook.Entry entry, UserProfile viewerProfile)
@@ -284,9 +284,9 @@ namespace VanillaArtifactsPlus
                     }
                     else
                     {
-                       // RoR2.Util.PlaySound("Play_UI_item_spawn_tier1", tempGPC.gameObject);
+                        // RoR2.Util.PlaySound("Play_UI_item_spawn_tier1", tempGPC.gameObject);
                         tempGPC.pickupDisplay.tier1ParticleEffect.SetActive(true);
-                    }                    
+                    }
                     tempGPC.pickupDisplay.equipmentParticleEffect.SetActive(true);
                 }
                 return tempGPC;
@@ -319,7 +319,7 @@ namespace VanillaArtifactsPlus
                 }
             }
 
-           
+
             orig(self, body);
             if (hasAnEquip)
             {
@@ -339,6 +339,6 @@ namespace VanillaArtifactsPlus
             }
         }
 
-        
+
     }
 }

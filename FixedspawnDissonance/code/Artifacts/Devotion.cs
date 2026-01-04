@@ -1,16 +1,10 @@
-using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using RoR2;
 using RoR2.CharacterAI;
 using RoR2.Projectile;
-using RoR2.UI;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using RoR2.Items;
- 
+
 using UnityEngine.Networking;
 
 namespace VanillaArtifactsPlus
@@ -33,9 +27,7 @@ namespace VanillaArtifactsPlus
 
         public static void Start()
         {
-            On.RoR2.UI.ScoreboardController.Rebuild += AddLemurianInventory;
 
-            
             On.RoR2.PickupPickerController.SetOptionsFromInteractor += VoidForLemurians;
             On.RoR2.DevotionInventoryController.DropScrapOnDeath += ScrapForVoids;
             On.DevotedLemurianController.Start += TeleportMoreOften;
@@ -65,9 +57,9 @@ namespace VanillaArtifactsPlus
                 /*bodyL.bodyFlags |= CharacterBody.BodyFlags.ImmuneToExecutes;
                 bodyE.bodyFlags |= CharacterBody.BodyFlags.ImmuneToExecutes;
                */
-        
+
             }
-          
+
             bodyL.lavaCooldown = 2;
             bodyE.lavaCooldown = 2;
 
@@ -75,7 +67,7 @@ namespace VanillaArtifactsPlus
             //DevotedLemurian.GetComponent<CharacterBody>().bodyFlags |= CharacterBody.BodyFlags.Devotion; //They don't have this by default ???
             //DevotedLemurianElder.GetComponent<CharacterBody>().bodyFlags |= CharacterBody.BodyFlags.Devotion; //This somehow makes them get DroneWeapons ????
             #endregion
- 
+
 
 
             GameObject DevotedMaster = Addressables.LoadAssetAsync<GameObject>(key: "90b219aa7b48e824384c5abd65c30f70").WaitForCompletion();
@@ -125,7 +117,7 @@ namespace VanillaArtifactsPlus
             returnToLeaderMakeLast.customName = "BackOffFromDead";*/
 
             On.DevotedLemurianController.OnDevotedBodyDead += RemoveVoidDiosLikeRegular;
- 
+
             if (WConfig.DevotionVoidInfestor.Value)
             {
                 IL.RoR2.HealthComponent.UpdateLastHitTime += ExpellVoidInfestorsAtLow;
@@ -169,13 +161,13 @@ namespace VanillaArtifactsPlus
               x => x.MatchLdfld("RoR2.HealthComponent/ItemCounts", "fragileDamageBonus")
             ))
             {
-                
+
                 c.EmitDelegate<System.Func<HealthComponent, HealthComponent>>(self =>
                 {
                     if (self.body.teamComponent.teamIndex == TeamIndex.Void)
                     {
                         if (self.combinedHealthFraction < 0.05f)
-                        {   
+                        {
                             if (self.body.master && self.body.master.TryGetComponent<DevotedLemurianController>(out var a))
                             {
                                 if (self.body.TryGetComponent<DevotionEquipmentHolder>(out var equip))
@@ -226,7 +218,7 @@ namespace VanillaArtifactsPlus
             }
         }
 
- 
+
 
         private static void RemoveVoidDiosLikeRegular(On.DevotedLemurianController.orig_OnDevotedBodyDead orig, DevotedLemurianController self)
         {
@@ -240,7 +232,7 @@ namespace VanillaArtifactsPlus
                 return;
             }
             orig(self);
-            
+
         }
 
         private static void NoFogLemurianDamage(ILContext il)
@@ -259,7 +251,7 @@ namespace VanillaArtifactsPlus
             }
 
         }
- 
+
         private static void ScrapForVoids(On.RoR2.DevotionInventoryController.orig_DropScrapOnDeath orig, DevotionInventoryController self, ItemIndex devotionItem, CharacterBody minionBody)
         {
             orig(self, devotionItem, minionBody);
@@ -305,7 +297,7 @@ namespace VanillaArtifactsPlus
             orig(self);
             self._leashDistSq = 18000f;
         }
- 
+
         private static void VoidForLemurians(On.RoR2.PickupPickerController.orig_SetOptionsFromInteractor orig, PickupPickerController self, Interactor activator)
         {
             bool egg = self.GetComponent<RoR2.CharacterAI.LemurianEggController>();
@@ -323,7 +315,7 @@ namespace VanillaArtifactsPlus
                     ItemTierCatalog.GetItemTierDef(ItemTier.Lunar).canScrap = true;
                 }
             }
-            orig(self,activator);
+            orig(self, activator);
             if (egg)
             {
                 ItemTierCatalog.GetItemTierDef(ItemTier.FoodTier).canScrap = false;
@@ -339,74 +331,9 @@ namespace VanillaArtifactsPlus
                 }
             }
         }
-   
-        private static void AddLemurianInventory(On.RoR2.UI.ScoreboardController.orig_Rebuild orig, ScoreboardController self)
-        {
-            orig(self);
-            //Basically overwrites vanilla one entirely hopefully not an issue
-            if (WConfig.DevotionInventory.Value)
-            {
-                //Better this than checking Artifact
-                //Because you might have Lems after the Artifact is disabled.
-                if (DevotionInventoryController.InstanceList.Count > 0)
-                {
-                    List<CharacterMaster> list = new List<CharacterMaster>();
-                    foreach (PlayerCharacterMasterController playerCharacterMasterController in PlayerCharacterMasterController.instances)
-                    {
-                        if (playerCharacterMasterController.isConnected)
-                        {
-                            list.Add(playerCharacterMasterController.master);
-                            if (WConfig.DevotionShowAllInventory.Value)
-                            {
-                                CharacterMaster summonerMaster = playerCharacterMasterController.master;
-                                MinionOwnership.MinionGroup minionGroup = MinionOwnership.MinionGroup.FindGroup(summonerMaster.netId);
-                                if (minionGroup != null)
-                                {
-                                    foreach (MinionOwnership minionOwnership in minionGroup.members)
-                                    {
-                                        Inventory devotedLemurianController;
-                                        if (minionOwnership && minionOwnership.TryGetComponent<Inventory>(out devotedLemurianController))
-                                        {
-                                            if (devotedLemurianController.GetItemCount(CU8Content.Items.LemurianHarness) > 0)
-                                            {
-                                                list.Add(minionOwnership.GetComponent<CharacterMaster>());
-                                                break;
-                                            }                                        
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    //If every player has their own Lem inventory why would we only display the local one
-                    if (!WConfig.DevotionShowAllInventory.Value)
-                    {
-                        CharacterMaster summonerMaster = LocalUserManager.readOnlyLocalUsersList.First<LocalUser>().cachedMasterController.master;
-                        MinionOwnership.MinionGroup minionGroup = MinionOwnership.MinionGroup.FindGroup(summonerMaster.netId);
-                        if (minionGroup != null)
-                        {
-                            foreach (MinionOwnership minionOwnership in minionGroup.members)
-                            {
-                                DevotedLemurianController devotedLemurianController;
-                                if (minionOwnership && minionOwnership.GetComponent<CharacterMaster>().TryGetComponent<DevotedLemurianController>(out devotedLemurianController))
-                                {
-                                    list.Add(minionOwnership.GetComponent<CharacterMaster>());
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    self.SetStripCount(list.Count);
-                    for (int i = 0; i < list.Count; i++)
-                    {
-                        self.stripAllocator.elements[i].SetMaster(list[i]);
-                    }
-                }
-            }
-        }
 
 
-         
+
+
     }
 }

@@ -15,7 +15,7 @@ namespace VanillaArtifactsPlus
         public static void Start()
         {
             //Does Simu not have PromoteHonor normally??
- 
+
             //On.RoR2.InfiniteTowerExplicitSpawnWaveController.Initialize += Honor_SimuForceSpecialEliteType;
 
             //Probably don't remove this based on Honor
@@ -78,7 +78,7 @@ namespace VanillaArtifactsPlus
                 Honor.Honor_EliteTiers(true);
                 if (WConfig.Honor_PerfectMithrix.Value == true)
                 {
-                   
+
                 }
                 /*if (WConfig.Honor_EliteMinions.Value)
                 {
@@ -97,13 +97,13 @@ namespace VanillaArtifactsPlus
         {
             WConfig.cfgEliteWorms_Changed(null, null);
             Honor.Honor_EliteTiers(false);
-           /* if (WConfig.Honor_EliteMinions.Value)
-            {
-                On.RoR2.MinionOwnership.MinionGroup.AddMinion -= Honor.MinionsInheritHonor;
-            }*/
+            /* if (WConfig.Honor_EliteMinions.Value)
+             {
+                 On.RoR2.MinionOwnership.MinionGroup.AddMinion -= Honor.MinionsInheritHonor;
+             }*/
         }
 
-   
+
 
 
         public static void Honor_EliteTiers(bool activate)
@@ -170,10 +170,10 @@ namespace VanillaArtifactsPlus
                         CombatDirector.eliteTiers[i].costMultiplier = Mathf.LerpUnclamped(1f, CombatDirector.eliteTiers[i].costMultiplier, value);
                     }
                 }
-            } 
+            }
         }
 
-         
+
         private static void Honor_SimuForceSpecialEliteType(On.RoR2.InfiniteTowerExplicitSpawnWaveController.orig_Initialize orig, InfiniteTowerExplicitSpawnWaveController self, int waveIndex, Inventory enemyInventory, GameObject spawnTargetObject)
         {
             if (RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.EliteOnly))
@@ -217,12 +217,12 @@ namespace VanillaArtifactsPlus
                             self.spawnList[0].eliteDef = DLC2Content.Elites.Aurelionite;
                         }
                     }
-                }   
+                }
             }
             orig(self, waveIndex, enemyInventory, spawnTargetObject);
         }
 
-      
+
 
         private static void RemoveFireTrailFromWorm(On.RoR2.CharacterBody.orig_UpdateItemAvailability orig, CharacterBody self)
         {
@@ -232,7 +232,7 @@ namespace VanillaArtifactsPlus
                 self.itemAvailability.hasFireTrail = false;
             }
         }
- 
+
 
         public static void MinionsInheritHonor(On.RoR2.MinionOwnership.MinionGroup.orig_AddMinion orig, NetworkInstanceId ownerId, global::RoR2.MinionOwnership minion)
         {
@@ -255,7 +255,7 @@ namespace VanillaArtifactsPlus
         }
 
 
- 
+
 
     }
 }

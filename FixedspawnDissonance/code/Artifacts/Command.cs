@@ -1,5 +1,4 @@
 using RoR2;
-using UnityEngine;
 using System.Collections.Generic;
 
 namespace VanillaArtifactsPlus
@@ -13,24 +12,24 @@ namespace VanillaArtifactsPlus
         public static void OnArtifactEnable()
         {
         }
-       
-       
+
+
         public static void Start()
         {
-            
+
             On.RoR2.PickupTransmutationManager.RebuildPickupGroups += AddEliteEquipmentsToCommand;
             On.RoR2.Run.IsEquipmentAvailable += Make_EliteEquipmentAvailable;
         }
-  
+
 
         private static bool Make_EliteEquipmentAvailable(On.RoR2.Run.orig_IsEquipmentAvailable orig, Run self, EquipmentIndex equipmentIndex)
         {
             EquipmentDef def = EquipmentCatalog.GetEquipmentDef(equipmentIndex);
             if (def && def.passiveBuffDef)
-            {               
+            {
                 return !self.IsEquipmentExpansionLocked(equipmentIndex);
             }
-            return orig(self, equipmentIndex); 
+            return orig(self, equipmentIndex);
         }
 
         private static void AddEliteEquipmentsToCommand(On.RoR2.PickupTransmutationManager.orig_RebuildPickupGroups orig)
@@ -59,10 +58,10 @@ namespace VanillaArtifactsPlus
             {
                 list[i].canDrop = false;
             }
-       
+
         }
- 
-       
+
+
 
     }
 }

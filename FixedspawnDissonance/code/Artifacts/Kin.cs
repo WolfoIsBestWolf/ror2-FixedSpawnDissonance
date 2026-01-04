@@ -1,4 +1,3 @@
-using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using RoR2;
 using UnityEngine;
@@ -27,7 +26,7 @@ namespace VanillaArtifactsPlus
             {
                 c.Next.Operand = 50f;
                 c.Index++;
-            
+
                 c.TryGotoNext(MoveType.Before,
                 x => x.MatchLdcR4(50f));
                 c.Next.Operand = 60f;
